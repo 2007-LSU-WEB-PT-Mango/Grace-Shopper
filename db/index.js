@@ -1,3 +1,4 @@
+// Commit branch comment
 // Connect to DB
 const { Client } = require('pg');
 const DB_NAME = 'mango';
