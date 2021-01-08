@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Button from '@material-ui/core/Button';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
+import NotInterestedIcon from '@material-ui/icons/NotInterested';
 
 const useStyles = makeStyles({
   root: {
@@ -20,33 +21,47 @@ const useStyles = makeStyles({
   media: {
     height: 250,
   },
+  action: {
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
+  },
 });
 
-const Album = () => {
+const Album = (props) => {
+  const { name, description, price, imageURL, inStock, category } = props;
   const classes = useStyles();
   return (
     <>
       <Card className={classes.root}>
         <CardMedia
           className={classes.media}
-          image="https://w7.pngwing.com/pngs/162/283/png-transparent-vinyl-disc-art-phonograph-record-lp-record-vinyl-record-miscellaneous-desktop-wallpaper-sound-recording-and-reproduction-thumbnail.png"
+          image={imageURL}
           title="Vinyl Record Stock Thumbnail"
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
-            Album Title
+            {name}
           </Typography>
           <Typography gutterBottom variant="h6" component="h3">
-            Artist Name
+            {description}
           </Typography>
           <Typography gutterBottom variant="h6" component="h4">
-            Price
+            ${price}
           </Typography>
         </CardContent>
-        <CardActionArea>
-          <Button>
-            <AddShoppingCartIcon />
-          </Button>
+        <CardActionArea className={classes.action}>
+          {inStock ? (
+            <Button>
+              <AddShoppingCartIcon />
+              ADD TO CART
+            </Button>
+          ) : (
+            <Button variant="contained" disableRipple={true} disabled>
+              <NotInterestedIcon />
+              SOLD OUT
+            </Button>
+          )}
         </CardActionArea>
       </Card>
     </>
