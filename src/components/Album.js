@@ -52,12 +52,12 @@ const Album = (props) => {
         </CardContent>
         <CardActionArea className={classes.action}>
           {inStock ? (
-            <Button>
+            <Button fullWidth>
               <AddShoppingCartIcon />
               ADD TO CART
             </Button>
           ) : (
-            <Button variant="contained" disableRipple={true} disabled>
+            <Button fullWidth variant="contained" disableRipple={true} disabled>
               <NotInterestedIcon />
               SOLD OUT
             </Button>
