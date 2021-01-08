@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Album } from '../components';
+import { AlbumList } from '../components';
 
 import { getSomething } from '../api';
 
@@ -19,7 +19,7 @@ const App = () => {
 
   return (
     <div className="App">
-      <Album />
+      <AlbumList />
       {/* <h2>{message}</h2> */}
     </div>
   );
