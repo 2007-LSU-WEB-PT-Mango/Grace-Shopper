@@ -31,7 +31,7 @@ async function buildTables() {
         "firstName" VARCHAR(255) NOT NULL,
         "lastName" VARCHAR(255) NOT NULL,
         email VARCHAR(255) UNIQUE NOT NULL,
-        "imageURL" VARCHAR(255) DEFAULT ,
+        "imageURL" VARCHAR(255),
         username VARCHAR(255) UNIQUE NOT NULL,
         password VARCHAR(255) UNIQUE NOT NULL,
         "isAdmin" BOOLEAN NOT NULL DEFAULT false
@@ -42,7 +42,7 @@ async function buildTables() {
         name VARCHAR(255) NOT NULL,
         description TEXT NOT NULL,
         price INTEGER NOT NULL,
-        "imageURL" VARCHAR(255) DEFAULT ,
+        "imageURL" VARCHAR(255),
         "inStock" BOOLEAN NOT NULL DEFAULT false,
         category VARCHAR(255) NOT NULL
       );
@@ -64,15 +64,14 @@ async function buildTables() {
 
 async function rebuildDB() {
   try {
+    client.connect()
     await dropTables();
     await buildTables()
   } catch(error) {
     throw error;
   }
 }
-
-client.connect()
-  .then(rebuildDB())
+rebuildDB()
   .catch(console.error)
   .finally(() => client.end());
 
