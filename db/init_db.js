@@ -1,16 +1,19 @@
 // code to build and initialize DB goes here
 const {
-  client
-  // other db methods 
+  client,
+  // other db methods
+  getAllProducts,
+  createProduct,
+  getProduct 
 } = require('./index');
 
 async function dropTables() {
   console.log('dropping tables');
   try {
     client.query(`
+      DROP TABLE IF EXISTS orders;
       DROP TABLE IF EXISTS users;
       DROP TABLE IF EXISTS products;
-      DROP TABLE IF EXISTS orders;
     `);
   } catch (error) {
       console.error('error dropping tables')
@@ -31,7 +34,7 @@ async function buildTables() {
         "firstName" VARCHAR(255) NOT NULL,
         "lastName" VARCHAR(255) NOT NULL,
         email VARCHAR(255) UNIQUE NOT NULL,
-        "imageURL" VARCHAR(255),
+        "imageURL" VARCHAR(255) DEFAULT 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/12in-Vinyl-LP-Record-Angle.jpg/1920px-12in-Vinyl-LP-Record-Angle.jpg',
         username VARCHAR(255) UNIQUE NOT NULL,
         password VARCHAR(255) UNIQUE NOT NULL,
         "isAdmin" BOOLEAN NOT NULL DEFAULT false
@@ -54,10 +57,41 @@ async function buildTables() {
         "datePlaced" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
       );
     `)
-    
-
+    console.log('tables created!');
+    await populateInitialData();
   } catch (error) {
     console.error('error creating tables')
+    throw error;
+  }
+}
+
+
+async function populateInitialData() {
+  try {
+    console.log('creating products....');
+    
+    const productOne = await createProduct({
+      name: "Revolver",
+      description: "The Beatles",
+      price: 19,
+      imageURL: "https://images-na.ssl-images-amazon.com/images/I/91ffeWzPNpL._SL1500_.jpg",
+      inStock: true,
+      category: "rock"
+    });
+    
+    const productTwo = await createProduct({
+      name: "Abbey Road",
+      description: "The Beatles",
+      price: 20,
+      imageURL: "https://images-na.ssl-images-amazon.com/images/I/81dUVKQDBEL._SL1200_.jpg",
+      inStock: true,
+      category: "rock"
+    });
+    
+    console.log('success creating products!');
+    
+    return [productOne, productTwo]
+  } catch (error) {
     throw error;
   }
 }
@@ -65,8 +99,10 @@ async function buildTables() {
 async function rebuildDB() {
   try {
     client.connect()
-    await dropTables();
+    await dropTables()
     await buildTables()
+    await getAllProducts()
+    await getProduct(2)
   } catch(error) {
     throw error;
   }
@@ -74,14 +110,6 @@ async function rebuildDB() {
 rebuildDB()
   .catch(console.error)
   .finally(() => client.end());
-
-// async function populateInitialData() {
-//   try {
-//     // create useful starting data
-//   } catch (error) {
-//     throw error;
-//   }
-// }
 
 // buildTables()
 //   .then(populateInitialData)
