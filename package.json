@@ -15,8 +15,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+<<<<<<< HEAD
     "@material-ui/core": "^4.11.2",
     "@material-ui/icons": "^4.11.2",
+=======
+>>>>>>> database
     "axios": "^0.19.2",
     "express": "^4.17.1",
     "morgan": "^1.10.0",
