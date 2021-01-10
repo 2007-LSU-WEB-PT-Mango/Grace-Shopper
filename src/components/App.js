@@ -35,7 +35,6 @@ const App = () => {
         <Switch>
           <Route exact path="/products" />
         </Switch>
-
         <AlbumsList />
       </Router>
 
