@@ -2,24 +2,25 @@ import React, { useState, useEffect } from 'react';
 
 import { AlbumsList } from '../components';
 
-import { getSomething } from '../api';
+import { getSomething, getProducts } from '../api';
 
 const App = () => {
-  const [message, setMessage] = useState('');
+  const [productList, setProductList] = useState([]);
 
-  // useEffect(() => {
-  //   getSomething()
-  //     .then((response) => {
-  //       setMessage(response.message);
-  //     })
-  //     .catch((error) => {
-  //       setMessage(error.message);
-  //     });
-  // });
+  useEffect(() => {
+    getProducts()
+      .then((response) => {
+        console.log('App.js useEffect:', response);
+        setProductList(response);
+      })
+      .catch((error) => {
+        // setMessage(error.message);
+      });
+  }, []);
 
   return (
     <div className="App">
-      <AlbumsList />
+      <AlbumsList productList={productList} />
       {/* <h2>{message}</h2> */}
     </div>
   );

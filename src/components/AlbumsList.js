@@ -38,21 +38,21 @@ const dummyData = [
   },
 ];
 
-const AlbumsList = () => {
+const AlbumsList = ({ productList }) => {
   return (
     <>
       <div id="AlbumList">
         <Grid container>
-          {dummyData.map((data) => {
+          {productList.map((product) => {
             return (
               <>
                 <Grid item xs={12} sm={6} lg={3}>
                   <Album
-                    name={data.name}
-                    description={data.description}
-                    price={data.price}
-                    imageURL={data.imageURL}
-                    inStock={data.inStock}
+                    name={product.name}
+                    description={product.description}
+                    price={product.price}
+                    imageURL={product.imageURL}
+                    inStock={product.inStock}
                   />
                 </Grid>
               </>
