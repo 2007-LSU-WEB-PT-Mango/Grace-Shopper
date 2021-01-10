@@ -7,7 +7,7 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-import { withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Header = (props) => {
-  const { history } = props;
+  // const { history } = props;
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -32,7 +32,8 @@ const Header = (props) => {
   };
 
   const handleMenuClick = (pageURL) => {
-    history.push(pageURL);
+    // history.push(pageURL);
+
     setAnchorEl(null);
   };
 
@@ -69,8 +70,8 @@ const Header = (props) => {
               onClose={() => setAnchorEl(null)}
             >
               <MenuItem onClick={handleMenuClick}>Login</MenuItem>
-              <MenuItem onClick={() => handleMenuClick("/api/products")}>
-                Products
+              <MenuItem onClick={() => handleMenuClick("/products")}>
+                <Link to="/products"> Products</Link>
               </MenuItem>
             </Menu>
           </div>

@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "./styles.css";
-import Products from "./Products";
 import Header from "./Header";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Link,
+  Route,
+  Switch,
+  useParams,
+} from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { AlbumsList } from "../components";
 
@@ -25,17 +30,14 @@ const App = () => {
   const classes = useStyles();
   return (
     <div className="App">
-      <Header />
-      <BrowserRouter>
+      <Router>
+        <Header />
         <Switch>
-          <Route
-            exact
-            path="/products"
-            render={(props) => <Products {...props} />}
-          />
+          <Route exact path="/products" />
         </Switch>
-      </BrowserRouter>
-      <AlbumsList />
+
+        <AlbumsList />
+      </Router>
 
       {/* <h2>{message}</h2> */}
     </div>
