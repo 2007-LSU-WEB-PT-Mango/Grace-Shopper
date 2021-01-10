@@ -49,7 +49,7 @@ async function getProduct(productID) {
       WHERE id=${productID}
     `)
     
-    console.log('found the following:', product);
+    // console.log('found the following:', product);
     return product
   } catch (error) {
     throw error;
