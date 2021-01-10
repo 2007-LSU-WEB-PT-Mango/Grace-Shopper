@@ -71,7 +71,7 @@ const Header = (props) => {
             >
               <MenuItem onClick={handleMenuClick}>Login</MenuItem>
               <MenuItem onClick={() => handleMenuClick("/products")}>
-                <Link to="/products"> Products</Link>
+                <Link to="/products">Products</Link>
               </MenuItem>
             </Menu>
           </div>
