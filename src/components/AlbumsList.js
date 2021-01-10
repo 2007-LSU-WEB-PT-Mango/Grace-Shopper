@@ -38,26 +38,43 @@ const dummyData = [
   },
 ];
 
-const AlbumsList = ({ productList }) => {
+const AlbumsList = ({ productList, setSingleAlbum }) => {
   return (
     <>
       <div id="AlbumList">
         <Grid container>
-          {productList.map((product) => {
-            return (
-              <>
-                <Grid item xs={12} sm={6} lg={3}>
-                  <Album
-                    name={product.name}
-                    description={product.description}
-                    price={product.price}
-                    imageURL={product.imageURL}
-                    inStock={product.inStock}
-                  />
-                </Grid>
-              </>
-            );
-          })}
+          {productList.length > 1?
+            productList.map((product) => {
+              return (
+                <>
+                  <Grid item xs={12} sm={6} lg={3}>
+                    <Album
+                      setSingleAlbum={setSingleAlbum}
+                      ID={product.id}
+                      name={product.name}
+                      description={product.description}
+                      price={product.price}
+                      imageURL={product.imageURL}
+                      inStock={product.inStock}
+                    />
+                  </Grid>
+                </>
+              );
+            })
+          :
+            <>
+              <Grid item xs={12} sm={6} lg={3}>
+                <Album
+                  ID={productList.id}
+                  name={productList.name}
+                  description={productList.description}
+                  price={productList.price}
+                  imageURL={productList.imageURL}
+                  inStock={productList.inStock}
+                />
+              </Grid>
+            </>
+        }
         </Grid>
       </div>
     </>

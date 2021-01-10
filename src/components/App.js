@@ -9,13 +9,14 @@ import {
   useParams,
 } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import { AlbumsList } from "../components";
+import { AlbumsList, Album } from "../components";
 import { getSomething, getProducts } from "../api";
 
 const useStyles = makeStyles({});
 
 const App = () => {
   const [productList, setProductList] = useState([]);
+  const [singleAlbum, setSingleAlbum] = useState([]);
 
   useEffect(() => {
     getProducts()
@@ -33,8 +34,11 @@ const App = () => {
       <Router>
         <Header />
         <Switch>
+          <Route exact path="/products/:id">
+            <AlbumsList productList={singleAlbum} setProductList={setProductList}/>
+          </Route>
           <Route exact path="/products">
-            <AlbumsList productList={productList} />
+            <AlbumsList productList={productList} setSingleAlbum={setSingleAlbum}/>
           </Route>
           <Route exact path="/">
             <h1>This is the home page</h1>
