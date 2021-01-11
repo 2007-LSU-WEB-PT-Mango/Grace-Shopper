@@ -4,25 +4,23 @@ const {
   // other db methods
   getAllProducts,
   createProduct,
-  getProduct 
+  getProduct,
 } = require('./index');
 
 async function dropTables() {
   console.log('dropping tables');
   try {
-    client.query(`
+    await client.query(`
       DROP TABLE IF EXISTS orders;
       DROP TABLE IF EXISTS users;
       DROP TABLE IF EXISTS products;
     `);
   } catch (error) {
-      console.error('error dropping tables')
+    console.error('error dropping tables');
 
-      throw error;
+    throw error;
   }
 }
-
-
 
 async function buildTables() {
   console.log('building tables');
@@ -56,41 +54,42 @@ async function buildTables() {
         "userID" INTEGER REFERENCES users(id),
         "datePlaced" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
       );
-    `)
+    `);
     console.log('tables created!');
     await populateInitialData();
   } catch (error) {
-    console.error('error creating tables')
+    console.error('error creating tables');
     throw error;
   }
 }
 
-
 async function populateInitialData() {
   try {
     console.log('creating products....');
-    
+
     const productOne = await createProduct({
-      name: "Revolver",
-      description: "The Beatles",
+      name: 'Revolver',
+      description: 'The Beatles',
       price: 19,
-      imageURL: "https://images-na.ssl-images-amazon.com/images/I/91ffeWzPNpL._SL1500_.jpg",
+      imageURL:
+        'https://images-na.ssl-images-amazon.com/images/I/91ffeWzPNpL._SL1500_.jpg',
       inStock: true,
-      category: "rock"
+      category: 'rock',
     });
-    
+
     const productTwo = await createProduct({
-      name: "Abbey Road",
-      description: "The Beatles",
+      name: 'Abbey Road',
+      description: 'The Beatles',
       price: 20,
-      imageURL: "https://images-na.ssl-images-amazon.com/images/I/81dUVKQDBEL._SL1200_.jpg",
+      imageURL:
+        'https://images-na.ssl-images-amazon.com/images/I/81dUVKQDBEL._SL1200_.jpg',
       inStock: true,
-      category: "rock"
+      category: 'rock',
     });
-    
+
     console.log('success creating products!');
-    
-    return [productOne, productTwo]
+
+    return [productOne, productTwo];
   } catch (error) {
     throw error;
   }
@@ -98,12 +97,12 @@ async function populateInitialData() {
 
 async function rebuildDB() {
   try {
-    client.connect()
-    await dropTables()
-    await buildTables()
-    await getAllProducts()
-    await getProduct(2)
-  } catch(error) {
+    client.connect();
+    await dropTables();
+    await buildTables();
+    await getAllProducts();
+    await getProduct(2);
+  } catch (error) {
     throw error;
   }
 }
