@@ -10,7 +10,8 @@ export async function getSomething() {
 }
 
 const heroku = axios.create({
-  baseURL: 'https://mango-record-shop.herokuapp.com//api',
+  baseURL: 'http://localhost:3000/api',
+  // baseURL: 'https://mango-record-shop.herokuapp.com/api',
 });
 
 export async function getProducts() {
