@@ -43,8 +43,11 @@ const AlbumsList = ({ productList }) => {
   console.log(productList)
   const {id} = useParams();
   let filteredAlbum = productList.filter(function (product) {
-    return id == product.id;
-  }); 
+    if (id) {
+      return id == product.id;
+    }
+    return false
+  })
   let selectedAlbum = filteredAlbum[0];
   
   return (
