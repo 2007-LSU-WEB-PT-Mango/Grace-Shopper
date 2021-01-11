@@ -9,13 +9,13 @@ export async function getSomething() {
   }
 }
 
-const local = axios.create({
-  baseURL: 'http://localhost:3000/api',
+const heroku = axios.create({
+  baseURL: 'https://mango-record-shop.herokuapp.com//api',
 });
 
 export async function getProducts() {
   try {
-    const { data } = await local.get('/products');
+    const { data } = await heroku.get('/products');
     return data;
   } catch (err) {
     console.error(err);
