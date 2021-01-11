@@ -3,20 +3,17 @@ import "./styles.css";
 import Header from "./Header";
 import {
   BrowserRouter as Router,
-  Link,
   Route,
   Switch,
-  useParams,
 } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import { AlbumsList, Album } from "../components";
-import { getSomething, getProducts } from "../api";
+import { AlbumsList } from "../components";
+import { getProducts } from "../api";
 
 const useStyles = makeStyles({});
 
 const App = () => {
   const [productList, setProductList] = useState([]);
-  const [singleAlbum, setSingleAlbum] = useState([]);
 
   useEffect(() => {
     getProducts()
@@ -35,10 +32,10 @@ const App = () => {
         <Header />
         <Switch>
           <Route exact path="/products/:id">
-            <AlbumsList productList={singleAlbum} setProductList={setProductList}/>
+            <AlbumsList productList={productList} setProductList={setProductList}/>
           </Route>
           <Route exact path="/products">
-            <AlbumsList productList={productList} setSingleAlbum={setSingleAlbum}/>
+            <AlbumsList productList={productList}/>
           </Route>
           <Route exact path="/">
             <h1>This is the home page</h1>

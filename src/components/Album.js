@@ -30,10 +30,9 @@ const useStyles = makeStyles({
 });
 
 const Album = (props) => {
-  const { ID, name, description, price, imageURL, inStock, category, setSingleAlbum } = props;
+  const { ID, name, description, price, imageURL, inStock, category } = props;
   const classes = useStyles();
 
-  const single = {ID, name, description, price, imageURL, inStock, category};
 
   function productPage() {
     return ("/products/"+ID)
@@ -41,11 +40,7 @@ const Album = (props) => {
   return (
     <>
       <Card className={classes.root}>
-        <Link to={productPage()}
-          onClick={()=> {
-            
-            setSingleAlbum(single);
-          }}>
+        <Link to={productPage()}>
           <CardMedia
             className={classes.media}
             image={imageURL}
