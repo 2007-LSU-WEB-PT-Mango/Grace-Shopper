@@ -21,7 +21,7 @@ const App = () => {
   return (
     <div className="App">
       <h1>My App</h1>
-      {/* <AlbumsList productList={productList} /> */}
+      <AlbumsList productList={productList} />
       {/* <h2>{message}</h2> */}
     </div>
   );
