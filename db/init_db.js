@@ -89,7 +89,6 @@ async function populateInitialData() {
 
     const productThree = await createProduct(
       {
-        id: 1,
         name: 'The Waterfall II',
         description: 'My Morning Jacket',
         price: 27,
@@ -101,7 +100,6 @@ async function populateInitialData() {
     
     const productFour = await createProduct(
       {
-        id: 2,
         name: 'Circles (Deluxe)',
         description: 'Mac Miller',
         price: 35,
@@ -113,7 +111,6 @@ async function populateInitialData() {
 
     const productFive = await createProduct(
       {
-        id: 3,
         name: "Cuttin' Grass Vol. 1",
         description: 'Sturgill Simpson',
         price: 22,
@@ -122,7 +119,6 @@ async function populateInitialData() {
         inStock: true,
         category: 'Country',
       });
-    
 
     console.log('success creating products!');
 

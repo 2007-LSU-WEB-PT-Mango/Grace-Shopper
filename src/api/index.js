@@ -3,8 +3,8 @@ import axios from 'axios';
 export async function getSomething() {
   try {
     const { data } = await axios.get(
-      // local host use /api/products
-      'https://mangorecords.herokuapp.com/api/products'
+      // '/api/products'
+      'https://mangorecordshop.herokuapp.com/api/products'
     );
     return data;
   } catch (error) {
@@ -13,8 +13,8 @@ export async function getSomething() {
 }
 
 const heroku = axios.create({
-  // baseURL: 'http://localhost:3000/api',
-  baseURL: 'https://mangorecords.herokuapp.com/api',
+  // baseURL: 'http://localhost:3000/api'
+  baseURL: 'https://mangorecordshop.herokuapp.com/api'
 });
 
 export async function getProducts() {
