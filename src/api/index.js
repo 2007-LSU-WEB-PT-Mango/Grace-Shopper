@@ -20,7 +20,7 @@ export async function getProducts() {
   try {
     const response = await heroku.get('/products');
     console.log(response);
-    // return data;
+    return response;
   } catch (err) {
     console.error(err);
   }
