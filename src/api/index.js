@@ -18,8 +18,9 @@ const heroku = axios.create({
 
 export async function getProducts() {
   try {
-    const { data } = await heroku.get('/products');
-    return data;
+    const response = await heroku.get('/products');
+    console.log(response);
+    // return data;
   } catch (err) {
     console.error(err);
   }
