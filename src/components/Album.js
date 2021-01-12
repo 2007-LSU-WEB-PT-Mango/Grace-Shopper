@@ -11,6 +11,7 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import Button from '@material-ui/core/Button';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles({
   root: {
@@ -29,16 +30,23 @@ const useStyles = makeStyles({
 });
 
 const Album = (props) => {
-  const { name, description, price, imageURL, inStock, category } = props;
+  const { ID, name, description, price, imageURL, inStock, category } = props;
   const classes = useStyles();
+
+
+  function productPage() {
+    return ("/products/"+ID)
+  }
   return (
     <>
       <Card className={classes.root}>
-        <CardMedia
-          className={classes.media}
-          image={imageURL}
-          title="Vinyl Record Stock Thumbnail"
-        />
+        <Link to={productPage()}>
+          <CardMedia
+            className={classes.media}
+            image={imageURL}
+            title="Vinyl Record Stock Thumbnail"
+          />
+        </Link>
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
             {name}

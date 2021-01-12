@@ -3,6 +3,7 @@ import axios from 'axios';
 export async function getSomething() {
   try {
     const { data } = await axios.get(
+      // local host use /api/products
       'https://mangorecordshop.herokuapp.com/api/products'
     );
     return data;
@@ -18,9 +19,9 @@ const heroku = axios.create({
 
 export async function getProducts() {
   try {
-    const response = await heroku.get('/products');
-    console.log(response);
-    return response;
+    const {data} = await heroku.get('/products');
+    console.log(data);
+    return data;
   } catch (err) {
     throw err;
   }
