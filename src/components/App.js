@@ -28,7 +28,6 @@ const App = () => {
   const classes = useStyles();
   return (
     <div className="App">
-<<<<<<< HEAD
       <Router>
         <Header />
         <Switch>
@@ -43,11 +42,6 @@ const App = () => {
           </Route>
         </Switch>
       </Router>
-=======
-      <h1>My App</h1>
-      {/* <AlbumsList productList={productList} /> */}
-      {/* <h2>{message}</h2> */}
->>>>>>> dev
     </div>
   );
 };
