@@ -20,7 +20,8 @@ const App = () => {
 
   return (
     <div className="App">
-      <AlbumsList productList={productList} />
+      <h1>My App</h1>
+      {/* <AlbumsList productList={productList} /> */}
       {/* <h2>{message}</h2> */}
     </div>
   );
