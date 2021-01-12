@@ -5,18 +5,18 @@ const {
   getAllProducts,
   createProduct,
   getProduct,
-} = require("./index");
+} = require('./index');
 
 async function dropTables() {
   console.log("dropping tables");
   try {
-    client.query(`
+    await client.query(`
       DROP TABLE IF EXISTS orders;
       DROP TABLE IF EXISTS users;
       DROP TABLE IF EXISTS products;
     `);
   } catch (error) {
-    console.error("error dropping tables");
+    console.error('error dropping tables');
 
     throw error;
   }
@@ -55,46 +55,39 @@ async function buildTables() {
         "datePlaced" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
       );
     `);
-    console.log("tables created!");
+    console.log('tables created!');
     await populateInitialData();
   } catch (error) {
-    console.error("error creating tables");
+    console.error('error creating tables');
     throw error;
   }
 }
 
 async function populateInitialData() {
   try {
-    console.log("creating products....");
+    console.log('creating products....');
 
     const productOne = await createProduct({
-      name: "Revolver",
-      description: "The Beatles",
+      name: 'Revolver',
+      description: 'The Beatles',
       price: 19,
       imageURL:
-        "https://images-na.ssl-images-amazon.com/images/I/91ffeWzPNpL._SL1500_.jpg",
+        'https://images-na.ssl-images-amazon.com/images/I/91ffeWzPNpL._SL1500_.jpg',
       inStock: true,
-      category: "rock",
+      category: 'rock',
     });
 
     const productTwo = await createProduct({
-      name: "Abbey Road",
-      description: "The Beatles",
+      name: 'Abbey Road',
+      description: 'The Beatles',
       price: 20,
       imageURL:
-        "https://images-na.ssl-images-amazon.com/images/I/81dUVKQDBEL._SL1200_.jpg",
+        'https://images-na.ssl-images-amazon.com/images/I/81dUVKQDBEL._SL1200_.jpg',
       inStock: true,
-      category: "rock",
+      category: 'rock',
     });
 
-    const productThree = await createProduct({
-      name: "test",
-      description: "by unknown",
-      price: 15,
-      category: "unknown",
-    });
-
-    console.log("success creating products!");
+    console.log('success creating products!');
 
     return [productOne, productTwo];
   } catch (error) {
