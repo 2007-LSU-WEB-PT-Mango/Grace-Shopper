@@ -13,13 +13,13 @@ export async function getSomething() {
 }
 
 const heroku = axios.create({
-  // baseURL: 'http://localhost:3000/api',
-  baseURL: 'https://mangorecordshop.herokuapp.com/api',
+  baseURL: 'http://localhost:3000/api',
+  // baseURL: 'https://mangorecordshop.herokuapp.com/api',
 });
 
 export async function getProducts() {
   try {
-    const {data} = await heroku.get('/products');
+    const { data } = await heroku.get('/products');
     console.log(data);
     return data;
   } catch (err) {
