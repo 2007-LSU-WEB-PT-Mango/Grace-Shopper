@@ -22,6 +22,6 @@ export async function getProducts() {
     console.log(response);
     return response;
   } catch (err) {
-    console.error(err);
+    throw err;
   }
 }
