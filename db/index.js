@@ -25,6 +25,7 @@ async function getAllProducts() {
   }
 }
 
+
 async function createProduct({
   name,
   description,
@@ -69,6 +70,88 @@ async function getProduct(productID) {
   }
 }
 
+async function getAllUsers() {
+  try {
+    const { rows: users } = await client.query(`
+      SELECT *
+      FROM users
+    `);
+
+    console.log('the users are:', users);
+
+    return users;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getUserById(userID) {
+  try {
+    console.log('finding user id:', userID);
+    const {
+      rows: [user],
+    } = await client.query(`
+      SELECT *
+      FROM users
+      WHERE id=${userID}
+    `);
+
+    delete user.password;
+
+    console.log('found the following:', user);
+    return user;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getUserByUsername(username) {
+  try {
+    console.log('finding user by username:', username);
+    const { rows: [user]} = await client.query(`
+      SELECT *
+      FROM users
+      WHERE username=${username}
+    `);
+
+    delete user.password;
+    console.log('found the following:', user);
+    return user;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function createUser({
+  firstName,
+  lastName,
+  email,
+  imageURL,
+  username,
+  password,
+  isAdmin
+}) {
+  try {
+    const {
+      rows: [user],
+    } = await client.query(
+      `
+      INSERT INTO users("firstName", "lastName", email, "imageURL", username, password, "isAdmin")
+      VALUES($1, $2, $3, $4, $5, $6, $7)
+      RETURNING *;
+    `,
+      [firstName, lastName, email, imageURL, username, password, isAdmin]
+    );
+
+    delete user.password
+    
+    console.log('this is the new user:', user)
+    return user;
+  } catch (error) {
+    throw error;
+  }
+}
+
 // export
 module.exports = {
   client,
@@ -76,4 +159,8 @@ module.exports = {
   getAllProducts,
   createProduct,
   getProduct,
+  getAllUsers,
+  getUserById,
+  getUserByUsername,
+  createUser
 };

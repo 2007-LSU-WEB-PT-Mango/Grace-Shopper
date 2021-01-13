@@ -5,6 +5,10 @@ const {
   getAllProducts,
   createProduct,
   getProduct,
+  getAllUsers,
+  getUserById,
+  getUserByUsername,
+  createUser
 } = require('./index');
 
 async function dropTables() {
@@ -57,6 +61,7 @@ async function buildTables() {
     `);
     console.log('tables created!');
     await populateInitialData();
+    await populateInitialUser();
   } catch (error) {
     console.error('error creating tables');
     throw error;
@@ -128,13 +133,37 @@ async function populateInitialData() {
   }
 }
 
+async function populateInitialUser() {
+  try {
+    console.log('starting to put in users');
+
+    const userOne = await createUser(
+      {
+        firstName: "Brandon",
+        lastName: "Albright",
+        email: "brandon4692@gmail.com",
+        imageURL: "none",
+        username: "brandonalbright92",
+        password: "mypassword",
+        isAdmin: true
+      }
+    );
+    console.log('success creating users');
+
+    return [userOne];
+  } catch (error) {
+    throw error;
+  }
+}
+
 async function rebuildDB() {
   try {
     client.connect();
     await dropTables();
     await buildTables();
-    await getAllProducts();
-    await getProduct(2);
+    // await getAllUsers();
+    // await getUserById(1);
+    await getUserByUsername('brandonalbright92');
   } catch (error) {
     throw error;
   }
