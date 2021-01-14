@@ -1,4 +1,5 @@
 // Connect to DB
+const { Compare, FormatAlignJustifyTwoTone } = require('@material-ui/icons');
 const { Client } = require('pg');
 const DB_NAME = 'mango';
 const DB_URL =
@@ -17,7 +18,6 @@ async function getAllProducts() {
       FROM products
     `);
 
-    console.log('the products are:', products);
 
     return products;
   } catch (error) {
@@ -54,7 +54,7 @@ async function createProduct({
 
 async function getProduct(productID) {
   try {
-    console.log('finding product id:', productID);
+    
     const {
       rows: [product],
     } = await client.query(`
@@ -63,7 +63,7 @@ async function getProduct(productID) {
       WHERE id=${productID}
     `);
 
-    console.log('found the following:', product);
+    
     return product;
   } catch (error) {
     throw error;
@@ -77,7 +77,7 @@ async function getAllUsers() {
       FROM users
     `);
 
-    console.log('the users are:', users);
+    
 
     return users;
   } catch (error) {
@@ -87,7 +87,7 @@ async function getAllUsers() {
 
 async function getUserById(userID) {
   try {
-    console.log('finding user id:', userID);
+    
     const {
       rows: [user],
     } = await client.query(`
@@ -98,7 +98,7 @@ async function getUserById(userID) {
 
     delete user.password;
 
-    console.log('found the following:', user);
+    
     return user;
   } catch (error) {
     throw error;
@@ -107,20 +107,37 @@ async function getUserById(userID) {
 
 async function getUserByUsername(username) {
   try {
-    console.log('finding user by username:', username);
+    
     const { rows: [user]} = await client.query(`
       SELECT *
       FROM users
-      WHERE username=${username}
-    `);
+      WHERE username=$1
+    `, [username]);
 
     delete user.password;
-    console.log('found the following:', user);
+    
     return user;
   } catch (error) {
     throw error;
   }
 }
+
+// still working on!!
+async function authenticate({ username, password }) {
+  let authQuery = `
+    SELECT *
+    FROM users
+    WHERE username=$1
+  `
+
+  const user = (await client.query(authQuery, [username])).rows[0];
+
+  await Compare({ plain: password, hashed: user.password});
+
+  return FormatAlignJustifyTwoTone.encode(
+    { id: user.id }, process.env.JWT
+  );
+};
 
 async function createUser({
   firstName,
@@ -145,7 +162,6 @@ async function createUser({
 
     delete user.password
     
-    console.log('this is the new user:', user)
     return user;
   } catch (error) {
     throw error;
@@ -162,5 +178,6 @@ module.exports = {
   getAllUsers,
   getUserById,
   getUserByUsername,
-  createUser
+  createUser,
+  authenticate
 };

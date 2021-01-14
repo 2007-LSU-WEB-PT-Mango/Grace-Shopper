@@ -12,7 +12,6 @@ const {
 } = require('./index');
 
 async function dropTables() {
-  console.log("dropping tables");
   try {
     await client.query(`
       DROP TABLE IF EXISTS orders;
@@ -27,7 +26,6 @@ async function dropTables() {
 }
 
 async function buildTables() {
-  console.log("building tables");
   try {
     
     await client.query(`
@@ -59,7 +57,6 @@ async function buildTables() {
         "datePlaced" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
       );
     `);
-    console.log('tables created!');
     await populateInitialData();
     await populateInitialUser();
   } catch (error) {
@@ -70,7 +67,6 @@ async function buildTables() {
 
 async function populateInitialData() {
   try {
-    console.log('creating products....');
 
     const productOne = await createProduct({
       name: 'Revolver',
@@ -125,7 +121,6 @@ async function populateInitialData() {
         category: 'Country',
       });
 
-    console.log('success creating products!');
 
     return [productOne, productTwo, productThree, productFour, productFive];
   } catch (error) {
@@ -135,7 +130,6 @@ async function populateInitialData() {
 
 async function populateInitialUser() {
   try {
-    console.log('starting to put in users');
 
     const userOne = await createUser(
       {
@@ -148,7 +142,6 @@ async function populateInitialUser() {
         isAdmin: true
       }
     );
-    console.log('success creating users');
 
     return [userOne];
   } catch (error) {
@@ -161,9 +154,6 @@ async function rebuildDB() {
     client.connect();
     await dropTables();
     await buildTables();
-    // await getAllUsers();
-    // await getUserById(1);
-    await getUserByUsername('brandonalbright92');
   } catch (error) {
     throw error;
   }
