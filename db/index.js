@@ -20,13 +20,13 @@ async function getAllProducts() {
       FROM products
     `);
 
+    console.log("the products are:", products);
 
     return products;
   } catch (error) {
     throw error;
   }
 }
-
 
 async function createProduct({
   name,
