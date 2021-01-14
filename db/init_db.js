@@ -8,7 +8,7 @@ const {
 } = require('./index');
 
 async function dropTables() {
-  console.log("dropping tables");
+  console.log('dropping tables');
   try {
     await client.query(`
       DROP TABLE IF EXISTS orders;
@@ -23,9 +23,8 @@ async function dropTables() {
 }
 
 async function buildTables() {
-  console.log("building tables");
+  console.log('building tables');
   try {
-    
     await client.query(`
       CREATE TABLE users(
         id SERIAL PRIMARY KEY,

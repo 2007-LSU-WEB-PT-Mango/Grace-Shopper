@@ -8,6 +8,8 @@ const client = new Client({
   ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : undefined,
 });
 
+const bcrypt = require('bcrypt');
+
 // database methods
 
 async function getAllProducts() {
@@ -69,6 +71,44 @@ async function getProduct(productID) {
   }
 }
 
+// USER METHODS
+async function checkUsername(username) {
+  try {
+    const user = await client.query(
+      `
+      SELECT * FROM users
+      WHERE username = $1
+    `,
+      [username]
+    );
+
+    return user.rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function createUser({ firstName, lastName, email, username, password }) {
+  try {
+    // Password hashing
+    const saltRound = 10; //encryption setting
+    const salt = await bcrypt.genSalt(saltRound);
+    const bcryptPassword = await bcrypt.hash(password, salt);
+
+    const { rows: user } = await client.query(
+      `
+    INSERT INTO users ("firstName", "lastName", email, username, password)
+    VALUES ($1, $2, $3, $4, $5)
+    RETURNING *
+    `,
+      [firstName, lastName, email, username, bcryptPassword]
+    );
+    return user;
+  } catch (error) {
+    throw error;
+  }
+}
+
 // export
 module.exports = {
   client,
@@ -76,4 +116,6 @@ module.exports = {
   getAllProducts,
   createProduct,
   getProduct,
+  checkUsername,
+  createUser,
 };

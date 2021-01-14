@@ -31,4 +31,12 @@ apiRouter.get('/products/:id', async (req, res, next) => {
   }
 });
 
+// apiRouter.post('/users/register', async (req, res, next) => {
+//   try {
+//     res.json('This route will register and create a new user.');
+//   } catch (error) {
+//     next(error);
+//   }
+// });
+
 module.exports = apiRouter;
