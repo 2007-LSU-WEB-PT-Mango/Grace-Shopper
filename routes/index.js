@@ -6,7 +6,6 @@ apiRouter.get("/", (req, res, next) => {
   });
 });
 
-const apiRouter = require("express").Router();
 
 apiRouter.get("/products", async (req, res, next) => {
   try {
