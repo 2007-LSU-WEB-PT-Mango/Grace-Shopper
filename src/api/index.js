@@ -6,7 +6,11 @@ const local = axios.create({
 
 export async function getSomething() {
   try {
-    const { data } = await local.get('/products');
+    const { data } = await axios.get(
+      // '/api/products'
+      'https://mangorecordshop.herokuapp.com/api/products'
+    );
+    // const { data } = await local.get('/products');
     return data;
   } catch (error) {
     throw error;
@@ -21,7 +25,6 @@ const heroku = axios.create({
 export async function getProducts() {
   try {
     const { data } = await heroku.get('/products');
-    console.log(data);
     return data;
   } catch (err) {
     throw err;
