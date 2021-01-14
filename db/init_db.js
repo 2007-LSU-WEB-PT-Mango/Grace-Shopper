@@ -27,7 +27,6 @@ async function dropTables() {
 
 async function buildTables() {
   try {
-    
     await client.query(`
       CREATE TABLE users(
         id SERIAL PRIMARY KEY,

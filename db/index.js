@@ -9,6 +9,8 @@ const client = new Client({
   ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : undefined,
 });
 
+const bcrypt = require('bcrypt');
+
 // database methods
 
 async function getAllProducts() {
@@ -139,29 +141,26 @@ async function authenticate({ username, password }) {
   );
 };
 
-async function createUser({
-  firstName,
-  lastName,
-  email,
-  imageURL,
-  username,
-  password,
-  isAdmin
-}) {
-  try {
-    const {
-      rows: [user],
-    } = await client.query(
-      `
-      INSERT INTO users("firstName", "lastName", email, "imageURL", username, password, "isAdmin")
-      VALUES($1, $2, $3, $4, $5, $6, $7)
-      RETURNING *;
-    `,
-      [firstName, lastName, email, imageURL, username, password, isAdmin]
-    );
 
-    delete user.password
     
+async function createUser({ firstName, lastName, email, username, password }) {
+  try {
+    // Password hashing
+    const saltRound = 10; //encryption setting
+    const salt = await bcrypt.genSalt(saltRound);
+    const bcryptPassword = await bcrypt.hash(password, salt);
+
+    const { rows: user } = await client.query(
+      `
+    INSERT INTO users ("firstName", "lastName", email, username, password)
+    VALUES ($1, $2, $3, $4, $5)
+    RETURNING *
+    `,
+      [firstName, lastName, email, username, bcryptPassword]
+    );
+    
+    delete user.bcryptPassword
+
     return user;
   } catch (error) {
     throw error;

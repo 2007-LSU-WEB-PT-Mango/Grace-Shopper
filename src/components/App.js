@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from "react";
-import "./styles.css";
-import Header from "./Header";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-} from "react-router-dom";
-import { makeStyles } from "@material-ui/core/styles";
-import { AlbumsList } from "../components";
-import { getProducts } from "../api";
+import React, { useState, useEffect } from 'react';
+import './styles.css';
+import Header from './Header';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
+import { AlbumsList } from '../components';
+import { getProducts, getSomething } from '../api';
 
 const useStyles = makeStyles({});
 
@@ -16,9 +12,10 @@ const App = () => {
   const [productList, setProductList] = useState([]);
 
   useEffect(() => {
-    getProducts()
+    // getProducts()
+    getSomething()
       .then((response) => {
-        console.log("App.js useEffect:", response);
+        console.log('App.js useEffect:', response);
         setProductList(response);
       })
       .catch((error) => {
@@ -32,10 +29,13 @@ const App = () => {
         <Header />
         <Switch>
           <Route exact path="/products/:id">
-            <AlbumsList productList={productList} setProductList={setProductList}/>
+            <AlbumsList
+              productList={productList}
+              setProductList={setProductList}
+            />
           </Route>
           <Route exact path="/products">
-            <AlbumsList productList={productList}/>
+            <AlbumsList productList={productList} />
           </Route>
           <Route exact path="/">
             <h1>This is the home page</h1>
