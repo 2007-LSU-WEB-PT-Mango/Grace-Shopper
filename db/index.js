@@ -101,9 +101,7 @@ async function getUserById(userID) {
 
 async function getUserByUsername(username) {
   try {
-    const {
-      rows: [user],
-    } = await client.query(
+    const user = await client.query(
       `
       SELECT *
       FROM users
@@ -114,7 +112,7 @@ async function getUserByUsername(username) {
 
     delete user.password;
 
-    return user;
+    return user.rows;
   } catch (error) {
     throw error;
   }

@@ -6,35 +6,36 @@ const usersRouter = require('express').Router();
 const bcrypt = require('bcrypt');
 const { getUserByUsername, createUser } = require('../db/index');
 
+// Require and build new client to test post routes
+// !!Remove after troubleshooting is complete.
+const { client } = require('../db/index');
+
 usersRouter.post('/register', async (req, res, next) => {
   try {
-    //   1. De-structure the req.body (firstName, lastName, email, username, password).
-    const { firstName, lastName, email, username, password } = req.body;
-
-    //   2. Check if username exists.
+    // 1. Destructure the red. body
+    const { firstName, lastName, username, email, password } = req.body;
+    // 2. Check if user exists
     const user = await getUserByUsername(username);
 
-    if (user) {
-      return res.send({
-        Warning: 'Username already exists!',
+    if (user.length !== 0) {
+      return res.status(401).send({
+        success: false,
+        message: 'Username already exists!',
       });
     }
-    res.json(user);
 
-    //   3. Bcrypt the user's password
-    //   4. Enter new user in db.
-    // const newUser = await createUser({
-    //   firstName,
-    //   lastName,
-    //   email,
-    //   username,
-    //   password,
-    // });
+    // 3. Bcrypt the user password
+    // 4. Create new user in the database
+    let newUser = await createUser({
+      firstName,
+      lastName,
+      username,
+      email,
+      password,
+    });
 
-    //   5. Generate a JWT.
-
-    // console.log(`The new user is:`, newUser);
-    // res.json(newUser);
+    res.send(newUser);
+    // 5. Generate and return JWT token
   } catch (error) {
     console.error(error);
     next(error);
