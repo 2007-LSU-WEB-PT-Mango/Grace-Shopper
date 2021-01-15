@@ -5,10 +5,7 @@
 const usersRouter = require('express').Router();
 const bcrypt = require('bcrypt');
 const { getUserByUsername, createUser } = require('../db/index');
-
-// Require and build new client to test post routes
-// !!Remove after troubleshooting is complete.
-const { client } = require('../db/index');
+const jwtGenerator = require('../utils/jwtGenerator');
 
 usersRouter.post('/register', async (req, res, next) => {
   try {
@@ -34,8 +31,14 @@ usersRouter.post('/register', async (req, res, next) => {
       password,
     });
 
-    res.send(newUser);
     // 5. Generate and return JWT token
+    const token = jwtGenerator(newUser.id);
+    res.send({
+      success: true,
+      message: 'New user registered.',
+      username,
+      token,
+    });
   } catch (error) {
     console.error(error);
     next(error);
