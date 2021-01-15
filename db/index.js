@@ -151,7 +151,7 @@ async function createUser({ firstName, lastName, email, username, password }) {
       [firstName, lastName, email, username, bcryptPassword]
     );
 
-    delete user.bcryptPassword;
+    // delete user.bcryptPassword;
 
     return user;
   } catch (error) {

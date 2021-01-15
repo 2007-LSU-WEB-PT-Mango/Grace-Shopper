@@ -4,7 +4,7 @@
 
 const usersRouter = require('express').Router();
 const bcrypt = require('bcrypt');
-const { checkUsername, createUser } = require('../db/index');
+const { getUserByUsername, createUser } = require('../db/index');
 
 usersRouter.post('/register', async (req, res, next) => {
   try {
@@ -12,29 +12,31 @@ usersRouter.post('/register', async (req, res, next) => {
     const { firstName, lastName, email, username, password } = req.body;
 
     //   2. Check if username exists.
-    const user = await checkUsername(username);
+    const user = await getUserByUsername(username);
 
-    if (user.length !== 0) {
+    if (user) {
       return res.send({
         Warning: 'Username already exists!',
       });
     }
+    res.json(user);
 
     //   3. Bcrypt the user's password
     //   4. Enter new user in db.
-    const newUser = await createUser({
-      firstName,
-      lastName,
-      email,
-      username,
-      password,
-    });
+    // const newUser = await createUser({
+    //   firstName,
+    //   lastName,
+    //   email,
+    //   username,
+    //   password,
+    // });
 
     //   5. Generate a JWT.
 
-    console.log(newUser);
-    res.json(newUser);
+    // console.log(`The new user is:`, newUser);
+    // res.json(newUser);
   } catch (error) {
+    console.error(error);
     next(error);
   }
 });
