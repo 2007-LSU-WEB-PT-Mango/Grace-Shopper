@@ -40,14 +40,31 @@ usersRouter.post('/register', async (req, res, next) => {
       token,
     });
   } catch (error) {
-    console.error(error);
     next(error);
   }
 });
 
 usersRouter.post('/login', async (req, res, next) => {
   try {
-    res.send({ message: 'This route will log in a user.' });
+    // 1. Destructure the req.body
+    const { username, password } = req.body;
+    // 2. Check if user exists
+    const user = await getUserByUsername(username);
+    if (user.length === 0) {
+      return res.status(401).send('Email or password is incorrect.');
+    }
+    // 3. Check if incoming password matches password in the database
+    const validPassword = await bcrypt.compare(password, user[0].password);
+    if (!validPassword) {
+      return res.status(401).send('Email or password is incorrect.');
+    }
+    // 4. Generate a JWT token
+    const token = jwtGenerator(user.id);
+    res.send({
+      success: true,
+      message: `You are logged in as ${username}.`,
+      token,
+    });
   } catch (error) {
     next(error);
   }
