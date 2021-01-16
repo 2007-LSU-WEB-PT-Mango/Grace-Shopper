@@ -7,4 +7,4 @@ export async function getProducts() {
   } catch (error) {
     throw error;
   }
-}
+};

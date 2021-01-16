@@ -10,6 +10,7 @@ const client = new Client({
 });
 
 const bcrypt = require('bcrypt');
+// const { delete } = require('../routes');
 
 // database methods
 
@@ -75,6 +76,11 @@ async function getAllUsers() {
       FROM users
     `);
 
+<<<<<<< HEAD
+=======
+    users.map(user => delete user.password)
+
+>>>>>>> dev
     return users;
   } catch (error) {
     throw error;

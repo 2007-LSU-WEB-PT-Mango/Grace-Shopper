@@ -7,6 +7,25 @@ const Auth = (props) => {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
+  const handleClick = async (event) => {
+    event.preventDefault();
+    try {
+      const result = await FUNCTION(username, password, true);
+
+      setIsLoggedIn(true);
+      if (result.error) {
+        setMessage(result.error);
+        return <h3 className="error">Username Already Exists!</h3>;
+      } else {
+        setIsLoggedIn(true);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    // we need the api function to go here in a try catch block ^^^^
+  };
+
   return (
     <form className="log-in" onSubmit={(event) => event.preventDefault()}>
       <h5 className="error">Error!</h5>
@@ -24,49 +43,10 @@ const Auth = (props) => {
         placeholder="password"
         className="login"
       />
-      <button
-        className="register-button"
-        onClick={async (event) => {
-          event.preventDefault();
-          try {
-            const result = await FUNCTION(username, password, true);
-
-            setIsLoggedIn(true);
-            if (result.error) {
-              setMessage(result.error);
-              return <h3 className="error">Username Already Exists!</h3>;
-            } else {
-              setIsLoggedIn(true);
-            }
-            // console.log("result in registwer button", result);
-          } catch (error) {
-            console.error(error);
-          }
-
-          // we need the api function to go here in a try catch block ^^^^
-        }}
-      >
+      <button className="register-button" onClick={handleClick()}>
         Sign Up
       </button>
-      <button
-        className="log-in-button"
-        onClick={async (event) => {
-          event.preventDefault();
-          try {
-            const result = await FUNCTION(username, password);
-            if (result.error) {
-              setMessage(result.error);
-              return <h3 className="error"> Incorrect email or password!</h3>;
-            } else {
-              setIsLoggedIn(true);
-            }
-          } catch (error) {
-            console.error(error);
-          }
-
-          //we need the api route function to go here in the try catch block ^^^^
-        }}
-      >
+      <button className="log-in-button" onClick={handleClick()}>
         Log In
       </button>
     </form>

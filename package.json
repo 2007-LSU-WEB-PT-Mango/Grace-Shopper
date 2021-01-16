@@ -10,8 +10,8 @@
     "server:dev": "nodemon index.js",
     "db:build": "node ./db/init_db",
     "start": "node index.js",
-    "heroku-postbuild": "npm run db:build",
-    "start:dev": "npm run server:dev & npm run client:dev"
+    "start:dev": "npm run server:dev & npm run client:dev",
+    "heroku-postbuild": "npm run db:build"
   },
   "keywords": [],
   "author": "",
