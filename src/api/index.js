@@ -8,3 +8,16 @@ export async function getSomething() {
     throw error;
   }
 }
+
+const local = axios.create({
+  baseURL: 'http://localhost:3000/api',
+});
+
+export async function getProducts() {
+  try {
+    const { data } = await local.get('/products');
+    return data;
+  } catch (err) {
+    console.error(err);
+  }
+}
