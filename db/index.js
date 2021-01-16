@@ -55,7 +55,6 @@ async function createProduct({
 
 async function getProduct(productID) {
   try {
-    
     const {
       rows: [product],
     } = await client.query(`
@@ -64,7 +63,6 @@ async function getProduct(productID) {
       WHERE id=${productID}
     `);
 
-    
     return product;
   } catch (error) {
     throw error;
@@ -78,7 +76,7 @@ async function getAllUsers() {
       FROM users
     `);
 
-    users.map(user => delete user.password)
+    users.map((user) => delete user.password);
 
     return users;
   } catch (error) {
@@ -88,7 +86,6 @@ async function getAllUsers() {
 
 async function getUserById(userID) {
   try {
-    
     const {
       rows: [user],
     } = await client.query(`
@@ -99,7 +96,6 @@ async function getUserById(userID) {
 
     delete user.password;
 
-    
     return user;
   } catch (error) {
     throw error;
@@ -108,16 +104,18 @@ async function getUserById(userID) {
 
 async function getUserByUsername(username) {
   try {
-    
-    const { rows: [user]} = await client.query(`
+    const user = await client.query(
+      `
       SELECT *
       FROM users
       WHERE username=$1
-    `, [username]);
+    `,
+      [username]
+    );
 
     delete user.password;
-    
-    return user;
+
+    return user.rows;
   } catch (error) {
     throw error;
   }
@@ -129,19 +127,15 @@ async function authenticate({ username, password }) {
     SELECT *
     FROM users
     WHERE username=$1
-  `
+  `;
 
   const user = (await client.query(authQuery, [username])).rows[0];
 
-  await Compare({ plain: password, hashed: user.password});
+  await Compare({ plain: password, hashed: user.password });
 
-  return FormatAlignJustifyTwoTone.encode(
-    { id: user.id }, process.env.JWT
-  );
-};
+  return FormatAlignJustifyTwoTone.encode({ id: user.id }, process.env.JWT);
+}
 
-
-    
 async function createUser({ firstName, lastName, email, username, password }) {
   try {
     // Password hashing
@@ -157,8 +151,6 @@ async function createUser({ firstName, lastName, email, username, password }) {
     `,
       [firstName, lastName, email, username, bcryptPassword]
     );
-    
-    delete user.bcryptPassword
 
     return user;
   } catch (error) {
@@ -177,5 +169,5 @@ module.exports = {
   getUserById,
   getUserByUsername,
   createUser,
-  authenticate
+  authenticate,
 };

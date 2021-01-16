@@ -4,7 +4,7 @@ import Header from './Header';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { AlbumsList } from '../components';
-import { getProducts, getSomething } from '../api';
+import { getProducts } from '../api';
 
 const useStyles = makeStyles({});
 
@@ -12,10 +12,8 @@ const App = () => {
   const [productList, setProductList] = useState([]);
 
   useEffect(() => {
-    // getProducts()
-    getSomething()
+    getProducts()
       .then((response) => {
-        console.log('App.js useEffect:', response);
         setProductList(response);
       })
       .catch((error) => {
