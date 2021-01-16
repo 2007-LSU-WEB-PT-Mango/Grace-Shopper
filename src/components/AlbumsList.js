@@ -11,28 +11,22 @@ import Album from './Album';
 const AlbumsList = ({ productList }) => {
   console.log(productList)
   const {id} = useParams();
-  let filteredAlbum = productList.filter(function (product) {
-    if (id) {
-      return id == product.id;
-    }
-    return false
-  })
-  let selectedAlbum = filteredAlbum[0];
+  let filteredAlbum = productList.find(product => id && id == product.id);
   
   return (
     <>
       <div id="AlbumList">
         <Grid container>
-            {selectedAlbum?
+            {filteredAlbum?
               <>
                 <Grid item xs={12} sm={6} lg={3}>
                   <Album
-                    ID={selectedAlbum.id}
-                    name={selectedAlbum.name}
-                    description={selectedAlbum.description}
-                    price={selectedAlbum.price}
-                    imageURL={selectedAlbum.imageURL}
-                    inStock={selectedAlbum.inStock}
+                    ID={filteredAlbum.id}
+                    name={filteredAlbum.name}
+                    description={filteredAlbum.description}
+                    price={filteredAlbum.price}
+                    imageURL={filteredAlbum.imageURL}
+                    inStock={filteredAlbum.inStock}
                   />
                 </Grid>
               </>
