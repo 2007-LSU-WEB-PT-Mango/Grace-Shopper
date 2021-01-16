@@ -36,7 +36,7 @@ const App = () => {
           <Route exact path="/products">
             <AlbumsList productList={productList} />
           </Route>
-          <Route exact path="/">
+          <Route path="/">
             <h1>This is the home page</h1>
           </Route>
         </Switch>
