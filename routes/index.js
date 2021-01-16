@@ -12,7 +12,6 @@ apiRouter.get('/products', async (req, res, next) => {
     const allProducts = await getAllProducts();
 
     res.send(allProducts);
-    next();
   } catch (error) {
     console.log('Error requesting products');
     next(error);
