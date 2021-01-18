@@ -93,6 +93,7 @@ usersRouter.get('/me', verifyToken, async (req, res) => {
         res.json({
           success: true,
           message: `Welcome ${username}!`,
+          id,
           firstName,
           lastName,
           username,
