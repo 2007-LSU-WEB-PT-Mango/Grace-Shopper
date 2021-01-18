@@ -39,7 +39,6 @@ usersRouter.post('/register', async (req, res, next) => {
     });
 
     // 5. Generate and return JWT token
-    // const token = jwtGenerator(newUser.id);
     jwt.sign({ newUser }, process.env.jwtSecret, (err, token) => {
       res.send({
         success: true,
