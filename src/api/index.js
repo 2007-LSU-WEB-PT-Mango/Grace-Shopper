@@ -9,9 +9,7 @@ export async function getProducts() {
   }
 }
 
-// Build a fetch request to register a new user
-// Test with user dummy data
-
+// Build an axios request to register a new user
 export async function registerNewUser({
   firstName,
   lastName,
