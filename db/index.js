@@ -1,6 +1,6 @@
 // Connect to DB
-const { Client } = require('pg');
-const DB_NAME = 'mango';
+const { Client } = require("pg");
+const DB_NAME = "mango";
 const DB_URL =
   process.env.DATABASE_URL || `postgres://localhost:5432/${DB_NAME}`;
 const client = new Client(DB_URL);
@@ -14,7 +14,7 @@ async function getAllProducts() {
       FROM products
     `);
 
-    console.log('the products are:', products);
+    console.log("the products are:", products);
 
     return products;
   } catch (error) {
@@ -50,7 +50,7 @@ async function createProduct({
 
 async function getProduct(productID) {
   try {
-    console.log('finding product id:', productID);
+    console.log("finding product id:", productID);
     const {
       rows: [product],
     } = await client.query(`
@@ -59,8 +59,21 @@ async function getProduct(productID) {
       WHERE id=${productID}
     `);
 
-    console.log('found the following:', product);
+    console.log("found the following:", product);
     return product;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// Orders-DbAdapters
+
+async function getOrderById(id) {
+  try {
+    const { order: orderIds } = await client.query(
+      `    SELECT id    FROM orders;   `
+    );
+    return orders;
   } catch (error) {
     throw error;
   }

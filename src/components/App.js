@@ -20,7 +20,6 @@ const App = () => {
   useEffect(() => {
     getProducts()
       .then((response) => {
-        console.log("App.js useEffect:", response);
         setProductList(response);
       })
       .catch((error) => {
