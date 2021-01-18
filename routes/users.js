@@ -6,6 +6,9 @@ const usersRouter = require('express').Router();
 const bcrypt = require('bcrypt');
 const { getUserByUsername, createUser } = require('../db/index');
 const jwtGenerator = require('../utils/jwtGenerator');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
+const verifyToken = require('../middleware/verifyToken');
 
 usersRouter.post('/register', async (req, res, next) => {
   try {
@@ -37,12 +40,14 @@ usersRouter.post('/register', async (req, res, next) => {
     });
 
     // 5. Generate and return JWT token
-    const token = jwtGenerator(newUser.id);
-    res.send({
-      success: true,
-      message: 'New user registered.',
-      username,
-      token,
+    // const token = jwtGenerator(newUser.id);
+    jwt.sign({ newUser }, process.env.jwtSecret, (err, token) => {
+      res.send({
+        success: true,
+        message: 'New user registered.',
+        username,
+        token,
+      });
     });
   } catch (error) {
     next(error);
@@ -65,23 +70,40 @@ usersRouter.post('/login', async (req, res, next) => {
     }
     // 4. Generate a JWT token
     const token = jwtGenerator(user.id);
-    res.send({
-      success: true,
-      message: `You are logged in as ${username}.`,
-      token,
+    jwt.sign({ user }, process.env.jwtSecret, (err, token) => {
+      res.send({
+        success: true,
+        message: `You are logged in as ${username}.`,
+        token,
+      });
     });
   } catch (error) {
     next(error);
   }
 });
 
-usersRouter.get('/me', async (req, res) => {
+usersRouter.get('/me', verifyToken, async (req, res) => {
   try {
-    res.send({
-      message: `Send back the logged-in user's data if a valid token is supplied in the header.`,
+    jwt.verify(req.token, process.env.jwtSecret, (err, authData) => {
+      if (err) {
+        console.error(err);
+        res.status(403).send('403 Error');
+      } else {
+        const { id, firstName, lastName, username, email } = authData.user[0];
+        res.json({
+          success: true,
+          message: `Welcome ${username}!`,
+          id,
+          firstName,
+          lastName,
+          username,
+          email,
+        });
+      }
     });
   } catch (error) {
     next(error);
+    res.status(500).send('Server Error');
   }
 });
 
