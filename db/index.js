@@ -71,7 +71,8 @@ async function getProduct(productID) {
 async function getOrderById(id) {
   try {
     const { order: orderIds } = await client.query(
-      `    SELECT id    FROM orders;   `
+      ` SELECT *   
+      FROM orders;   `
     );
     return orders;
   } catch (error) {
