@@ -5,7 +5,6 @@
 const usersRouter = require('express').Router();
 const bcrypt = require('bcrypt');
 const { getUserByUsername, createUser } = require('../db/index');
-const jwtGenerator = require('../utils/jwtGenerator');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const verifyToken = require('../middleware/verifyToken');
@@ -69,7 +68,6 @@ usersRouter.post('/login', async (req, res, next) => {
       return res.status(401).send('Email or password is incorrect.');
     }
     // 4. Generate a JWT token
-    const token = jwtGenerator(user.id);
     jwt.sign({ user }, process.env.jwtSecret, (err, token) => {
       res.send({
         success: true,
