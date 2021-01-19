@@ -17,6 +17,7 @@ async function dropTables() {
       DROP TABLE IF EXISTS orders;
       DROP TABLE IF EXISTS users;
       DROP TABLE IF EXISTS products;
+      DROP TABLE IF EXISTS orderedproducts;
     `);
   } catch (error) {
     console.error('error dropping tables');
@@ -54,6 +55,13 @@ async function buildTables() {
         status VARCHAR(255) DEFAULT 'created',
         "userID" INTEGER REFERENCES users(id),
         "datePlaced" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE TABLE orderedproducts(
+        id SERIAL PRIMARY KEY,
+        "productID" INTEGER REFERENCES products(id),
+        "orderID" INTEGER REFERENCES orders(id),
+        quantity INTEGER
       );
     `);
     await populateInitialData();

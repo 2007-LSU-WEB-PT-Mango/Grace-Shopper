@@ -29,7 +29,6 @@ const App = () => {
           <Route exact path="/products/:id">
             <AlbumsList
               productList={productList}
-              setProductList={setProductList}
             />
           </Route>
           <Route exact path="/products">

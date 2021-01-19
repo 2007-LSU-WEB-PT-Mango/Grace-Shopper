@@ -1,8 +1,10 @@
 import React from 'react';
 import {useParams} from 'react-router-dom';
-
+import { Link } from "react-router-dom";
 // Material UI imports
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 
 import Album from './Album';
 
@@ -16,6 +18,8 @@ const AlbumsList = ({ productList }) => {
   return (
     <>
       <div id="AlbumList">
+        
+      
         <Grid container>
             {filteredAlbum?
               <>
@@ -49,6 +53,16 @@ const AlbumsList = ({ productList }) => {
             })
         }
         </Grid>
+        {filteredAlbum?
+        <Link to="/products">
+          <Button variant="contained" color="primary">
+            <KeyboardBackspaceIcon />
+            Return to All Products
+          </Button>
+        </Link>
+        :
+          null
+      }
       </div>
     </>
   );
