@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import './styles.css';
-import Header from './Header';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import { AlbumsList } from '../components';
-import { getProducts, getSomething } from '../api';
+import React, { useState, useEffect } from "react";
+import "./styles.css";
+import Header from "./Header";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { makeStyles } from "@material-ui/core/styles";
+import { AlbumsList } from "../components";
+import { getProducts, getSomething } from "../api";
 
 const useStyles = makeStyles({});
 
@@ -15,7 +15,7 @@ const App = () => {
     // getProducts()
     getSomething()
       .then((response) => {
-        console.log('App.js useEffect:', response);
+        console.log("App.js useEffect:", response);
         setProductList(response);
       })
       .catch((error) => {
