@@ -1,24 +1,24 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 const Auth = (props) => {
   const { setIsLoggedIn } = props;
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
 
   const handleClick = async (event) => {
-    event.preventDefault();
+    // event.preventDefault();
     try {
-      const result = await FUNCTION(username, password, true);
+      // const result = await FUNCTION(username, password, true);
 
       setIsLoggedIn(true);
-      if (result.error) {
-        setMessage(result.error);
-        return <h3 className="error">Username Already Exists!</h3>;
-      } else {
-        setIsLoggedIn(true);
-      }
+      // if (result.error) {
+      //   setMessage(result.error);
+      //   return <h3 className="error">Username Already Exists!</h3>;
+      // } else {
+      //   setIsLoggedIn(true);
+      // }
     } catch (error) {
       console.error(error);
     }
