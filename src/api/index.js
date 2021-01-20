@@ -56,7 +56,6 @@ export async function getUserData() {
     const { data } = await axios.get('/api/users/dashboard', {
       headers: { Authorization: `Bearer ${token}` },
     });
-    console.log(`inside getUserData()`, data);
     return data;
   } catch (error) {
     console.error(error);

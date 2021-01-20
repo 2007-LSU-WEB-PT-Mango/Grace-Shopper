@@ -2,15 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { getUserData } from '../api/index';
 
 const Dashboard = () => {
+  const [greeting, setGreeting] = useState('');
   useEffect(() => {
     getUserData()
-      .then((response) => console.log(response))
+      .then((response) => {
+        console.log(response);
+        const { firstName, lastName, username, message } = response;
+        setGreeting(message);
+      })
       .catch((err) => console.error(err));
   });
 
   return (
     <>
-      <h1>Dashboard user here.</h1>
+      <h1>{greeting}</h1>
     </>
   );
 };
