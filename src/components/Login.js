@@ -70,7 +70,6 @@ const Auth = ({ setIsLoggedIn }) => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <Typography></Typography>
         <form className={classes.form} noValidate onSubmit={submitForm}>
           <TextField
             variant="outlined"
