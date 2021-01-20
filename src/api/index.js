@@ -25,6 +25,8 @@ export async function registerNewUser({
       email,
       password,
     });
+    localStorage.setItem('token', data.token);
+
     console.log('console.log inside registerNewUser:', data);
     return data;
   } catch (error) {

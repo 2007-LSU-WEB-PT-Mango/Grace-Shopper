@@ -33,7 +33,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Register = () => {
+const Register = ({ setIsLoggedIn }) => {
+  const [isDirty, setIsDirty] = useState(false);
+  const [error, setError] = useState();
   const [inputs, setInputs] = useState({
     firstName: '',
     lastName: '',
@@ -53,10 +55,23 @@ const Register = () => {
   const submitForm = async (e) => {
     e.preventDefault();
     try {
+      setIsDirty(true);
+      if (password.length < 8) {
+        return;
+      } else if (
+        firstName === 0 ||
+        lastName === 0 ||
+        username === 0 ||
+        email === 0
+      ) {
+        return;
+      }
       registerNewUser(inputs);
+      setIsLoggedIn(true);
       console.log(inputs);
     } catch (error) {
       console.error(error);
+      setError(error.message);
     }
   };
 
@@ -139,6 +154,12 @@ const Register = () => {
                   value={password}
                   onChange={onChange}
                 />
+                {isDirty && password.length < 8 ? (
+                  <h4 style={{ color: 'red' }}>
+                    Password must be at least 8 characters long.
+                  </h4>
+                ) : null}
+                {isDirty && error ? 'Required fields missing!' : null}
               </Grid>
             </Grid>
             <Button
@@ -147,7 +168,6 @@ const Register = () => {
               variant="contained"
               color="primary"
               className={classes.submit}
-              onSubmit={submitForm}
             >
               Sign Up
             </Button>

@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Auth = ({ setIsLoggedIn }) => {
+  const [errorMessage, setErrorMessage] = useState(null);
   const [loginData, setLoginData] = useState({
     username: '',
     password: '',
@@ -51,30 +52,12 @@ const Auth = ({ setIsLoggedIn }) => {
     e.preventDefault();
     try {
       loginUser({ username, password });
-      setIsLoggedIn(true);
       setLoginData({ username: '', password: '' });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleClick = async (event) => {
-    // event.preventDefault();
-    try {
-      // const result = await FUNCTION(username, password, true);
-
       setIsLoggedIn(true);
-      // if (result.error) {
-      //   setMessage(result.error);
-      //   return <h3 className="error">Username Already Exists!</h3>;
-      // } else {
-      //   setIsLoggedIn(true);
-      // }
     } catch (error) {
       console.error(error);
+      setErrorMessage(error.response);
     }
-
-    // we need the api function to go here in a try catch block ^^^^
   };
 
   return (
@@ -87,6 +70,7 @@ const Auth = ({ setIsLoggedIn }) => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
+        <Typography></Typography>
         <form className={classes.form} noValidate onSubmit={submitForm}>
           <TextField
             variant="outlined"
@@ -114,6 +98,7 @@ const Auth = ({ setIsLoggedIn }) => {
             value={password}
             onChange={onChange}
           />
+
           <Button
             type="submit"
             fullWidth
@@ -123,8 +108,8 @@ const Auth = ({ setIsLoggedIn }) => {
           >
             Sign In
           </Button>
-          <Grid container>
-            <Grid item>
+          <Grid container className={classes.paper}>
+            <Grid item className={classes.paper}>
               <Link to="/register" variant="body2">
                 Don't have an account? Sign Up
               </Link>

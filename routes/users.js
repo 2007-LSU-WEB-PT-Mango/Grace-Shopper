@@ -14,9 +14,9 @@ usersRouter.post('/register', async (req, res, next) => {
     // 1. Destructure the red. body
     const { firstName, lastName, username, email, password } = req.body;
     // 2. Check if user exists
-    const user = await getUserByUsername(username);
+    const userDB = await getUserByUsername(username);
 
-    if (user.length !== 0) {
+    if (userDB.length !== 0) {
       return res.status(401).send({
         success: false,
         message: 'Username already exists!',
@@ -30,7 +30,7 @@ usersRouter.post('/register', async (req, res, next) => {
 
     // 3. Bcrypt the user password
     // 4. Create new user in the database
-    let newUser = await createUser({
+    let user = await createUser({
       firstName,
       lastName,
       username,
@@ -39,7 +39,7 @@ usersRouter.post('/register', async (req, res, next) => {
     });
 
     // 5. Generate and return JWT token
-    jwt.sign({ newUser }, process.env.jwtSecret, (err, token) => {
+    jwt.sign({ user }, process.env.jwtSecret, (err, token) => {
       res.send({
         success: true,
         message: 'New user registered.',
@@ -59,12 +59,12 @@ usersRouter.post('/login', async (req, res, next) => {
     // 2. Check if user exists
     const user = await getUserByUsername(username);
     if (user.length === 0) {
-      return res.status(401).send('Email or password is incorrect.');
+      res.json('Email or password is incorrect.');
     }
     // 3. Check if incoming password matches password in the database
     const validPassword = await bcrypt.compare(password, user[0].password);
     if (!validPassword) {
-      return res.status(401).send('Email or password is incorrect.');
+      res.json('Email or password is incorrect.');
     }
     // 4. Generate a JWT token
     jwt.sign({ user }, process.env.jwtSecret, (err, token) => {

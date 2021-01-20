@@ -37,10 +37,10 @@ const App = () => {
             <AlbumsList productList={productList} />
           </Route>
           <Route exact path="/register">
-            <Register />
+            <Register isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
           </Route>
           <Route exact path="/login">
-            <Login setIsLoggedIn={setIsLoggedIn} />
+            <Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
           </Route>
           <Route exact path="/dashboard">
             <Dashboard />
