@@ -87,13 +87,7 @@ usersRouter.get('/dashboard', verifyToken, async (req, res, next) => {
         res.status(403).send('403 Error');
       } else {
         console.log(authData);
-        const {
-          id,
-          firstName,
-          lastName,
-          username,
-          email,
-        } = authData.newUser[0];
+        const { id, firstName, lastName, username, email } = authData.user[0];
         res.json({
           success: true,
           message: `Welcome ${username}!`,
