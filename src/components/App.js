@@ -10,6 +10,7 @@ const useStyles = makeStyles({});
 
 const App = () => {
   const [productList, setProductList] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     getProducts()
@@ -39,7 +40,7 @@ const App = () => {
             <Register />
           </Route>
           <Route exact path="/login">
-            <Login />
+            <Login setIsLoggedIn={setIsLoggedIn} />
           </Route>
           <Route exact path="/dashboard">
             <Dashboard />

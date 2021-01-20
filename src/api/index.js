@@ -32,3 +32,34 @@ export async function registerNewUser({
     throw error;
   }
 }
+
+export async function loginUser({ username, password }) {
+  try {
+    const { data } = await axios.post('/api/users/login', {
+      username,
+      password,
+    });
+
+    localStorage.setItem('token', data.token);
+
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function getUserData() {
+  try {
+    const token = localStorage.token;
+    const { data } = await axios.get('/api/users/dashboard', {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    console.log(`inside getUserData()`, data);
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}

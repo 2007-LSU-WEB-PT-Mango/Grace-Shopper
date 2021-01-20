@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
 import { registerNewUser } from '../api/index';
+import { Link } from 'react-router-dom';
 
 // Material UI
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -49,21 +46,17 @@ const Register = () => {
 
   const classes = useStyles();
 
-  const inputStyle = {
-    margin: '.25rem',
-  };
-
   const onChange = (event) => {
     setInputs({ ...inputs, [event.target.name]: event.target.value });
   };
 
-  const submitForm = (e) => {
+  const submitForm = async (e) => {
     e.preventDefault();
     try {
       registerNewUser(inputs);
       console.log(inputs);
     } catch (error) {
-      console.error(error.message);
+      console.error(error);
     }
   };
 

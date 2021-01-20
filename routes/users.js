@@ -1,6 +1,6 @@
 // POST  /users/register
 // POST  /users/login
-// GET   /users/me (*)
+// GET   /users/dashboard (*)
 
 const usersRouter = require('express').Router();
 const bcrypt = require('bcrypt');
@@ -79,14 +79,21 @@ usersRouter.post('/login', async (req, res, next) => {
   }
 });
 
-usersRouter.get('/me', verifyToken, async (req, res) => {
+usersRouter.get('/dashboard', verifyToken, async (req, res, next) => {
   try {
     jwt.verify(req.token, process.env.jwtSecret, (err, authData) => {
       if (err) {
         console.error(err);
         res.status(403).send('403 Error');
       } else {
-        const { id, firstName, lastName, username, email } = authData.user[0];
+        console.log(authData);
+        const {
+          id,
+          firstName,
+          lastName,
+          username,
+          email,
+        } = authData.newUser[0];
         res.json({
           success: true,
           message: `Welcome ${username}!`,
@@ -100,7 +107,6 @@ usersRouter.get('/me', verifyToken, async (req, res) => {
     });
   } catch (error) {
     next(error);
-    res.status(500).send('Server Error');
   }
 });
 
