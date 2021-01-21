@@ -11,6 +11,7 @@ const useStyles = makeStyles({});
 
 const App = () => {
   const [productList, setProductList] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     getProducts()
@@ -39,10 +40,10 @@ const App = () => {
             <AlbumsList productList={productList} />
           </Route>
           <Route exact path="/register">
-            <Register />
+            <Register isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
           </Route>
           <Route exact path="/login">
-            <Login />
+            <Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
           </Route>
           <Route exact path="/dashboard">
             <Dashboard />
