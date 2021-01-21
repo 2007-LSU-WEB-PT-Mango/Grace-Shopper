@@ -64,9 +64,7 @@ const Header = (props) => {
                 isLoggedIn={isLoggedIn}
                 setIsLoggedIn={setIsLoggedIn}
               />
-            ) : (
-              'You are not logged in'
-            )}
+            ) : null}
             <Menu
               id="menu-appbar"
               anchorEl={anchorEl}

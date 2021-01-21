@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './styles.css';
 import Header from './Header';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { AlbumsList, Login, Register, Dashboard } from '../components';
 import { getProducts } from '../api';
@@ -37,13 +42,21 @@ const App = () => {
             <AlbumsList productList={productList} />
           </Route>
           <Route exact path="/register">
-            <Register isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+            {isLoggedIn ? (
+              <Redirect to="/dashboard" />
+            ) : (
+              <Register isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+            )}
           </Route>
           <Route exact path="/login">
-            <Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+            {isLoggedIn ? (
+              <Redirect to="/dashboard" />
+            ) : (
+              <Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+            )}
           </Route>
           <Route exact path="/dashboard">
-            <Dashboard />
+            {!isLoggedIn ? <Redirect to="/login" /> : <Dashboard />}
           </Route>
           <Route path="/">
             <h1>This is the home page</h1>
