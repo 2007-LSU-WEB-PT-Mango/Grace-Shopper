@@ -17,6 +17,7 @@ export async function registerNewUser({
   email,
   password,
 }) {
+  // console.log('inside registerNewUser');
   try {
     const { data } = await axios.post('/api/users/register', {
       firstName,
@@ -25,12 +26,14 @@ export async function registerNewUser({
       email,
       password,
     });
+    // console.log('regNewUser line 29');
     localStorage.setItem('token', data.token);
 
-    console.log('console.log inside registerNewUser:', data);
+    // console.log('console.log inside registerNewUser:', data);
     return data;
   } catch (error) {
     console.error(error);
+    // next(error);
     throw error;
   }
 }
@@ -44,7 +47,7 @@ export async function loginUser({ username, password }) {
 
     localStorage.setItem('token', data.token);
 
-    console.log(data);
+    // console.log(data);
     return data;
   } catch (error) {
     console.error(error);

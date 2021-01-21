@@ -17,12 +17,12 @@ usersRouter.post('/register', async (req, res, next) => {
     const userDB = await getUserByUsername(username);
 
     if (userDB.length !== 0) {
-      return res.status(401).send({
+      res.send({
         success: false,
         message: 'Username already exists!',
       });
     } else if (password.length < 8) {
-      return res.status(401).send({
+      res.send({
         success: false,
         message: 'Password must contain at least 8 characters',
       });

@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Register = ({ setIsLoggedIn }) => {
   const [isDirty, setIsDirty] = useState(false);
-  const [error, setError] = useState();
+  const [errorMessage, setErrorMessage] = useState('');
   const [inputs, setInputs] = useState({
     firstName: '',
     lastName: '',
@@ -54,26 +54,27 @@ const Register = ({ setIsLoggedIn }) => {
 
   const submitForm = async (e) => {
     e.preventDefault();
+    // console.log('inside submitForm');
     try {
       setIsDirty(true);
       if (password.length < 8) {
         return;
-      } else if (
-        firstName === 0 ||
-        lastName === 0 ||
-        username === 0 ||
-        email === 0
-      ) {
-        return;
       }
-      registerNewUser(inputs);
+
+      const data = await registerNewUser(inputs);
+      if (!data.success) {
+        setErrorMessage(data.message);
+      }
+
+      // console.log(data);
       setIsLoggedIn(true);
-      console.log(inputs);
+      // console.log(inputs);
     } catch (error) {
       console.error(error);
-      setError(error.message);
+      // setErrorMessage(error.message);
     }
   };
+  // console.log('error message', errorMessage);
 
   return (
     <>
@@ -86,6 +87,7 @@ const Register = ({ setIsLoggedIn }) => {
           <Typography component="h1" variant="h5">
             New User Registration
           </Typography>
+          {errorMessage ? <h5>{errorMessage}</h5> : null}
           <form className={classes.form} onSubmit={submitForm} noValidate>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
@@ -159,7 +161,6 @@ const Register = ({ setIsLoggedIn }) => {
                     Password must be at least 8 characters long.
                   </h4>
                 ) : null}
-                {isDirty && error ? 'Required fields missing!' : null}
               </Grid>
             </Grid>
             <Button

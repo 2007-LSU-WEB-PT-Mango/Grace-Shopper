@@ -38,7 +38,7 @@ const Dashboard = () => {
   useEffect(() => {
     getUserData()
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         const { firstName, lastName, username, email, message } = response;
         setGreeting(message);
       })
