@@ -159,39 +159,33 @@ async function createUser({ firstName, lastName, email, username, password }) {
 }
 
 //getcartbyuser, createorder;
-
-async function getCartByUser(user) {
+async function getOrderByID({ id }) {
+  console.log("this working");
   try {
     const {
-      rows: [cart],
+      rows: [orders],
     } = await client.query(`
-      SELECT *
-      FROM users
-      WHERE id=${user}
+      SELECT id
+      FROM orders
+      WHERE id = ${id}
     `);
 
-    delete user.password;
-
-    return cart;
+    return orders, [products.id];
   } catch (error) {
     throw error;
   }
 }
 
-async function createOrder({ status, userID }) {
+async function getAllOrders() {
   try {
     const {
-      rows: [order],
-    } = await client.query(
-      `
-      INSERT INTO order(status, userID)
-      VALUES($1, $2)
-      RETURNING *;
-    `,
-      [status, userID]
-    );
+      rows: [orders],
+    } = await client.query(`
+    SELECT *
+    FROM orders
+  `);
 
-    return order;
+    return orders;
   } catch (error) {
     throw error;
   }
