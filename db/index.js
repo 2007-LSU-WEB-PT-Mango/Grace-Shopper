@@ -158,36 +158,40 @@ async function createUser({ firstName, lastName, email, username, password }) {
   }
 }
 
-// Order DB Adapters
+//getcartbyuser, createorder;
 
-async function getOrderByID({ id }) {
-  console.log("this working");
+async function getCartByUser(user) {
   try {
     const {
-      rows: [orders],
+      rows: [cart],
     } = await client.query(`
-      SELECT id
-      FROM orders
-      WHERE id = ${id}
-
+      SELECT *
+      FROM users
+      WHERE id=${user}
     `);
 
-    return orders, [products.id];
+    delete user.password;
+
+    return cart;
   } catch (error) {
     throw error;
   }
 }
 
-async function getAllOrders() {
+async function createOrder({ status, userID }) {
   try {
     const {
-      rows: [orders],
-    } = await client.query(`
-    SELECT *
-    FROM orders
-  `);
+      rows: [order],
+    } = await client.query(
+      `
+      INSERT INTO order(status, userID)
+      VALUES($1, $2)
+      RETURNING *;
+    `,
+      [status, userID]
+    );
 
-    return orders;
+    return order;
   } catch (error) {
     throw error;
   }
