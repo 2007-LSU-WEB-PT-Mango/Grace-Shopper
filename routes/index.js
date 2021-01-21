@@ -1,18 +1,23 @@
-const apiRouter = require('express').Router();
-const { getAllProducts, getProduct } = require('../db/index');
+const apiRouter = require("express").Router();
+const {
+  getAllProducts,
+  getProduct,
+  getOrderByID,
+  getAllOrders,
+} = require("../db/index");
 
-apiRouter.get('/products', async (req, res, next) => {
+apiRouter.get("/products", async (req, res, next) => {
   try {
     const allProducts = await getAllProducts();
 
     res.send(allProducts);
   } catch (error) {
-    console.log('Error requesting products');
+    console.log("Error requesting products");
     next(error);
   }
 });
 
-apiRouter.get('/products/:id', async (req, res, next) => {
+apiRouter.get("/products/:id", async (req, res, next) => {
   const { id } = req.params;
 
   try {
@@ -24,6 +29,17 @@ apiRouter.get('/products/:id', async (req, res, next) => {
   }
 });
 
+apiRouter.get("/ordertest/:id"),
+  async (req, res, next) => {
+    const { id } = req.params;
+
+    try {
+      const orders = await getOrderByID(id);
+      res.send(orders);
+    } catch (error) {
+      next(error);
+    }
+  };
 // apiRouter.post('/users/register', async (req, res, next) => {
 //   try {
 //     res.json('This route will register and create a new user.');

@@ -10,6 +10,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import { AlbumsList, Login, Register, Dashboard } from '../components';
 import { getProducts } from '../api';
+import Cart from '../components/Cart';
 
 const useStyles = makeStyles({});
 
@@ -32,10 +33,12 @@ const App = () => {
       <Router>
         <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
         <Switch>
+          <Route exact path="/cart">
+            <Cart />
+          </Route>
           <Route exact path="/products/:id">
             <AlbumsList
               productList={productList}
-              setProductList={setProductList}
             />
           </Route>
           <Route exact path="/products">

@@ -177,6 +177,90 @@ async function createUser({ firstName, lastName, email, username, password }) {
   }
 }
 
+//getcartbyuser, createorder;
+async function getCartByUser(user) {
+  try {
+    const {
+      rows: [cart],
+    } = await client.query(`
+      SELECT *
+      FROM users
+      WHERE id=${user}
+    `);
+
+    delete user.password;
+
+    return cart;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function createOrder({ status, userID }) {
+  try {
+    const {
+      rows: [order],
+    } = await client.query(
+      `
+      INSERT INTO order(status, userID)
+      VALUES($1, $2)
+      RETURNING *;
+    `,
+      [status, userID]
+    );
+
+    return order;
+  } catch (error) {
+    throw error;
+  }
+}
+async function getOrderByID({ id }) {
+  console.log('this working');
+  try {
+    const {
+      rows: [orders],
+    } = await client.query(`
+      SELECT id
+      FROM orders
+      WHERE id = ${id}
+    `);
+
+    return orders, [products.id];
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getAllOrders() {
+  try {
+    const {
+      rows: [orders],
+    } = await client.query(`
+    SELECT *
+    FROM orders
+  `);
+
+    return orders;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getOrdersbyUser({ userid }) {
+  console.log('Let me grab these orders using your ID...');
+  try {
+    const {
+      rows: [orders],
+    } = await client.query(`
+      SELECT *
+      FROM orders
+      WHERE userid = ${userid}
+    `);
+    return [orders];
+  } catch (error) {}
+  throw error;
+}
+
 // export
 module.exports = {
   client,
@@ -190,4 +274,9 @@ module.exports = {
   createUser,
   authenticate,
   getUserByEmail,
+  getOrderByID,
+  getAllOrders,
+  getOrdersbyUser,
+  getCartByUser,
+  createOrder,
 };

@@ -99,6 +99,9 @@ const Header = (props) => {
               <MenuItem onClick={() => handleMenuClick('/products')}>
                 <Link to="/products">Products</Link>
               </MenuItem>
+              <MenuItem onClick={() => handleMenuClick('/cart')}>
+                <Link to="/cart">Cart</Link>
+              </MenuItem>
             </Menu>
           </div>
         </Toolbar>
