@@ -1,7 +1,7 @@
 // Connect to DB
-const { Compare, FormatAlignJustifyTwoTone } = require('@material-ui/icons');
-const { Client } = require('pg');
-const DB_NAME = 'mango';
+const { Compare, FormatAlignJustifyTwoTone } = require("@material-ui/icons");
+const { Client } = require("pg");
+const DB_NAME = "mango";
 const DB_URL =
   process.env.DATABASE_URL || `postgres://localhost:5432/${DB_NAME}`;
 const client = new Client({
@@ -9,7 +9,8 @@ const client = new Client({
   ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : undefined,
 });
 
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
+// const { delete } = require('../routes');
 
 // database methods
 
@@ -19,8 +20,6 @@ async function getAllProducts() {
       SELECT *
       FROM products
     `);
-
-    console.log("the products are:", products);
 
     return products;
   } catch (error) {
@@ -56,7 +55,6 @@ async function createProduct({
 
 async function getProduct(productID) {
   try {
-    
     const {
       rows: [product],
     } = await client.query(`
@@ -65,7 +63,6 @@ async function getProduct(productID) {
       WHERE id=${productID}
     `);
 
-    
     return product;
   } catch (error) {
     throw error;
@@ -79,7 +76,7 @@ async function getAllUsers() {
       FROM users
     `);
 
-    
+    users.map((user) => delete user.password);
 
     return users;
   } catch (error) {
@@ -89,7 +86,6 @@ async function getAllUsers() {
 
 async function getUserById(userID) {
   try {
-    
     const {
       rows: [user],
     } = await client.query(`
@@ -100,7 +96,6 @@ async function getUserById(userID) {
 
     delete user.password;
 
-    
     return user;
   } catch (error) {
     throw error;
@@ -109,16 +104,18 @@ async function getUserById(userID) {
 
 async function getUserByUsername(username) {
   try {
-    
-    const { rows: [user]} = await client.query(`
+    const user = await client.query(
+      `
       SELECT *
       FROM users
       WHERE username=$1
-    `, [username]);
+    `,
+      [username]
+    );
 
     delete user.password;
-    
-    return user;
+
+    return user.rows;
   } catch (error) {
     throw error;
   }
@@ -130,19 +127,15 @@ async function authenticate({ username, password }) {
     SELECT *
     FROM users
     WHERE username=$1
-  `
+  `;
 
   const user = (await client.query(authQuery, [username])).rows[0];
 
-  await Compare({ plain: password, hashed: user.password});
+  await Compare({ plain: password, hashed: user.password });
 
-  return FormatAlignJustifyTwoTone.encode(
-    { id: user.id }, process.env.JWT
-  );
-};
+  return FormatAlignJustifyTwoTone.encode({ id: user.id }, process.env.JWT);
+}
 
-
-    
 async function createUser({ firstName, lastName, email, username, password }) {
   try {
     // Password hashing
@@ -158,10 +151,47 @@ async function createUser({ firstName, lastName, email, username, password }) {
     `,
       [firstName, lastName, email, username, bcryptPassword]
     );
-    
-    delete user.bcryptPassword
 
     return user;
+  } catch (error) {
+    throw error;
+  }
+}
+
+//getcartbyuser, createorder;
+
+async function getCartByUser(user) {
+  try {
+    const {
+      rows: [cart],
+    } = await client.query(`
+      SELECT *
+      FROM users
+      WHERE id=${user}
+    `);
+
+    delete user.password;
+
+    return cart;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function createOrder({ status, userID }) {
+  try {
+    const {
+      rows: [order],
+    } = await client.query(
+      `
+      INSERT INTO order(status, userID)
+      VALUES($1, $2)
+      RETURNING *;
+    `,
+      [status, userID]
+    );
+
+    return order;
   } catch (error) {
     throw error;
   }
@@ -178,5 +208,7 @@ module.exports = {
   getUserById,
   getUserByUsername,
   createUser,
-  authenticate
+  authenticate,
+  getCartByUser,
+  createOrder,
 };
