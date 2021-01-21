@@ -197,6 +197,21 @@ async function createOrder({ status, userID }) {
   }
 }
 
+async function getOrdersbyUser({ userid }) {
+  console.log("Let me grab these orders using your ID...");
+  try {
+    const {
+      rows: [orders],
+    } = await client.query(`
+      SELECT *
+      FROM orders
+      WHERE userid = ${userid}
+    `);
+    return [orders];
+  } catch (error) {}
+  throw error;
+}
+
 // export
 module.exports = {
   client,
@@ -209,6 +224,7 @@ module.exports = {
   getUserByUsername,
   createUser,
   authenticate,
-  getCartByUser,
-  createOrder,
+  getOrderByID,
+  getAllOrders,
+  getOrdersbyUser,
 };
