@@ -21,9 +21,6 @@ const useStyles = makeStyles({
     },
     media: {
       height: 100,
-    },
-    total: {
-
     }
   });
 
@@ -119,8 +116,7 @@ const Cart = () => {
             <Grid
         justify="flex-start"
         alignItems="center">
-            <Card
-                    className={classes.total}>
+            <Card>
                         <CardContent>
                             <Typography gutterBottom variant="h5" component="h2">
                                 Order Details
