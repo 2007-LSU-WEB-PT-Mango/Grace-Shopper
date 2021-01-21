@@ -25,7 +25,7 @@ const App = () => {
   return (
     <div className="App">
       <Router>
-        <Header />
+        <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
         <Switch>
           <Route exact path="/products/:id">
             <AlbumsList

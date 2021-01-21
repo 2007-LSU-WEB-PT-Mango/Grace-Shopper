@@ -9,6 +9,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { Link } from 'react-router-dom';
 
+import LogoutButton from './LogoutButton';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -23,6 +25,9 @@ const useStyles = makeStyles((theme) => ({
 
 const Header = (props) => {
   // const { history } = props;
+  console.log('Header', props);
+  const { isLoggedIn, setIsLoggedIn } = props;
+
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -54,6 +59,14 @@ const Header = (props) => {
             >
               <MenuIcon />
             </IconButton>
+            {isLoggedIn ? (
+              <LogoutButton
+                isLoggedIn={isLoggedIn}
+                setIsLoggedIn={setIsLoggedIn}
+              />
+            ) : (
+              'You are not logged in'
+            )}
             <Menu
               id="menu-appbar"
               anchorEl={anchorEl}

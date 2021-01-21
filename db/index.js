@@ -121,6 +121,25 @@ async function getUserByUsername(username) {
   }
 }
 
+async function getUserByEmail(email) {
+  try {
+    const userInfo = await client.query(
+      `
+      SELECT *
+      FROM users
+      WHERE email=$1
+    `,
+      [email]
+    );
+
+    delete userInfo.password;
+
+    return userInfo.rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
 // still working on!!
 async function authenticate({ username, password }) {
   let authQuery = `
@@ -170,4 +189,5 @@ module.exports = {
   getUserByUsername,
   createUser,
   authenticate,
+  getUserByEmail,
 };
