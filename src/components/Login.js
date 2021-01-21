@@ -1,55 +1,122 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import { loginUser } from '../api/index';
+import { Link } from 'react-router-dom';
+// Material UI
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
 
-const Auth = (props) => {
-  const { setIsLoggedIn } = props;
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+}));
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
+const Auth = ({ setIsLoggedIn }) => {
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [loginData, setLoginData] = useState({
+    username: '',
+    password: '',
+  });
+  const { username, password } = loginData;
+  const classes = useStyles();
 
-  const handleClick = async (event) => {
-    event.preventDefault();
+  const onChange = (event) => {
+    setLoginData({
+      ...loginData,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const submitForm = async (e) => {
+    e.preventDefault();
     try {
-      const result = await FUNCTION(username, password, true);
-
+      loginUser({ username, password });
+      setLoginData({ username: '', password: '' });
       setIsLoggedIn(true);
-      if (result.error) {
-        setMessage(result.error);
-        return <h3 className="error">Username Already Exists!</h3>;
-      } else {
-        setIsLoggedIn(true);
-      }
     } catch (error) {
       console.error(error);
+      setErrorMessage(error.response);
     }
-
-    // we need the api function to go here in a try catch block ^^^^
   };
 
   return (
-    <form className="log-in" onSubmit={(event) => event.preventDefault()}>
-      <h5 className="error">Error!</h5>
-      <input
-        type="text"
-        value={username}
-        onChange={(event) => setUsername(event.target.value)}
-        placeholder="username"
-        className="login"
-      />
-      <input
-        type="password"
-        value={password}
-        onChange={(event) => setPassword(event.target.value)}
-        placeholder="password"
-        className="login"
-      />
-      <button className="register-button" onClick={handleClick()}>
-        Sign Up
-      </button>
-      <button className="log-in-button" onClick={handleClick()}>
-        Log In
-      </button>
-    </form>
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Sign in
+        </Typography>
+        <form className={classes.form} noValidate onSubmit={submitForm}>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="username"
+            label="Username"
+            name="username"
+            autoComplete="username"
+            autoFocus
+            value={username}
+            onChange={onChange}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            value={password}
+            onChange={onChange}
+          />
+
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+          >
+            Sign In
+          </Button>
+          <Grid container className={classes.paper}>
+            <Grid item className={classes.paper}>
+              <Link to="/register" variant="body2">
+                Don't have an account? Sign Up
+              </Link>
+            </Grid>
+          </Grid>
+        </form>
+      </div>
+    </Container>
   );
 };
 
