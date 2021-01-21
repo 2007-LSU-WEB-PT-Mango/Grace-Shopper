@@ -32,15 +32,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Auth = ({ setIsLoggedIn }) => {
-  const [errorMessage, setErrorMessage] = useState(null);
+const Auth = (props) => {
+  const { setIsLoggedIn } = props;
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [loginData, setLoginData] = useState({
     username: '',
     password: '',
   });
   const { username, password } = loginData;
   const classes = useStyles();
-
+  console.log('Login line45', props);
   const onChange = (event) => {
     setLoginData({
       ...loginData,
@@ -51,8 +53,15 @@ const Auth = ({ setIsLoggedIn }) => {
   const submitForm = async (e) => {
     e.preventDefault();
     try {
-      loginUser({ username, password });
       setLoginData({ username: '', password: '' });
+
+      const data = await loginUser({ username, password });
+      if (!data.success) {
+        setErrorMessage(data.message);
+      }
+      if (data.success) {
+        setSuccessMessage(data.message);
+      }
       setIsLoggedIn(true);
     } catch (error) {
       console.error(error);
@@ -70,6 +79,10 @@ const Auth = ({ setIsLoggedIn }) => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
+        {errorMessage ? <h5 style={{ color: 'red' }}>{errorMessage}</h5> : null}
+        {successMessage ? (
+          <h5 style={{ color: 'green' }}>{successMessage}</h5>
+        ) : null}
         <form className={classes.form} noValidate onSubmit={submitForm}>
           <TextField
             variant="outlined"
