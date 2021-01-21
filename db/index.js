@@ -193,7 +193,7 @@ async function getAllOrders() {
   }
 }
 
-async function getOrdersbyUser({ id }) {
+async function getOrdersbyUser({ userid }) {
   console.log("Let me grab these orders using your ID...");
   try {
     const {
@@ -201,9 +201,9 @@ async function getOrdersbyUser({ id }) {
     } = await client.query(`
       SELECT *
       FROM orders
-      WHERE id = {id}
+      WHERE userid = ${userid}
     `);
-    return orders;
+    return [orders];
   } catch (error) {}
   throw error;
 }

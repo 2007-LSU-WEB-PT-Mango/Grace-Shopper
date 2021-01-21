@@ -10,6 +10,8 @@ const {
   getUserByUsername,
   createUser,
   getOrderByID,
+  getAllOrders,
+  getOrdersbyUser,
 } = require("./index");
 
 async function dropTables() {
@@ -65,7 +67,6 @@ async function buildTables() {
     `);
     await populateInitialData();
     await populateInitialUser();
-    await getOrderByID();
   } catch (error) {
     console.error("error creating tables");
     throw error;
