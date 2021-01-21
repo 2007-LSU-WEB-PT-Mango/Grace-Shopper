@@ -159,6 +159,42 @@ async function createUser({ firstName, lastName, email, username, password }) {
 }
 
 //getcartbyuser, createorder;
+async function getCartByUser(user) {
+  try {
+    const {
+      rows: [cart],
+    } = await client.query(`
+      SELECT *
+      FROM users
+      WHERE id=${user}
+    `);
+
+    delete user.password;
+
+    return cart;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function createOrder({ status, userID }) {
+  try {
+    const {
+      rows: [order],
+    } = await client.query(
+      `
+      INSERT INTO order(status, userID)
+      VALUES($1, $2)
+      RETURNING *;
+    `,
+      [status, userID]
+    );
+
+    return order;
+  } catch (error) {
+    throw error;
+  }
+}
 async function getOrderByID({ id }) {
   console.log("this working");
   try {
@@ -221,4 +257,6 @@ module.exports = {
   getOrderByID,
   getAllOrders,
   getOrdersbyUser,
+  getCartByUser,
+  createOrder,
 };
