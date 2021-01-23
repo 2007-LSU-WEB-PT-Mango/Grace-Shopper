@@ -242,6 +242,51 @@ async function getOrdersbyUser({ userid }) {
   throw error;
 }
 
+// week 3 Adapters: updateOrder({id, status, userId}), completeOrder({id}), cancelOrder(id)
+
+async function updateOrder({ id, status, userid }) {
+  try {
+    const {
+      rows: [order],
+    } = await client.query(`
+      UPDATE order SET status = '' *
+      WHERE id = ${id} , status = ${status} , userid = ${userid}
+      RETURNING name, order AS updated_order;
+
+    `);
+    return [order];
+  } catch (error) {}
+  throw error;
+}
+
+async function completeOrder({ id }) {
+  try {
+    const {
+      rows: [order],
+    } = await client.query(`
+      UPDATE order SET status = status * 'complete'
+      WHERE id = ${id}
+      RETURNING name, order AS updated_order;
+    `);
+    return [order];
+  } catch (error) {}
+  throw error;
+}
+
+async function cancelOrder(id) {
+  try {
+    const {
+      rows: [order],
+    } = await client.query(`
+      UPDATE order SET status = status * 'cancelled'
+      WHERE id = ${id}
+      RETURNING name, order AS updated_order;
+    `);
+    return [order];
+  } catch (error) {}
+  throw error;
+}
+
 // export
 module.exports = {
   client,
@@ -259,4 +304,7 @@ module.exports = {
   getOrdersbyUser,
   getCartByUser,
   createOrder,
+  updateOrder,
+  completeOrder,
+  cancelOrder,
 };
