@@ -11,6 +11,13 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import { Link } from "react-router-dom";
+import { loadStripe } from "@stripe/stripe-js";
+import App from './Stripe';
+
+
+const stripePromise = loadStripe("pk_test_51ICFMDCJh48L0M91LcpLLqnG895c9gQydCsdE1auAYJTqNhbskPhk4ULxKoDeuniL5BEADGKBAKbkpEPxRZyx1A600wtU2xF1J");
+
 
 const useStyles = makeStyles({
     root: {
@@ -34,6 +41,15 @@ const Cart = () => {
         })
         return rollingTotal;
     }
+
+    const quantitiyTotal = () => {
+        let rollingTotal = 0;
+        dummyCart.map((product) => {
+            rollingTotal = rollingTotal + product.quantity
+        })
+        return rollingTotal;
+    }
+    
 
     // need to pull in cart from database, update state of quantitiy 
     let dummyCart = [
@@ -122,14 +138,12 @@ const Cart = () => {
                                 Order Details
                             </Typography>
                             <Typography gutterBottom variant="h6" component="h4">
-                                items: {dummyCart.length}
+                                items: {quantitiyTotal()}
                             </Typography>
                             <Typography gutterBottom variant="h6" component="h4">
                                 Total: ${total()}
                             </Typography>
-                            <Button color="primary" variant="contained" fullWidth>
-                                Submit Order
-                            </Button>
+                            <App />
                         </CardContent>
                     </Card>
         </Grid>

@@ -18,6 +18,37 @@ server.use(express.static(path.join(__dirname, 'build')));
 server.use('/api', require('./routes'));
 server.use('/api/users', require('./routes/users'));
 
+const Stripe = require('stripe');
+const stripe = Stripe('sk_test_51ICFMDCJh48L0M91i51uTAjgxFsbPE1XQrV0Q5n7TQD4dzEDqIps6iCAGljkvUsfBApmKPwTOnELE7TeCEX7vywt003rsJR1fS');
+
+const YOUR_DOMAIN = 'http://localhost:3000';
+
+server.post('/create-checkout-session', async (req, res) => {
+  console.log("inside route for checkout!")
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ['card'],
+    line_items: [
+      {
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: 'T-shirt',
+          },
+          unit_amount: 2000,
+        },
+        quantity: 1,
+      },
+    ],
+    mode: 'payment',
+    success_url: `${YOUR_DOMAIN}?success=true`,
+    cancel_url: `${YOUR_DOMAIN}?canceled=true`,
+  });
+  console.log("session:", session)
+  res.json({ id: session.id });
+});
+
+server.listen(4242, () => console.log(`Listening on port ${4242}!`));
+
 // by default serve up the react app if we don't recognize the route
 server.use((req, res, next) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
@@ -31,6 +62,17 @@ server.use((err, req, res, next) => {
 
 // bring in the DB connection
 const { client } = require('./db');
+
+
+// This example sets up an endpoint using the Express framework.
+// Watch this video to get started: https://youtu.be/rPR2aJ6XnAc.
+
+// const express = require('express');
+// const app = express();
+
+// Set your secret key. Remember to switch to your live secret key in production!
+// See your keys here: https://dashboard.stripe.com/account/apikeys
+
 
 // connect to the server
 const PORT = process.env.PORT || 5000;

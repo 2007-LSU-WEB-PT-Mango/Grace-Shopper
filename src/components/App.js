@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { AlbumsList, Login, Register, Dashboard } from '../components';
 import { getProducts } from '../api';
 import Cart from '../components/Cart';
+import Checkout from '../components/Checkout';
 
 const useStyles = makeStyles({});
 
@@ -30,6 +31,9 @@ const App = () => {
         <Switch>
           <Route exact path="/cart">
             <Cart />
+          </Route>
+          <Route exact path="/cart/checkout">
+            <Checkout />
           </Route>
           <Route exact path="/products/:id">
             <AlbumsList
