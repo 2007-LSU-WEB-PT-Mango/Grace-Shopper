@@ -1,7 +1,7 @@
 // Connect to DB
-const { Compare, FormatAlignJustifyTwoTone } = require("@material-ui/icons");
-const { Client } = require("pg");
-const DB_NAME = "mango";
+const { Compare, FormatAlignJustifyTwoTone } = require('@material-ui/icons');
+const { Client } = require('pg');
+const DB_NAME = 'mango';
 const DB_URL =
   process.env.DATABASE_URL || `postgres://localhost:5432/${DB_NAME}`;
 const client = new Client({
@@ -9,7 +9,7 @@ const client = new Client({
   ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : undefined,
 });
 
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcrypt');
 // const { delete } = require('../routes');
 
 // database methods
@@ -196,7 +196,7 @@ async function createOrder({ status, userID }) {
   }
 }
 async function getOrderByID({ id }) {
-  console.log("this working");
+  console.log('this working');
   try {
     const {
       rows: [orders],
@@ -228,7 +228,7 @@ async function getAllOrders() {
 }
 
 async function getOrdersbyUser({ userid }) {
-  console.log("Let me grab these orders using your ID...");
+  console.log('Let me grab these orders using your ID...');
   try {
     const {
       rows: [orders],
@@ -238,8 +238,82 @@ async function getOrdersbyUser({ userid }) {
       WHERE userid = ${userid}
     `);
     return [orders];
-  } catch (error) {}
-  throw error;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// Week 3 - orderProduct
+async function getOrderProductById(id) {
+  try {
+    const {
+      rows: [orderProducts],
+    } = await client.query(`
+      SELECT * FROM orderedproducts
+      WHERE id = ${id}
+    `);
+    return [orderProducts];
+  } catch (error) {
+    throw error;
+  }
+}
+
+// // addProductToOrder
+// if the product Id is NOT on the order yet, create a new order_products
+
+async function addProductToOrder({ orderId, productId, price, quantity }) {
+  try {
+    const {
+      rows: [addedProduct],
+    } = await client.query(
+      `
+    INSERT INTO orderedproducts("orderId", "productId", price, quantity)
+    VALUES ($1, $2, $3, $4)
+    `,
+      [orderId, productId, price, quantity]
+    );
+
+    return addedProduct;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function updateOrderProduct({ id, price, quantity }) {
+  try {
+    const {
+      rows: [updatedProduct],
+    } = await client.query(
+      `
+    UPDATE orderedproducts
+    SET price=$2, quantity=$3
+    WHERE "orderId"=$1
+    `,
+      [id, price, quantity]
+    );
+
+    return updatedProduct;
+  } catch (error) {
+    throw error;
+  }
+}
+// UPDATE orderedproducts
+// SET price=$2, quantity=$3
+// WHERE id=$1
+
+async function destroyOrderProduct(id) {
+  try {
+    const {
+      rows: [orderProduct],
+    } = await client.query(`
+    DELETE from orderedproducts
+    WHERE id = ${id}
+    `);
+
+    return [orderProduct];
+  } catch (error) {
+    throw error;
+  }
 }
 
 // week 3 Adapters: updateOrder({id, status, userId}), completeOrder({id}), cancelOrder(id)
@@ -304,7 +378,5 @@ module.exports = {
   getOrdersbyUser,
   getCartByUser,
   createOrder,
-  updateOrder,
-  completeOrder,
-  cancelOrder,
+
 };
