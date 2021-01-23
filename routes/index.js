@@ -21,7 +21,7 @@ apiRouter.get("/products/:id", async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const products = await getProduct(id);
+    const products = await getOrderByProductId(id);
 
     res.json(products);
   } catch (error) {
@@ -69,7 +69,7 @@ apiRouter.patch("/orders/:orderId", async (req, res, next) => {
     console.log("The update fields are", update);
 
     if (order.id === orderId) {
-      const updateOrder = await updateOrder(userId, update);
+      const updateOrder = await updateOrderProduct(userId, update);
       res.send({ order: updateOrder });
     } else {
       next({
@@ -126,4 +126,30 @@ apiRouter.patch("/orders_products/:orderProductId", async (req, res, next) => {
   }
 });
 
+//  POST /orders/:orderId/products (**)
+//Add a single product to an order (using order_products).
+//Prevent duplication on ("orderId", "productId") pair.
+//If product already exists on order, increment quantity and update price.
+
+apiRouter.post("/orders/:orderId/products", async (req, res, next) => {
+  const { orderId } = req.params;
+  try {
+    const newProduct = await getOrderByProductId(orderId, req.body);
+    res.send(newProduct);
+  } catch (error) {
+    next(error);
+  }
+});
+
+//DELETE /order_products/:orderProductId (**)
+//Remove a product from a order, use hard delete
+
+apiRouter.delete("/order_products/:orderProductId", async (req, res, next) => {
+  try {
+    const order = await destroyOrderProduct(req.params.orderProductId);
+    res.send(order);
+  } catch (error) {
+    throw error;
+  }
+});
 module.exports = apiRouter;
