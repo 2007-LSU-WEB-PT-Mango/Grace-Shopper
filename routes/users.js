@@ -4,7 +4,11 @@
 
 const usersRouter = require('express').Router();
 const bcrypt = require('bcrypt');
-const { getUserByUsername, createUser } = require('../db/index');
+const {
+  getUserByUsername,
+  getUserByEmail,
+  createUser,
+} = require('../db/index');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const verifyToken = require('../middleware/verifyToken');
@@ -15,13 +19,21 @@ usersRouter.post('/register', async (req, res, next) => {
     const { firstName, lastName, username, email, password } = req.body;
     // 2. Check if user exists
     const userDB = await getUserByUsername(username);
+    const userEmail = await getUserByEmail(email);
 
+    if (userEmail.length !== 0) {
+      res.send({
+        success: false,
+        message: 'An account for this e-mail already exists.',
+      });
+    }
     if (userDB.length !== 0) {
       res.send({
         success: false,
         message: 'Username already exists!',
       });
-    } else if (password.length < 8) {
+    }
+    if (password.length < 8) {
       res.send({
         success: false,
         message: 'Password must contain at least 8 characters',

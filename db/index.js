@@ -1,7 +1,7 @@
 // Connect to DB
-const { Compare, FormatAlignJustifyTwoTone } = require("@material-ui/icons");
-const { Client } = require("pg");
-const DB_NAME = "mango";
+const { Compare, FormatAlignJustifyTwoTone } = require('@material-ui/icons');
+const { Client } = require('pg');
+const DB_NAME = 'mango';
 const DB_URL =
   process.env.DATABASE_URL || `postgres://localhost:5432/${DB_NAME}`;
 const client = new Client({
@@ -9,7 +9,7 @@ const client = new Client({
   ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : undefined,
 });
 
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcrypt');
 // const { delete } = require('../routes');
 
 // database methods
@@ -121,6 +121,25 @@ async function getUserByUsername(username) {
   }
 }
 
+async function getUserByEmail(email) {
+  try {
+    const userInfo = await client.query(
+      `
+      SELECT *
+      FROM users
+      WHERE email=$1
+    `,
+      [email]
+    );
+
+    delete userInfo.password;
+
+    return userInfo.rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
 // still working on!!
 async function authenticate({ username, password }) {
   let authQuery = `
@@ -196,7 +215,7 @@ async function createOrder({ status, userID }) {
   }
 }
 async function getOrderByID({ id }) {
-  console.log("this working");
+  console.log('this working');
   try {
     const {
       rows: [orders],
@@ -228,7 +247,7 @@ async function getAllOrders() {
 }
 
 async function getOrdersbyUser({ userid }) {
-  console.log("Let me grab these orders using your ID...");
+  console.log('Let me grab these orders using your ID...');
   try {
     const {
       rows: [orders],
@@ -254,6 +273,7 @@ module.exports = {
   getUserByUsername,
   createUser,
   authenticate,
+  getUserByEmail,
   getOrderByID,
   getAllOrders,
   getOrdersbyUser,
