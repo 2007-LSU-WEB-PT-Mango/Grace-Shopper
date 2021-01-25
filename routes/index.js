@@ -5,6 +5,7 @@ const {
   getOrderByID,
   getAllOrders,
   createOrder,
+  cancelOrder,
 } = require('../db/index');
 const verifyToken = require('../middleware/verifyToken');
 

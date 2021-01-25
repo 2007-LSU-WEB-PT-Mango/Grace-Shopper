@@ -371,13 +371,14 @@ async function cancelOrder(id) {
     const {
       rows: [order],
     } = await client.query(`
-      UPDATE order SET status = status * 'cancelled'
+      UPDATE orders SET status = 'cancelled'
       WHERE id = ${id}
-      RETURNING name, order AS updated_order;
+      RETURNING *
     `);
-    return [order];
-  } catch (error) {}
-  throw error;
+    return order;
+  } catch (error) {
+    throw error;
+  }
 }
 
 // export
@@ -398,5 +399,5 @@ module.exports = {
   getOrdersbyUser,
   getCartByUser,
   createOrder,
-
+  cancelOrder,
 };
