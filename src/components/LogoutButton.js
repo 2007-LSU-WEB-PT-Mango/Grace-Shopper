@@ -5,7 +5,6 @@ import Button from '@material-ui/core/Button';
 
 const LogoutButton = (props) => {
   const { isLoggedIn, setIsLoggedIn } = props;
-  console.log('LogOut', props);
 
   const logout = () => {
     localStorage.removeItem('token');
