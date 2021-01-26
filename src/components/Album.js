@@ -59,7 +59,8 @@ const Album = (props) => {
         </CardContent>
         <CardActionArea className={classes.action}>
           {inStock ? (
-            <Button fullWidth>
+            <Button fullWidth
+              >
               <AddShoppingCartIcon />
               ADD TO CART
             </Button>

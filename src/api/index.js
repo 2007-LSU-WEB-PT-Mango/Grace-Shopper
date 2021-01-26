@@ -68,4 +68,15 @@ export async function getUserData() {
   }
 }
 
-
+export async function checkCart() {
+  try {
+    const token = localStorage.token;
+    const { data } = await axios.get('/api/orders/:userID', {
+      headers: { Authorization: `Bearer ${token}`},
+    });
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
