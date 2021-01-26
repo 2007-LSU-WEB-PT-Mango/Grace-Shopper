@@ -181,7 +181,7 @@ async function createUser({ firstName, lastName, email, username, password }) {
 async function getCartByUser(user) {
   try {
     const {
-      rows: [cart],
+      rows: cart
     } = await client.query(`
       SELECT *
       FROM users
