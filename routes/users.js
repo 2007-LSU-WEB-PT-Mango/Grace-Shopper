@@ -83,7 +83,10 @@ usersRouter.post('/login', async (req, res, next) => {
     // 2. Check if user exists
     const user = await getUserByUsername(username);
     if (user.length === 0) {
-      res.json('Email or password is incorrect.');
+      res.json({
+        success: false,
+        message: 'Email or password is incorrect.',
+      });
     }
     // 3. Check if incoming password matches password in the database
     const validPassword = await bcrypt.compare(password, user[0].password);

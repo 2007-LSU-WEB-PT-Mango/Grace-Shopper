@@ -55,7 +55,6 @@ const Auth = (props) => {
       setLoginData({ username: '', password: '' });
 
       const data = await loginUser({ username, password });
-      console.log(data);
 
       if (!data.success) {
         setErrorMessage(data.message);
