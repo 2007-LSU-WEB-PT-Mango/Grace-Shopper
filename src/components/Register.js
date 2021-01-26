@@ -36,7 +36,6 @@ const useStyles = makeStyles((theme) => ({
 const Register = ({ setIsLoggedIn }) => {
   const [isDirty, setIsDirty] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
   const [inputs, setInputs] = useState({
     firstName: '',
     lastName: '',
@@ -55,7 +54,6 @@ const Register = ({ setIsLoggedIn }) => {
 
   const submitForm = async (e) => {
     e.preventDefault();
-    // console.log('inside submitForm');
     try {
       setIsDirty(true);
       if (password.length < 8) {
@@ -67,19 +65,13 @@ const Register = ({ setIsLoggedIn }) => {
         setErrorMessage(data.message);
         return;
       }
-      if (data.success) {
-        setSuccessMessage(data.message);
-      }
 
-      // console.log(data);
       setIsLoggedIn(true);
-      // console.log(inputs);
+      return data;
     } catch (error) {
       console.error(error);
-      // setErrorMessage(error.message);
     }
   };
-  // console.log('error message', errorMessage);
 
   return (
     <>
@@ -94,9 +86,6 @@ const Register = ({ setIsLoggedIn }) => {
           </Typography>
           {errorMessage ? (
             <h4 style={{ color: 'red' }}>{errorMessage}</h4>
-          ) : null}
-          {successMessage ? (
-            <h4 style={{ color: 'green' }}>{successMessage}</h4>
           ) : null}
           <form className={classes.form} onSubmit={submitForm} noValidate>
             <Grid container spacing={2}>

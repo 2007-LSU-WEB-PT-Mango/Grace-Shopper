@@ -15,7 +15,7 @@ const verifyToken = require('../middleware/verifyToken');
 
 usersRouter.post('/register', async (req, res, next) => {
   try {
-    // 1. Destructure the red. body
+    // 1. Destructure the req. body
     const { firstName, lastName, username, email, password } = req.body;
     // 2. Check if user exists
     const userDB = await getUserByUsername(username);
@@ -24,7 +24,7 @@ usersRouter.post('/register', async (req, res, next) => {
     if (userEmail.length !== 0) {
       res.send({
         success: false,
-        message: 'An account for this e-mail already exists.',
+        message: 'An account for this e-mail already exists!',
       });
     }
     if (userDB.length !== 0) {
@@ -39,7 +39,18 @@ usersRouter.post('/register', async (req, res, next) => {
         message: 'Password must contain at least 8 characters',
       });
     }
-    // If any of the register fields are missings, generate an errorw/ message.
+    // If any of the register fields are missings, generate an error w/ message.
+    if (
+      firstName.length === 0 ||
+      lastName.length === 0 ||
+      username.length === 0 ||
+      email.length === 0
+    ) {
+      res.send({
+        success: false,
+        message: 'Required fields missing!',
+      });
+    }
 
     // 3. Bcrypt the user password
     // 4. Create new user in the database
