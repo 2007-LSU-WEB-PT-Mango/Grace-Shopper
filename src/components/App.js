@@ -7,13 +7,11 @@ import {
   Switch,
   Redirect,
 } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
 import { AlbumsList, Login, Register, Dashboard } from '../components';
 import { getProducts } from '../api';
 import Cart from '../components/Cart';
 import Success from './Success';
 
-const useStyles = makeStyles({});
 
 const App = () => {
   const [productList, setProductList] = useState([]);
@@ -28,7 +26,7 @@ const App = () => {
         console.error(error);
       });
   }, []);
-  const classes = useStyles();
+  
   return (
     <div className="App">
       <Router>

@@ -54,7 +54,7 @@ const Header = (props) => {
             <IconButton
               edge="start"
               className={classes.menuButton}
-              color="transperant"
+              color="default"
               aria-label="menu"
               onClick={handleMenu}
             >

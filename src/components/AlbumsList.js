@@ -11,7 +11,7 @@ import Album from './Album';
 
 
 const AlbumsList = ({ productList }) => {
-  console.log(productList)
+
   const {id} = useParams();
   let filteredAlbum = productList.find(product => id && id == product.id);
   
@@ -35,10 +35,10 @@ const AlbumsList = ({ productList }) => {
                 </Grid>
               </>
             :
-            productList.map((product) => {
+            productList.map((product, index) => {
               return (
-                <>
-                  <Grid item xs={12} sm={6} lg={3}>
+                
+                  <Grid item xs={12} sm={6} lg={3} key={index}>
                     <Album
                       ID={product.id}
                       name={product.name}
@@ -48,7 +48,7 @@ const AlbumsList = ({ productList }) => {
                       inStock={product.inStock}
                     />
                   </Grid>
-                </>
+                
               );
             })
         }

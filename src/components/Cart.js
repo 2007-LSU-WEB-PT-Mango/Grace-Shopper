@@ -11,13 +11,13 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import { Link } from "react-router-dom";
-import { loadStripe } from "@stripe/stripe-js";
+// import { Link } from "react-router-dom";
+// import { loadStripe } from "@stripe/stripe-js";
 import App from './Stripe';
 import {checkCart, removeItemCart, quantityUpdate} from '../api';
 
 
-const stripePromise = loadStripe("pk_test_51ICFMDCJh48L0M91LcpLLqnG895c9gQydCsdE1auAYJTqNhbskPhk4ULxKoDeuniL5BEADGKBAKbkpEPxRZyx1A600wtU2xF1J");
+// const stripePromise = loadStripe("pk_test_51ICFMDCJh48L0M91LcpLLqnG895c9gQydCsdE1auAYJTqNhbskPhk4ULxKoDeuniL5BEADGKBAKbkpEPxRZyx1A600wtU2xF1J");
 
 
 const useStyles = makeStyles({
