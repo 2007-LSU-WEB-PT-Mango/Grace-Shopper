@@ -12,6 +12,8 @@ import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
 import { Link } from "react-router-dom";
 
+import {addToOrder} from '../api';
+
 const useStyles = makeStyles({
   root: {
     maxWidth: 270,
@@ -60,6 +62,12 @@ const Album = (props) => {
         <CardActionArea className={classes.action}>
           {inStock ? (
             <Button fullWidth
+              onClick={() => {
+        
+                  addToOrder(2, ID)
+                  console.log("adding to cart")
+                
+              }}
               >
               <AddShoppingCartIcon />
               ADD TO CART

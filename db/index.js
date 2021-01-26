@@ -178,17 +178,35 @@ async function createUser({ firstName, lastName, email, username, password }) {
 }
 
 //getcartbyuser, createorder;
-async function getCartByUser(user) {
+async function getCartByUser(userID) {
   try {
     const {
-      rows: cart
+      rows: shoppingCart
     } = await client.query(`
       SELECT *
-      FROM users
-      WHERE id=${user}
-    `);
+      FROM orders
+      WHERE "userID"=$1 AND status=$2
+    `, [userID, "cart"]
+    );
+    const cart = shoppingCart[0];
+    
+    const orderProductsNumbers = await getCartProducts(cart.id);
+    
+    const orderProducts = await Promise.all(orderProductsNumbers.map((product) => {
+      const cartProduct = getProduct(product.productID); 
+      return cartProduct
+    }));
 
-    delete user.password;
+    
+    orderProducts.map((orderedProduct) => {
+      const orderedProductsID = orderedProduct.id
+      orderProductsNumbers.map((product)=> {
+        if (orderedProductsID === product.productID) {
+          orderedProduct.quantity = product.quantity
+        }
+      })
+    })
+    cart.products = orderProducts;
 
     return cart;
   } catch (error) {
@@ -215,7 +233,7 @@ async function createOrder({ status, userID }) {
   }
 }
 async function getOrderByID({ id }) {
-  console.log('this working');
+  
   try {
     const {
       rows: [orders],
@@ -263,15 +281,15 @@ async function getOrdersbyUser( userID ) {
 }
 
 // Week 3 - orderProduct
-async function getOrderProductById(id) {
+async function getCartProducts(orderID) {
   try {
     const {
-      rows: [orderProducts],
+      rows: orderProducts,
     } = await client.query(`
       SELECT * FROM orderedproducts
-      WHERE id = ${id}
+      WHERE "orderID" = ${orderID}
     `);
-    return [orderProducts];
+    return orderProducts;
   } catch (error) {
     throw error;
   }
@@ -281,7 +299,7 @@ async function getOrderProductById(id) {
 // if the product Id is NOT on the order yet, create a new order_products
 
 async function addProductToOrder(orderID, productID, quantity = 1) {
-  console.log(orderID, productID);
+  
   try {
     const {
       rows: addedProduct,
@@ -292,7 +310,7 @@ async function addProductToOrder(orderID, productID, quantity = 1) {
     `,
       [orderID, productID, quantity]
     );
-    console.log("addedProduct:", addedProduct)
+    
     return addedProduct;
   } catch (error) {
     throw error;
@@ -322,7 +340,7 @@ async function updateOrderProduct( orderID, productID, quantity ) {
 // WHERE id=$1
 
 async function destroyOrderProduct(orderID, productID) {
-  console.log(orderID, productID)
+  
   try {
     const {
       rows: order,

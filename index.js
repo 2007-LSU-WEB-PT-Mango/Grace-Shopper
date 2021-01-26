@@ -19,12 +19,15 @@ server.use('/api', require('./routes'));
 server.use('/api/users', require('./routes/users'));
 
 const Stripe = require('stripe');
+
 const stripe = Stripe('sk_test_51ICFMDCJh48L0M91i51uTAjgxFsbPE1XQrV0Q5n7TQD4dzEDqIps6iCAGljkvUsfBApmKPwTOnELE7TeCEX7vywt003rsJR1fS');
 
 const YOUR_DOMAIN = 'http://localhost:3000';
 
 server.post('/create-checkout-session', async (req, res) => {
   console.log("inside route for checkout!")
+  const cart = req.body;
+  console.log("this is passed into body:", cart)
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
     line_items: [
@@ -34,7 +37,7 @@ server.post('/create-checkout-session', async (req, res) => {
           product_data: {
             name: 'T-shirt',
           },
-          unit_amount: 2000,
+          unit_amount: 100,
         },
         quantity: 1,
       },

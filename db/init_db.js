@@ -55,7 +55,7 @@ async function buildTables() {
 
       CREATE TABLE orders(
         id SERIAL PRIMARY KEY,
-        status VARCHAR(255) DEFAULT 'created',
+        status VARCHAR(255) DEFAULT 'cart',
         "userID" INTEGER REFERENCES users(id),
         "datePlaced" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
       );

@@ -68,15 +68,54 @@ export async function getUserData() {
   }
 }
 
+// how do I get userid into this???
 export async function checkCart() {
   try {
     const token = localStorage.token;
-    const { data } = await axios.get('/api/orders/:userID', {
+    const { data } = await axios.get('/api/orders/3/cart', {
       headers: { Authorization: `Bearer ${token}`},
     });
     return data;
   } catch (error) {
     console.error(error);
     throw error;
+  }
+}
+
+export async function removeItemCart(orderID, productID) {
+  try {
+    const token = localStorage.token;
+    const { data } = await axios.delete(`/api/order_products/${orderID}/${productID}`, {
+      headers: { Authorization: `Bearer ${token}`},
+    });
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// not working yet
+export async function quantityUpdate(orderID, productID, quantity) {
+  try {
+    const token = localStorage.token;
+    const { data } = await axios.patch('/api/orderedproducts/updatequantity', {
+      headers: { Authorization: `Bearer ${token}`},
+      body: {"orderID": orderID, "productID": productID, "quantity": quantity}
+    });
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function addToOrder(orderID, productID) {
+  try {
+    const token = localStorage.token;
+    const { data } = await axios.post(`/api/orders/${orderID}/${productID}`, {
+      headers: { Authorization: `Bearer ${token}`},
+    });
+    return data;
+  } catch (error) { 
+    throw error
   }
 }

@@ -66,7 +66,7 @@ const App = () => {
             {!isLoggedIn ? <Redirect to="/login" /> : <Dashboard />}
           </Route>
           <Route path="/">
-            <h1>This is the home page</h1>
+            <Redirect to="/products" />
           </Route>
         </Switch>
       </Router>
