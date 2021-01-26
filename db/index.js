@@ -257,8 +257,82 @@ async function getOrdersbyUser({ userid }) {
       WHERE userid = ${userid}
     `);
     return [orders];
-  } catch (error) {}
-  throw error;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// Week 3 - orderProduct
+async function getOrderProductById(id) {
+  try {
+    const {
+      rows: [orderProducts],
+    } = await client.query(`
+      SELECT * FROM orderedproducts
+      WHERE id = ${id}
+    `);
+    return [orderProducts];
+  } catch (error) {
+    throw error;
+  }
+}
+
+// // addProductToOrder
+// if the product Id is NOT on the order yet, create a new order_products
+
+async function addProductToOrder({ orderId, productId, price, quantity }) {
+  try {
+    const {
+      rows: [addedProduct],
+    } = await client.query(
+      `
+    INSERT INTO orderedproducts("orderId", "productId", price, quantity)
+    VALUES ($1, $2, $3, $4)
+    `,
+      [orderId, productId, price, quantity]
+    );
+
+    return addedProduct;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function updateOrderProduct({ id, price, quantity }) {
+  try {
+    const {
+      rows: [updatedProduct],
+    } = await client.query(
+      `
+    UPDATE orderedproducts
+    SET price=$2, quantity=$3
+    WHERE "orderId"=$1
+    `,
+      [id, price, quantity]
+    );
+
+    return updatedProduct;
+  } catch (error) {
+    throw error;
+  }
+}
+// UPDATE orderedproducts
+// SET price=$2, quantity=$3
+// WHERE id=$1
+
+async function destroyOrderProduct(id) {
+  try {
+    const {
+      rows: [orderProduct],
+    } = await client.query(`
+    DELETE from orderedproducts
+    WHERE id = ${id}
+    `);
+
+    return [orderProduct];
+  } catch (error) {
+    throw error;
+  }
 }
 
 // week 3 Adapters: updateOrder({id, status, userId}), completeOrder({id}), cancelOrder(id)
@@ -297,13 +371,14 @@ async function cancelOrder(id) {
     const {
       rows: [order],
     } = await client.query(`
-      UPDATE order SET status = status * 'cancelled'
+      UPDATE orders SET status = 'cancelled'
       WHERE id = ${id}
-      RETURNING name, order AS updated_order;
+      RETURNING *
     `);
-    return [order];
-  } catch (error) {}
-  throw error;
+    return order;
+  } catch (error) {
+    throw error;
+  }
 }
 
 // export
@@ -324,7 +399,5 @@ module.exports = {
   getOrdersbyUser,
   getCartByUser,
   createOrder,
-  updateOrder,
-  completeOrder,
   cancelOrder,
 };
