@@ -25,7 +25,6 @@ const useStyles = makeStyles((theme) => ({
 
 const Header = (props) => {
   // const { history } = props;
-  console.log('Header', props);
   const { isLoggedIn, setIsLoggedIn } = props;
 
   const classes = useStyles();
