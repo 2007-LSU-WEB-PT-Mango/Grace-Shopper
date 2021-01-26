@@ -36,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
 const Register = ({ setIsLoggedIn }) => {
   const [isDirty, setIsDirty] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [inputs, setInputs] = useState({
     firstName: '',
     lastName: '',
@@ -65,6 +66,9 @@ const Register = ({ setIsLoggedIn }) => {
       if (!data.success) {
         setErrorMessage(data.message);
       }
+      if (data.success) {
+        setSuccessMessage(data.message);
+      }
 
       // console.log(data);
       setIsLoggedIn(true);
@@ -87,7 +91,12 @@ const Register = ({ setIsLoggedIn }) => {
           <Typography component="h1" variant="h5">
             New User Registration
           </Typography>
-          {errorMessage ? <h5>{errorMessage}</h5> : null}
+          {errorMessage ? (
+            <h4 style={{ color: 'red' }}>{errorMessage}</h4>
+          ) : null}
+          {successMessage ? (
+            <h4 style={{ color: 'green' }}>{successMessage}</h4>
+          ) : null}
           <form className={classes.form} onSubmit={submitForm} noValidate>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
