@@ -39,6 +39,7 @@ usersRouter.post('/register', async (req, res, next) => {
         message: 'Password must contain at least 8 characters',
       });
     }
+    // If any of the register fields are missings, generate an errorw/ message.
 
     // 3. Bcrypt the user password
     // 4. Create new user in the database
@@ -76,7 +77,7 @@ usersRouter.post('/login', async (req, res, next) => {
     // 3. Check if incoming password matches password in the database
     const validPassword = await bcrypt.compare(password, user[0].password);
     if (!validPassword) {
-      res.json('Email or password is incorrect.');
+      res.json({ success: false, message: 'Email or password is incorrect.' });
     }
     // 4. Generate a JWT token
     jwt.sign({ user }, process.env.jwtSecret, (err, token) => {
@@ -98,7 +99,6 @@ usersRouter.get('/dashboard', verifyToken, async (req, res, next) => {
         console.error(err);
         res.status(403).send('403 Error');
       } else {
-        console.log(authData);
         const { id, firstName, lastName, username, email } = authData.user[0];
         res.json({
           success: true,

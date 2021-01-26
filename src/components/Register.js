@@ -65,6 +65,7 @@ const Register = ({ setIsLoggedIn }) => {
       const data = await registerNewUser(inputs);
       if (!data.success) {
         setErrorMessage(data.message);
+        return;
       }
       if (data.success) {
         setSuccessMessage(data.message);
