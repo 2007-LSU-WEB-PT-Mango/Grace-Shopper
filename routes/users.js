@@ -39,7 +39,7 @@ usersRouter.post('/register', async (req, res, next) => {
         message: 'Password must contain at least 8 characters',
       });
     }
-    // If any of the register fields are missings, generate an error w/ message.
+    // 2.1 If any of the register fields are missings, generate an error w/ message.
     if (
       firstName.length === 0 ||
       lastName.length === 0 ||
