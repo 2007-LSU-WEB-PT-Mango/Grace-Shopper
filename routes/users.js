@@ -13,6 +13,9 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const verifyToken = require('../middleware/verifyToken');
 
+// Route:   POST /api/users/register
+// Descr:   Register a new user
+// Private: false
 usersRouter.post('/register', async (req, res, next) => {
   try {
     // 1. Destructure the req. body
@@ -76,6 +79,9 @@ usersRouter.post('/register', async (req, res, next) => {
   }
 });
 
+// Route:   POST /api/users/login
+// Descr:   Log in a registered user
+// Private: false
 usersRouter.post('/login', async (req, res, next) => {
   try {
     // 1. Destructure the req.body
@@ -106,6 +112,9 @@ usersRouter.post('/login', async (req, res, next) => {
   }
 });
 
+// Route:   GET /api/users/dashboard
+// Descr:   Retrieve a user's info
+// Private: true
 usersRouter.get('/dashboard', verifyToken, async (req, res, next) => {
   try {
     jwt.verify(req.token, process.env.jwtSecret, (err, authData) => {
