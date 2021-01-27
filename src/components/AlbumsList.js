@@ -36,6 +36,7 @@ const AlbumsList = ({ productList }) => {
               </>
             :
             productList.map((product, index) => {
+              console.log(product)
               return (
                 
                   <Grid item xs={12} sm={6} lg={3} key={index}>

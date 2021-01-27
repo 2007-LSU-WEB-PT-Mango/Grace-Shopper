@@ -43,8 +43,9 @@ export default function App({cart}) {
 
     const response = await fetch("/create-checkout-session", {
       method: "POST",
-      headers: { 'Content-type': 'application/json' },
-      body: JSON.stringify(cart)
+      body: JSON.stringify({totalCart: cart}),
+      headers: { 'Content-type': 'application/json' }
+    
     });
 
     console.log(response)

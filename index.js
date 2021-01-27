@@ -26,8 +26,8 @@ const YOUR_DOMAIN = 'http://localhost:3000';
 
 server.post('/create-checkout-session', async (req, res) => {
   console.log("inside route for checkout!")
-  const cart = req.body;
-  console.log("this is passed into body:", cart)
+  const totalPrice = req.body.totalCart;
+  console.log("body: ", req.body);
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
     line_items: [
@@ -35,9 +35,10 @@ server.post('/create-checkout-session', async (req, res) => {
         price_data: {
           currency: 'usd',
           product_data: {
-            name: 'T-shirt',
+            name: 'Mango Records',
+            images: ['https://i.imgur.com/EHyR2nP.png'],
           },
-          unit_amount: 100,
+          unit_amount: totalPrice,
         },
         quantity: 1,
       },

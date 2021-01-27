@@ -109,12 +109,13 @@ apiRouter.post(
   verifyToken,
   async (req, res, next) => {
     const { orderId, productId } = req.params;
+    console.log(orderId, productId)
     try {
       const newProduct = await addProductToOrder(orderId, productId);
       
-      res.send({"success": "true"});
+      res.send(newProduct);
     } catch (error) {
-      next(error);
+      throw(error);
     }
   }
 );

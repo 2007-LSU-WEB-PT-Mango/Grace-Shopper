@@ -109,6 +109,7 @@ export async function quantityUpdate(orderID, productID, quantity) {
 }
 
 export async function addToOrder(orderID, productID) {
+  console.log("vars being passed in:", orderID, productID)
   try {
     const token = localStorage.token;
     const { data } = await axios.post(`/api/orders/${orderID}/${productID}`, {
