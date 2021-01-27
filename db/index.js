@@ -1,7 +1,7 @@
 // Connect to DB
-const { Compare, FormatAlignJustifyTwoTone } = require('@material-ui/icons');
-const { Client } = require('pg');
-const DB_NAME = 'mango';
+const { Compare, FormatAlignJustifyTwoTone } = require("@material-ui/icons");
+const { Client } = require("pg");
+const DB_NAME = "mango";
 const DB_URL =
   process.env.DATABASE_URL || `postgres://localhost:5432/${DB_NAME}`;
 const client = new Client({
@@ -9,7 +9,7 @@ const client = new Client({
   ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : undefined,
 });
 
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 // const { delete } = require('../routes');
 
 // database methods
@@ -215,7 +215,7 @@ async function createOrder({ status, userID }) {
   }
 }
 async function getOrderByID({ id }) {
-  console.log('this working');
+  console.log("this working");
   try {
     const {
       rows: [orders],
@@ -247,7 +247,7 @@ async function getAllOrders() {
 }
 
 async function getOrdersbyUser({ userid }) {
-  console.log('Let me grab these orders using your ID...');
+  console.log("Let me grab these orders using your ID...");
   try {
     const {
       rows: [orders],
@@ -400,4 +400,6 @@ module.exports = {
   getCartByUser,
   createOrder,
   cancelOrder,
+  updateOrder,
+  completeOrder,
 };
