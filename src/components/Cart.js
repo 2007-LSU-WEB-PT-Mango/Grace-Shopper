@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -11,12 +11,13 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import { Link } from "react-router-dom";
-import { loadStripe } from "@stripe/stripe-js";
+// import { Link } from "react-router-dom";
+// import { loadStripe } from "@stripe/stripe-js";
 import App from './Stripe';
+import {checkCart, removeItemCart, quantityUpdate} from '../api';
 
 
-const stripePromise = loadStripe("pk_test_51ICFMDCJh48L0M91LcpLLqnG895c9gQydCsdE1auAYJTqNhbskPhk4ULxKoDeuniL5BEADGKBAKbkpEPxRZyx1A600wtU2xF1J");
+// const stripePromise = loadStripe("pk_test_51ICFMDCJh48L0M91LcpLLqnG895c9gQydCsdE1auAYJTqNhbskPhk4ULxKoDeuniL5BEADGKBAKbkpEPxRZyx1A600wtU2xF1J");
 
 
 const useStyles = makeStyles({
@@ -33,41 +34,42 @@ const useStyles = makeStyles({
 
 const Cart = () => {
     const classes = useStyles();
+    const [cart, setCart] =useState([]);
+    const [order, setOrder] =useState([]);
 
+    useEffect(() => {
+        checkCart()
+          .then((response) => {
+            setCart(response.products);
+            setOrder(response);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }, []);
+    
+    console.log(order)
+    
     const total = () => {
         let rollingTotal = 0;
-        dummyCart.map((product) => {
+        cart.map((product) => {
             rollingTotal = rollingTotal + (product.price * product.quantity)
         })
         return rollingTotal;
     }
 
+    const totalDue = total()+"00";
+
     const quantitiyTotal = () => {
         let rollingTotal = 0;
-        dummyCart.map((product) => {
+        cart.map((product) => {
             rollingTotal = rollingTotal + product.quantity
         })
         return rollingTotal;
     }
     
 
-    // need to pull in cart from database, update state of quantitiy 
-    let dummyCart = [
-        {
-            name: 'Circles (Deluxe)',
-            description: 'Mac Miller',
-            price: 35,
-            imageURL: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfqColF4inSfJAhwt1uMwLvUjLWi50wZLHuM-K0fNY_4_Mh4CrO5C3OiMl91wdD7SxMn8-sNA&usqp=CAc',
-            quantity: 4
-        },
-        {
-            name: 'Abbey Road',
-            description: 'The Beatles',
-            price: 20,
-            imageURL: 'https://images-na.ssl-images-amazon.com/images/I/81dUVKQDBEL._SL1200_.jpg',
-            quantity: 1
-        }
-        ]
+    
 
     return (
         <div style={{padding: "20px"}}>
@@ -82,7 +84,7 @@ const Cart = () => {
             >
                 <h2>Shopping Cart</h2>
                 <hr></hr>
-                {dummyCart.map((product) => {
+                {cart.map((product) => {
                     return (
                         <>
                         <Card
@@ -107,11 +109,14 @@ const Cart = () => {
 
                                     <FormControl className={classes.formControl}>
                                         <Select
-                                        labelId="demo-simple-select-helper-label"
-                                        id="demo-simple-select-helper"
                                         value={product.quantity}
-                                        // onChange={handleChange} need to write
-                                        >
+                                        onChange={()=> {
+                                            try {
+                                                quantityUpdate(order.id, product.id, product.quantity)
+                                                console.log("updating quant")
+                                            } catch (error) {
+                                                throw error};
+                                        }}>
                                             <MenuItem value={1}>1</MenuItem>
                                             <MenuItem value={2}>2</MenuItem>
                                             <MenuItem value={3}>3</MenuItem>
@@ -119,7 +124,15 @@ const Cart = () => {
                                         </Select>
                                         <FormHelperText>quantity</FormHelperText>
                                     </FormControl>
-                                    <Button variant="contained" disableRipple={true}>
+                                    <Button variant="contained" disableRipple={true}
+                                        onClick={() => {
+                                            try {
+                                                removeItemCart(order.id, product.id)
+                                                console.log("removed item!")
+                                            } catch (error) {
+                                                throw error
+                                            };
+                                        }}>
                                         Remove
                                     </Button>
                                 </Grid>
@@ -143,7 +156,10 @@ const Cart = () => {
                             <Typography gutterBottom variant="h6" component="h4">
                                 Total: ${total()}
                             </Typography>
-                            <App />
+
+                            {/* stripe integration */}
+                            <App cart={totalDue}/>
+
                         </CardContent>
                     </Card>
         </Grid>

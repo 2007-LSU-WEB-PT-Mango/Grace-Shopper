@@ -46,13 +46,15 @@ const Header = (props) => {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
+            <Link to="/products" style={{"textDecoration": "none", "color": "white"}}>
             Mango's Vinyl Store
+            </Link>
           </Typography>
           <div>
             <IconButton
               edge="start"
               className={classes.menuButton}
-              color="transperant"
+              color="default"
               aria-label="menu"
               onClick={handleMenu}
             >
