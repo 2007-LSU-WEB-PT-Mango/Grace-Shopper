@@ -17,7 +17,6 @@ export async function registerNewUser({
   email,
   password,
 }) {
-  // console.log('inside registerNewUser');
   try {
     const { data } = await axios.post('/api/users/register', {
       firstName,
@@ -26,14 +25,13 @@ export async function registerNewUser({
       email,
       password,
     });
-    // console.log('regNewUser line 29');
+
     localStorage.setItem('token', data.token);
 
-    // console.log('console.log inside registerNewUser:', data);
     return data;
   } catch (error) {
     console.error(error);
-    // next(error);
+
     throw error;
   }
 }
@@ -61,6 +59,7 @@ export async function getUserData() {
     const { data } = await axios.get('/api/users/dashboard', {
       headers: { Authorization: `Bearer ${token}` },
     });
+
     return data;
   } catch (error) {
     console.error(error);
@@ -72,8 +71,22 @@ export async function checkCart() {
   try {
     const token = localStorage.token;
     const { data } = await axios.get('/api/orders/:userID', {
-      headers: { Authorization: `Bearer ${token}`},
+      headers: { Authorization: `Bearer ${token}` },
     });
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function getUserOrders(userID) {
+  try {
+    const token = localStorage.token;
+    const { data } = await axios.get(`/api/orders/${userID}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
     return data;
   } catch (error) {
     console.error(error);

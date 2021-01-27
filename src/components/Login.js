@@ -66,7 +66,7 @@ const Auth = (props) => {
       setIsLoggedIn(true);
     } catch (error) {
       console.error(error);
-      setErrorMessage(error.response);
+      setErrorMessage(error);
     }
   };
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getUserData } from '../api/index';
+import { getUserData, getUserOrders } from '../api/index';
 // Material UI
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
@@ -33,16 +33,31 @@ const useStyles = makeStyles((theme) => ({
 const Dashboard = () => {
   const classes = useStyles();
   const [greeting, setGreeting] = useState('');
-  const [firstName, setfirstName] = useState('');
+  const [username, setUsername] = useState('');
+
+  const [userInfo, setUserInfo] = useState({
+    id: '',
+    firstName: '',
+    lastName: '',
+    username: '',
+    email: '',
+  });
+
+  const loadData = async () => {
+    try {
+      const response = await getUserData();
+      console.log(`getUserData:`, response);
+      const { id, firstName, lastName, username, email } = response;
+      setUsername(username);
+      const orders = await getUserOrders(id);
+      console.log(`getUserOrders:`, orders);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    getUserData()
-      .then((response) => {
-        // console.log(response);
-        const { firstName, lastName, username, email, message } = response;
-        setGreeting(message);
-      })
-      .catch((err) => console.error(err));
+    loadData();
   }, []);
 
   return (
@@ -54,7 +69,7 @@ const Dashboard = () => {
             <AccountCircleIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            {greeting}
+            Welcome {username}!
           </Typography>
         </div>
       </Container>
