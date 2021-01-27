@@ -25,6 +25,12 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
   },
+  shell: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
@@ -67,55 +73,54 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <AccountCircleIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Welcome, {firstName}!
-          </Typography>
-        </div>
-        <div style={{ margin: '1rem' }}>
-          <TableContainer component={Paper}>
-            <Table aria-label="simple table">
-              <TableBody>
-                <TableRow>
-                  <TableCell align="center">
-                    <b>Username</b>
-                  </TableCell>
-                  <TableCell align="left">{username}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell align="center">
-                    <b>Email Address</b>
-                  </TableCell>
-                  <TableCell align="left">{email}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell align="center">
-                    <b>Name</b>
-                  </TableCell>
-                  <TableCell align="left">
-                    {firstName} {lastName}
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </div>
-      </Container>
-
-      {/* This will be a table with a list of order histories.
-          - There should be a title similar to the Welcome greeting above.
-          - If there are no orders ? 'Our records indicate ... : map over the user's orders.
-          - Render the orders in an accordian? (Have to generate some data in Postman first).
-       */}
-      {/* <Container component="main" maxWidth="xs"></Container> */}
-    </>
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <AccountCircleIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Welcome, {firstName}!
+        </Typography>
+      </div>
+      <div style={{ margin: '1rem' }}>
+        <TableContainer component={Paper}>
+          <Table aria-label="simple table">
+            <TableBody>
+              <TableRow>
+                <TableCell align="center">
+                  <b>Username</b>
+                </TableCell>
+                <TableCell align="left">{username}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell align="center">
+                  <b>Email Address</b>
+                </TableCell>
+                <TableCell align="left">{email}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell align="center">
+                  <b>Name</b>
+                </TableCell>
+                <TableCell align="left">
+                  {firstName} {lastName}
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
+    </Container>
   );
 };
 
 export default Dashboard;
+
+{
+  /* This will be a table with a list of order histories.
+          - There should be a title similar to the Welcome greeting above.
+          - If there are no orders ? 'Our records indicate ... : map over the user's orders.
+          - Render the orders in an accordian? (Have to generate some data in Postman first).
+       */
+}
