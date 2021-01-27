@@ -17,10 +17,15 @@ const App = () => {
   const [productList, setProductList] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  
+
   useEffect(() => {
     getProducts()
       .then((response) => {
         setProductList(response);
+        if (localStorage.token) {
+          setIsLoggedIn(true)
+        };
       })
       .catch((error) => {
         console.error(error);

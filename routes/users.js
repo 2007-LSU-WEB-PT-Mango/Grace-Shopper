@@ -99,6 +99,7 @@ usersRouter.post('/login', async (req, res, next) => {
         success: true,
         message: `You are logged in as ${username}.`,
         token,
+        userID: user[0].id
       });
     });
   } catch (error) {

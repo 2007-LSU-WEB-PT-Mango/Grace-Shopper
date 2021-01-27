@@ -28,6 +28,7 @@ export async function registerNewUser({
     });
     // console.log('regNewUser line 29');
     localStorage.setItem('token', data.token);
+    localStorage.setItem('userID', data.userID);
 
     // console.log('console.log inside registerNewUser:', data);
     return data;
@@ -46,8 +47,8 @@ export async function loginUser({ username, password }) {
     });
 
     localStorage.setItem('token', data.token);
-
-    // console.log(data);
+    localStorage.setItem('userID', data.userID);
+    console.log(data);
     return data;
   } catch (error) {
     console.error(error);
@@ -72,7 +73,8 @@ export async function getUserData() {
 export async function checkCart() {
   try {
     const token = localStorage.token;
-    const { data } = await axios.get('/api/orders/3/cart', {
+    const ID = localStorage.userID;
+    const { data } = await axios.get(`/api/orders/${ID}/cart`, {
       headers: { Authorization: `Bearer ${token}`},
     });
     return data;
