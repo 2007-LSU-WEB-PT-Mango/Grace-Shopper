@@ -34,14 +34,9 @@ const Dashboard = () => {
   const classes = useStyles();
   const [greeting, setGreeting] = useState('');
   const [username, setUsername] = useState('');
-
-  const [userInfo, setUserInfo] = useState({
-    id: '',
-    firstName: '',
-    lastName: '',
-    username: '',
-    email: '',
-  });
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
 
   const loadData = async () => {
     try {
@@ -49,6 +44,9 @@ const Dashboard = () => {
       console.log(`getUserData:`, response);
       const { id, firstName, lastName, username, email } = response;
       setUsername(username);
+      setFirstName(firstName);
+      setLastName(lastName);
+      setEmail(email);
       const orders = await getUserOrders(id);
       console.log(`getUserOrders:`, orders);
     } catch (error) {
@@ -70,6 +68,9 @@ const Dashboard = () => {
           </Avatar>
           <Typography component="h1" variant="h5">
             Welcome {username}!
+          </Typography>
+          <Typography component="h5" variant="h5">
+            {firstName}
           </Typography>
         </div>
       </Container>
