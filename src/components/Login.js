@@ -42,7 +42,6 @@ const Auth = (props) => {
   });
   const { username, password } = loginData;
   const classes = useStyles();
-  console.log('Login line45', props);
   const onChange = (event) => {
     setLoginData({
       ...loginData,
@@ -56,8 +55,10 @@ const Auth = (props) => {
       setLoginData({ username: '', password: '' });
 
       const data = await loginUser({ username, password });
+
       if (!data.success) {
         setErrorMessage(data.message);
+        return;
       }
       if (data.success) {
         setSuccessMessage(data.message);

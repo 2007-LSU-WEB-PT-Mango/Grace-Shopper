@@ -19,9 +19,10 @@ const Message = ({ message }) => (
   </section>
 );
 
-export default function App() {
+export default function App({cart}) {
   const [message, setMessage] = useState("");
 
+  console.log("cart passed into stripe:", cart);
   useEffect(() => {
     // Check to see if this is a redirect back from Checkout
     const query = new URLSearchParams(window.location.search);
@@ -42,6 +43,9 @@ export default function App() {
 
     const response = await fetch("/create-checkout-session", {
       method: "POST",
+      body: JSON.stringify({totalCart: cart}),
+      headers: { 'Content-type': 'application/json' }
+    
     });
 
     console.log(response)

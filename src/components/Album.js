@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 // Material U-I imports
 import { makeStyles } from '@material-ui/core/styles';
@@ -6,11 +6,14 @@ import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import CardActionArea from '@material-ui/core/CardActionArea';
+// import CardActionArea from '@material-ui/core/CardActionArea';
 import Button from '@material-ui/core/Button';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
 import { Link } from "react-router-dom";
+
+
+import {addToOrder} from '../api';
 
 const useStyles = makeStyles({
   root: {
@@ -29,9 +32,8 @@ const useStyles = makeStyles({
 });
 
 const Album = (props) => {
-  const { ID, name, description, price, imageURL, inStock, category } = props;
+  const { ID, name, description, price, imageURL, inStock } = props;
   const classes = useStyles();
-
 
   function productPage() {
     return ("/products/"+ID)
@@ -57,19 +59,26 @@ const Album = (props) => {
             ${price}
           </Typography>
         </CardContent>
-        <CardActionArea className={classes.action}>
           {inStock ? (
-            <Button fullWidth>
+            <Button fullWidth
+              className={classes.action}
+              onClick={() => {
+                  console.log(ID)
+                  addToOrder(2, ID)
+                  console.log("adding to cart")
+                  console.log("ID:",ID)
+                
+              }}
+              >
               <AddShoppingCartIcon />
               ADD TO CART
-            </Button>
-          ) : (
+            </Button>)
+           : (
             <Button fullWidth variant="contained" disableRipple={true} disabled>
               <NotInterestedIcon />
               SOLD OUT
             </Button>
           )}
-        </CardActionArea>
       </Card>
     </>
   );

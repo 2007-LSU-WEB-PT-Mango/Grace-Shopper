@@ -178,17 +178,36 @@ async function createUser({ firstName, lastName, email, username, password }) {
 }
 
 //getcartbyuser, createorder;
-async function getCartByUser(user) {
+async function getCartByUser(userID) {
   try {
-    const {
-      rows: [cart],
-    } = await client.query(`
+    const { rows: shoppingCart } = await client.query(
+      `
       SELECT *
-      FROM users
-      WHERE id=${user}
-    `);
+      FROM orders
+      WHERE "userID"=$1 AND status=$2
+    `,
+      [userID, "cart"]
+    );
+    const cart = shoppingCart[0];
 
-    delete user.password;
+    const orderProductsNumbers = await getCartProducts(cart.id);
+
+    const orderProducts = await Promise.all(
+      orderProductsNumbers.map((product) => {
+        const cartProduct = getProduct(product.productID);
+        return cartProduct;
+      })
+    );
+
+    orderProducts.map((orderedProduct) => {
+      const orderedProductsID = orderedProduct.id;
+      orderProductsNumbers.map((product) => {
+        if (orderedProductsID === product.productID) {
+          orderedProduct.quantity = product.quantity;
+        }
+      });
+    });
+    cart.products = orderProducts;
 
     return cart;
   } catch (error) {
@@ -215,7 +234,6 @@ async function createOrder({ status, userID }) {
   }
 }
 async function getOrderByID({ id }) {
-  console.log("this working");
   try {
     const {
       rows: [orders],
@@ -246,32 +264,30 @@ async function getAllOrders() {
   }
 }
 
-async function getOrdersbyUser({ userid }) {
-  console.log("Let me grab these orders using your ID...");
+async function getOrdersbyUser(userID) {
   try {
-    const {
-      rows: [orders],
-    } = await client.query(`
+    const { rows: orders } = await client.query(
+      `
       SELECT *
       FROM orders
-      WHERE userid = ${userid}
-    `);
-    return [orders];
+      WHERE "userID" = $1
+    `,
+      [userID]
+    );
+    return orders;
   } catch (error) {
     throw error;
   }
 }
 
 // Week 3 - orderProduct
-async function getOrderProductById(id) {
+async function getCartProducts(orderID) {
   try {
-    const {
-      rows: [orderProducts],
-    } = await client.query(`
+    const { rows: orderProducts } = await client.query(`
       SELECT * FROM orderedproducts
-      WHERE id = ${id}
+      WHERE "orderID" = ${orderID}
     `);
-    return [orderProducts];
+    return orderProducts;
   } catch (error) {
     throw error;
   }
@@ -280,16 +296,14 @@ async function getOrderProductById(id) {
 // // addProductToOrder
 // if the product Id is NOT on the order yet, create a new order_products
 
-async function addProductToOrder({ orderId, productId, price, quantity }) {
+async function addProductToOrder(orderID, productID, quantity = 1) {
   try {
-    const {
-      rows: [addedProduct],
-    } = await client.query(
+    const { rows: addedProduct } = await client.query(
       `
-    INSERT INTO orderedproducts("orderId", "productId", price, quantity)
-    VALUES ($1, $2, $3, $4)
+    INSERT INTO orderedproducts("orderID", "productID", quantity)
+    VALUES ($1, $2, $3)
     `,
-      [orderId, productId, price, quantity]
+      [orderID, productID, quantity]
     );
 
     return addedProduct;
@@ -298,17 +312,15 @@ async function addProductToOrder({ orderId, productId, price, quantity }) {
   }
 }
 
-async function updateOrderProduct({ id, price, quantity }) {
+async function updateOrderProduct(orderID, productID, quantity) {
   try {
-    const {
-      rows: [updatedProduct],
-    } = await client.query(
+    const { rows: updatedProduct } = await client.query(
       `
     UPDATE orderedproducts
-    SET price=$2, quantity=$3
-    WHERE "orderId"=$1
+    SET quantity=$3
+    WHERE "orderID"=$1 AND "productID" =$2
     `,
-      [id, price, quantity]
+      [orderID, productID, quantity]
     );
 
     return updatedProduct;
@@ -320,16 +332,17 @@ async function updateOrderProduct({ id, price, quantity }) {
 // SET price=$2, quantity=$3
 // WHERE id=$1
 
-async function destroyOrderProduct(id) {
+async function destroyOrderProduct(orderID, productID) {
   try {
-    const {
-      rows: [orderProduct],
-    } = await client.query(`
+    const { rows: order } = await client.query(
+      `
     DELETE from orderedproducts
-    WHERE id = ${id}
-    `);
+    WHERE "orderID" = $1 AND "productID" = $2
+    `,
+      [orderID, productID]
+    );
 
-    return [orderProduct];
+    return order;
   } catch (error) {
     throw error;
   }
@@ -352,18 +365,17 @@ async function updateOrder({ id, status, userid }) {
   throw error;
 }
 
-async function completeOrder({ id }) {
+async function completeOrder(id) {
   try {
-    const {
-      rows: [order],
-    } = await client.query(`
-      UPDATE order SET status = status * 'complete'
+    const { rows: order } = await client.query(`
+      UPDATE orders SET status = 'complete'
       WHERE id = ${id}
-      RETURNING name, order AS updated_order;
+      RETURNING *
     `);
-    return [order];
-  } catch (error) {}
-  throw error;
+    return order;
+  } catch (error) {
+    throw error;
+  }
 }
 
 async function cancelOrder(id) {
@@ -400,6 +412,8 @@ module.exports = {
   getCartByUser,
   createOrder,
   cancelOrder,
-  updateOrder,
+  addProductToOrder,
+  destroyOrderProduct,
+  updateOrderProduct,
   completeOrder,
 };

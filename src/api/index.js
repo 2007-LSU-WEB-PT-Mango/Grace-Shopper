@@ -28,6 +28,7 @@ export async function registerNewUser({
     });
     // console.log('regNewUser line 29');
     localStorage.setItem('token', data.token);
+    localStorage.setItem('userID', data.userID);
 
     // console.log('console.log inside registerNewUser:', data);
     return data;
@@ -46,8 +47,8 @@ export async function loginUser({ username, password }) {
     });
 
     localStorage.setItem('token', data.token);
-
-    // console.log(data);
+    localStorage.setItem('userID', data.userID);
+    console.log(data);
     return data;
   } catch (error) {
     console.error(error);
@@ -68,4 +69,56 @@ export async function getUserData() {
   }
 }
 
+// how do I get userid into this???
+export async function checkCart() {
+  try {
+    const token = localStorage.token;
+    const ID = localStorage.userID;
+    const { data } = await axios.get(`/api/orders/${ID}/cart`, {
+      headers: { Authorization: `Bearer ${token}`},
+    });
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
 
+export async function removeItemCart(orderID, productID) {
+  try {
+    const token = localStorage.token;
+    const { data } = await axios.delete(`/api/order_products/${orderID}/${productID}`, {
+      headers: { Authorization: `Bearer ${token}`},
+    });
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// not working yet
+export async function quantityUpdate(orderID, productID, quantity) {
+  try {
+    const token = localStorage.token;
+    const { data } = await axios.patch('/api/orderedproducts/updatequantity', {
+      headers: { Authorization: `Bearer ${token}`},
+      body: {"orderID": orderID, "productID": productID, "quantity": quantity}
+    });
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function addToOrder(orderID, productID) {
+  console.log("vars being passed in:", orderID, productID)
+  try {
+    const token = localStorage.token;
+    const { data } = await axios.post(`/api/orders/${orderID}/${productID}`, {
+      headers: { Authorization: `Bearer ${token}`},
+    });
+    return data;
+  } catch (error) { 
+    throw error
+  }
+}
