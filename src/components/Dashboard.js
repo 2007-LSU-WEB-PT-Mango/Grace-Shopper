@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getUserData, getUserOrders } from '../api/index';
+import OrderHistory from './OrderHistory';
 // Material UI
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
@@ -62,7 +63,9 @@ const Dashboard = () => {
       setLastName(lastName);
       setEmail(email);
       const orders = await getUserOrders(id);
+      const { products } = orders;
       console.log(`getUserOrders:`, orders);
+      console.log('Products', products);
     } catch (error) {
       console.error(error);
     }
@@ -110,6 +113,7 @@ const Dashboard = () => {
             </TableBody>
           </Table>
         </TableContainer>
+        <OrderHistory />
       </div>
     </Container>
   );
