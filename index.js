@@ -36,7 +36,7 @@ server.post('/create-checkout-session', async (req, res) => {
           currency: 'usd',
           product_data: {
             name: 'Mango Records',
-            images: ['https://i.imgur.com/EHyR2nP.png'],
+            images: ['https://i.imgur.com/D82HQ9Y.png'],
           },
           unit_amount: totalPrice,
         },

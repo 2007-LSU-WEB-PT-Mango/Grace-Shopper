@@ -32,8 +32,12 @@ const useStyles = makeStyles({
 });
 
 const Album = (props) => {
-  const { ID, name, description, price, imageURL, inStock } = props;
+  const { ID, name, description, price, imageURL, inStock, cart } = props;
   const classes = useStyles();
+
+  if (cart) {
+    const orderID = cart.id;
+  }
 
   function productPage() {
     return ("/products/"+ID)
@@ -64,9 +68,9 @@ const Album = (props) => {
               className={classes.action}
               onClick={() => {
                   console.log(ID)
-                  addToOrder(2, ID)
+                  // addToOrder({orderID, ID})
                   console.log("adding to cart")
-                  console.log("ID:",ID)
+                  console.log("ID:",ID, cart)
                 
               }}
               >

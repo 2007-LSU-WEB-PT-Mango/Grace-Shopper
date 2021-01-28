@@ -8,29 +8,33 @@ import {
   Redirect,
 } from 'react-router-dom';
 import { AlbumsList, Login, Register, Dashboard } from '../components';
-import { getProducts } from '../api';
+import { getProducts, checkCart } from '../api';
 import Cart from '../components/Cart';
 import Success from './Success';
+
 
 
 const App = () => {
   const [productList, setProductList] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [cart, setCart] = useState([]);
 
-  
 
   useEffect(() => {
     getProducts()
       .then((response) => {
         setProductList(response);
         if (localStorage.token) {
-          setIsLoggedIn(true)
+          setIsLoggedIn(true);
         };
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
+        checkCart()
+          .then((response) => {
+            setCart(response)
+          })
+      }).catch((error) => console.error)
+  }, [localStorage.userID]);
+  
+
   
   return (
     <div className="App">
@@ -41,7 +45,7 @@ const App = () => {
             <Success />
           </Route>
           <Route exact path="/cart">
-            <Cart />
+            <Cart cart={cart} />
           </Route>
           <Route exact path="/products/:id">
             <AlbumsList
@@ -49,7 +53,7 @@ const App = () => {
             />
           </Route>
           <Route exact path="/products">
-            <AlbumsList productList={productList} />
+            <AlbumsList productList={productList} cart={cart} />
           </Route>
           <Route exact path="/register">
             {isLoggedIn ? (

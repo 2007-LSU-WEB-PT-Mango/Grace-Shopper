@@ -10,14 +10,14 @@ import Album from './Album';
 
 
 
-const AlbumsList = ({ productList }) => {
+const AlbumsList = ({ productList, cart }) => {
 
   const {id} = useParams();
   let filteredAlbum = productList.find(product => id && id == product.id);
   
   return (
     <>
-      <div id="AlbumList">
+      <div id="AlbumList" style={{"width": "80vw", "margin": "0 auto"}}>
         
       
         <Grid container>
@@ -31,6 +31,7 @@ const AlbumsList = ({ productList }) => {
                     price={filteredAlbum.price}
                     imageURL={filteredAlbum.imageURL}
                     inStock={filteredAlbum.inStock}
+                    cart={cart}
                   />
                 </Grid>
               </>

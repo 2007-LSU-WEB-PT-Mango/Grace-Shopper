@@ -32,29 +32,23 @@ const useStyles = makeStyles({
     }
   });
 
-const Cart = () => {
+const Cart = ({cart}) => {
     const classes = useStyles();
-    const [cart, setCart] =useState([]);
     const [order, setOrder] =useState([]);
 
     useEffect(() => {
-        checkCart()
-          .then((response) => {
-            setCart(response.products);
-            setOrder(response);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }, []);
+        setOrder(cart.products)
+    }, [cart.products])
     
     console.log(order)
     
     const total = () => {
         let rollingTotal = 0;
-        cart.map((product) => {
-            rollingTotal = rollingTotal + (product.price * product.quantity)
-        })
+        if (cart.length >0) {
+            cart.map((product) => {
+                rollingTotal = rollingTotal + (product.price * product.quantity)
+            })
+        }
         return rollingTotal;
     }
 

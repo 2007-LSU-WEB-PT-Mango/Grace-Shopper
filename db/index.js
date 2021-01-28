@@ -188,39 +188,44 @@ async function getCartByUser(userID) {
       WHERE "userID"=$1 AND status=$2
     `, [userID, "cart"]
     );
-    const cart = shoppingCart[0];
-    
-    const orderProductsNumbers = await getCartProducts(cart.id);
-    
-    const orderProducts = await Promise.all(orderProductsNumbers.map((product) => {
-      const cartProduct = getProduct(product.productID); 
-      return cartProduct
-    }));
-
-    
-    orderProducts.map((orderedProduct) => {
-      const orderedProductsID = orderedProduct.id
-      orderProductsNumbers.map((product)=> {
-        if (orderedProductsID === product.productID) {
-          orderedProduct.quantity = product.quantity
-        }
+    if (shoppingCart){
+      const cart = shoppingCart[0];
+      
+      const orderProductsNumbers = await getCartProducts(cart.id);
+      
+      const orderProducts = await Promise.all(orderProductsNumbers.map((product) => {
+        const cartProduct = getProduct(product.productID); 
+        return cartProduct
+      }));
+  
+      
+      orderProducts.map((orderedProduct) => {
+        const orderedProductsID = orderedProduct.id
+        orderProductsNumbers.map((product)=> {
+          if (orderedProductsID === product.productID) {
+            orderedProduct.quantity = product.quantity
+          }
+        })
       })
-    })
-    cart.products = orderProducts;
+      cart.products = orderProducts;
 
-    return cart;
+      return cart;
+    } 
+      
   } catch (error) {
-    throw error;
+    console.log("making a new cart!")
+    const cart = createOrder('cart', userID)
+    return cart;
   }
 }
 
-async function createOrder({ status, userID }) {
+async function createOrder( status, userID ) {
   try {
     const {
       rows: [order],
     } = await client.query(
       `
-      INSERT INTO order(status, userID)
+      INSERT INTO orders(status, "userID")
       VALUES($1, $2)
       RETURNING *;
     `,
