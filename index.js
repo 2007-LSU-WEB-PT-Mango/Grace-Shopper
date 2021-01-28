@@ -25,9 +25,9 @@ const stripe = Stripe('sk_test_51ICFMDCJh48L0M91i51uTAjgxFsbPE1XQrV0Q5n7TQD4dzED
 const YOUR_DOMAIN = 'http://localhost:3000';
 
 server.post('/create-checkout-session', async (req, res) => {
-  console.log("inside route for checkout!")
+  
   const totalPrice = req.body.totalCart;
-  console.log("body: ", req.body);
+  
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
     line_items: [
@@ -47,7 +47,7 @@ server.post('/create-checkout-session', async (req, res) => {
     success_url: `${YOUR_DOMAIN}/success`,
     cancel_url: `${YOUR_DOMAIN}?canceled=true`,
   });
-  console.log("session:", session)
+  
   res.json({ id: session.id });
 });
 

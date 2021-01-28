@@ -1,19 +1,17 @@
 import React from 'react';
 import {useParams} from 'react-router-dom';
 import { Link } from "react-router-dom";
-// Material UI imports
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
-
 import Album from './Album';
 
+// Material UI imports
+import {Grid, Button} from '@material-ui/core';
+import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 
 
 const AlbumsList = ({ productList, cart }) => {
 
   const {id} = useParams();
-  let filteredAlbum = productList.find(product => id && id == product.id);
+  let filteredAlbum = productList.find(product => id && Number(id) === Number(product.id));
   
   return (
     <>
@@ -37,7 +35,6 @@ const AlbumsList = ({ productList, cart }) => {
               </>
             :
             productList.map((product, index) => {
-              console.log(product)
               return (
                 
                   <Grid item xs={12} sm={6} lg={3} key={index}>
@@ -48,6 +45,7 @@ const AlbumsList = ({ productList, cart }) => {
                       price={product.price}
                       imageURL={product.imageURL}
                       inStock={product.inStock}
+                      cart={cart}
                     />
                   </Grid>
                 

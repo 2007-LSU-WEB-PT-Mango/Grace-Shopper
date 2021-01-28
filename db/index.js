@@ -215,7 +215,8 @@ async function getCartByUser(userID) {
   } catch (error) {
     console.log("making a new cart!")
     const cart = createOrder('cart', userID)
-    return cart;
+    if (cart) {
+      return cart;}
   }
 }
 

@@ -18,38 +18,61 @@ const App = () => {
   const [productList, setProductList] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [cart, setCart] = useState([]);
+  const [order, setOrder] =useState('');
+
 
 
   useEffect(() => {
-    getProducts()
-      .then((response) => {
-        setProductList(response);
+    const start = async () => {
+      try{
+        const newProducts = await getProducts()
+        setProductList(newProducts)
         if (localStorage.token) {
           setIsLoggedIn(true);
         };
-        checkCart()
-          .then((response) => {
-            setCart(response)
-          })
-      }).catch((error) => console.error)
-  }, [localStorage.userID]);
+        const storageCart = await loadCart()
+        setCart(storageCart)
+      } catch (error) {
+        throw error;
+      }
+    }
+    start()
+  }, []);
+
+  const loadCart = async () => {
+    try {
+      
+      const newCart = await checkCart()
+        
+        return newCart
+    } catch (error) {
+      throw error;
+    }
+  }
   
 
-  
   return (
     <div className="App">
       <Router>
-        <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+        <Header 
+          isLoggedIn={isLoggedIn} 
+          setIsLoggedIn={setIsLoggedIn} 
+          cart={cart}
+          setOrder={setOrder}/>
         <Switch>
           <Route exact path="/success">
             <Success />
           </Route>
           <Route exact path="/cart">
-            <Cart cart={cart} />
+            <Cart 
+              cart={cart} 
+              order={order}
+              setOrder={setOrder}/>
           </Route>
           <Route exact path="/products/:id">
             <AlbumsList
               productList={productList}
+              cart={cart}
             />
           </Route>
           <Route exact path="/products">
