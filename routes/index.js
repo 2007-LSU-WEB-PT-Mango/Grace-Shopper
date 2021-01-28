@@ -47,7 +47,7 @@ apiRouter.get('/orders/:userID', verifyToken, async (req, res, next) => {
   const { userID } = req.params;
 
   try {
-    const orders = await getOrdersAndProducts(userID);
+    const orders = await getOrdersbyUser(userID);
     console.log('Line 51', orders);
     res.send(orders);
   } catch (error) {

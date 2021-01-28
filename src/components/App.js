@@ -8,30 +8,47 @@ import {
   Redirect,
 } from 'react-router-dom';
 import { AlbumsList, Login, Register, Dashboard } from '../components';
-import { getProducts } from '../api';
+import { getProducts, getUserData } from '../api';
 import Cart from '../components/Cart';
 import Success from './Success';
-
 
 const App = () => {
   const [productList, setProductList] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  
+  const loadData = async () => {
+    try {
+      const response = await getProducts();
+
+      const { token } = await getUserData();
+      console.log('useEffect token:', token);
+
+      if (token === localStorage.token) {
+        setIsLoggedIn(true);
+      }
+      setProductList(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    getProducts()
-      .then((response) => {
-        setProductList(response);
-        if (localStorage.token) {
-          setIsLoggedIn(true)
-        };
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    loadData();
   }, []);
-  
+
+  // useEffect(() => {
+  //   getProducts()
+  //     .then((response) => {
+  //       setProductList(response);
+  //       // if (localStorage.token) {
+  //       //   setIsLoggedIn(true);
+  //       // }
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // }, []);
+
   return (
     <div className="App">
       <Router>
@@ -44,9 +61,7 @@ const App = () => {
             <Cart />
           </Route>
           <Route exact path="/products/:id">
-            <AlbumsList
-              productList={productList}
-            />
+            <AlbumsList productList={productList} />
           </Route>
           <Route exact path="/products">
             <AlbumsList productList={productList} />

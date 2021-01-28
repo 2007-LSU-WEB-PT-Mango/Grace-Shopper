@@ -52,6 +52,7 @@ const Dashboard = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
+  const [orderHistory, setOrderHistory] = useState([]);
 
   const loadData = async () => {
     try {
@@ -66,6 +67,7 @@ const Dashboard = () => {
       const { products } = orders;
       console.log(`getUserOrders:`, orders);
       console.log('Products', products);
+      setOrderHistory(orders);
     } catch (error) {
       console.error(error);
     }
@@ -113,7 +115,10 @@ const Dashboard = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        <OrderHistory />
+        <OrderHistory
+          orderHistory={orderHistory}
+          setOrderHistory={setOrderHistory}
+        />
       </div>
     </Container>
   );
