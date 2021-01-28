@@ -15,14 +15,7 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-const useStyles = makeStyles({
-  avatar: {
-    backgroundColor: blue[100],
-    color: blue[600],
-  },
-});
-
-const useStylesAccordion = makeStyles((theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
   },
@@ -39,17 +32,12 @@ const useStylesAccordion = makeStyles((theme) => ({
 
 function SimpleDialog(props) {
   const classes = useStyles();
-  const classesA = useStylesAccordion();
   const [expanded, setExpanded] = useState(false);
 
   const { onClose, selectedValue, open, orderHistory, setOrderHistory } = props;
 
   const handleClose = () => {
     onClose(selectedValue);
-  };
-
-  const handleListItemClick = (value) => {
-    onClose(value);
   };
 
   const handleChange = (panel) => (event, isExpanded) => {
@@ -63,36 +51,41 @@ function SimpleDialog(props) {
       open={open}
     >
       <DialogTitle id="simple-dialog-title">Order History</DialogTitle>
-      {/* Put a ternary here to display orderhistory or 'no orders' */}
-      <List>
-        {orderHistory.map((order) => {
-          const date = order.datePlaced.slice(0, 10);
-          return (
-            <Accordion
-              expanded={expanded === 'panel1'}
-              onChange={handleChange('panel1')}
-            >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1bh-content"
-                id="panel1bh-header"
-              >
-                <Typography className={classesA.heading}>
-                  <b>Order ID:</b> {order.id}
-                </Typography>
-                <Typography className={classesA.secondaryHeading}>
-                  <b>Date:</b> {date}
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography>
-                  <b>Order Status:</b> {order.status}
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
-          );
-        })}
-      </List>
+      {orderHistory.length === 0 ? (
+        'No order on file. Browse our selection <here>.'
+      ) : (
+        <List>
+          {orderHistory.map((order) => {
+            const date = order.datePlaced.slice(0, 10);
+            return (
+              <ListItem>
+                <Accordion
+                  expanded={expanded === 'panel1'}
+                  onChange={handleChange('panel1')}
+                >
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1bh-content"
+                    id="panel1bh-header"
+                  >
+                    <Typography className={classes.heading}>
+                      <b>Order ID:</b> {order.id}
+                    </Typography>
+                    <Typography className={classes.secondaryHeading}>
+                      <b>Date:</b> {date}
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography>
+                      <b>Order Status:</b> {order.status}
+                    </Typography>
+                  </AccordionDetails>
+                </Accordion>
+              </ListItem>
+            );
+          })}
+        </List>
+      )}
     </Dialog>
   );
 }

@@ -21,7 +21,6 @@ const App = () => {
       const response = await getProducts();
 
       const { token } = await getUserData();
-      console.log('useEffect token:', token);
 
       if (token === localStorage.token) {
         setIsLoggedIn(true);
