@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Link } from "react-router-dom";
 import {addToOrder} from '../api';
+import AddAlerts from './Alert';
 
 // Material U-I imports
 import {Card, CardMedia, CardContent, Typography, Fade, Button} from '@material-ui/core';
@@ -27,7 +28,7 @@ const useStyles = makeStyles({
 const Album = (props) => {
   const { ID, name, description, price, imageURL, inStock, cart } = props;
   const classes = useStyles();
-
+  const [open, setOpen] = useState(false);
   
 
   function productPage() {
@@ -59,9 +60,8 @@ const Album = (props) => {
             <Button fullWidth
               className={classes.action}
               onClick={() => {
-
                   addToOrder(cart.id, ID)
-                
+                  setOpen(true)
               }}
               >
               <AddShoppingCartIcon />
@@ -73,6 +73,7 @@ const Album = (props) => {
               SOLD OUT
             </Button>
           )}
+          <AddAlerts open={open} setOpen={setOpen} />
       </Card>
       </Fade>
     </>
