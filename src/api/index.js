@@ -69,13 +69,27 @@ export async function getUserData() {
   }
 }
 
+export async function getUserOrders(userID) {
+  try {
+    const token = localStorage.token;
+    const { data } = await axios.get(`/api/orders/${userID}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 // how do I get userid into this???
 export async function checkCart() {
   try {
     const token = localStorage.token;
     const ID = localStorage.userID;
     const { data } = await axios.get(`/api/orders/${ID}/cart`, {
-      headers: { Authorization: `Bearer ${token}`},
+      headers: { Authorization: `Bearer ${token}` },
     });
     
     return data;
@@ -88,9 +102,12 @@ export async function checkCart() {
 export async function removeItemCart(orderID, productID) {
   try {
     const token = localStorage.token;
-    const { data } = await axios.delete(`/api/order_products/${orderID}/${productID}`, {
-      headers: { Authorization: `Bearer ${token}`},
-    });
+    const { data } = await axios.delete(
+      `/api/order_products/${orderID}/${productID}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     return data;
   } catch (error) {
     throw error;
@@ -102,8 +119,8 @@ export async function quantityUpdate(orderID, productID, quantity) {
   try {
     const token = localStorage.token;
     const { data } = await axios.patch('/api/orderedproducts/updatequantity', {
-      headers: { Authorization: `Bearer ${token}`},
-      body: {"orderID": orderID, "productID": productID, "quantity": quantity}
+      headers: { Authorization: `Bearer ${token}` },
+      body: { orderID: orderID, productID: productID, quantity: quantity },
     });
     return data;
   } catch (error) {
