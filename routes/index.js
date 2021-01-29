@@ -12,7 +12,8 @@ const {
   destroyOrderProduct,
   updateOrderProduct,
   completeOrder,
-  getCartByUser
+  getCartByUser,
+  getOrdersAndProducts,
 } = require('../db/index');
 const verifyToken = require('../middleware/verifyToken');
 const postVerifyToken = require('../middleware/postVerifyToken');
@@ -43,41 +44,43 @@ apiRouter.get('/products/:id', async (req, res, next) => {
 });
 
 // get all orders by userID
-apiRouter.get('/orders/:userID', verifyToken, 
-  async (req, res, next) => {
-    const { userID } = req.params;
+apiRouter.get('/orders/:userID', verifyToken, async (req, res, next) => {
+  const { userID } = req.params;
 
-    try {
-      const orders = await getOrdersbyUser(userID);
-      res.send(orders);
-    } catch (error) {
-      next(error);
-    }
-  });
-
-apiRouter.get('/orders/:userID/cart', verifyToken,
-  async (req, res, next) => {
-    
-    const { userID } = req.params;
-    
-    try {
-      const orders = await getCartByUser(userID);
-      
-      res.send(orders);
-    } catch (error) {
-      next(error);
-    }
-  });
-
-// changes order status to completed
-apiRouter.patch('/orders/complete/:orderId', verifyToken, async (req, res, next) => {
   try {
-    const order = await completeOrder(req.params.orderId); //unsure yet what function will be called!
-    res.send(order);
+    const orders = await getOrdersbyUser(userID);
+    console.log('Line 51', orders);
+    res.send(orders);
   } catch (error) {
-    throw error;
+    next(error);
   }
 });
+
+apiRouter.get('/orders/:userID/cart', verifyToken, async (req, res, next) => {
+  const { userID } = req.params;
+
+  try {
+    const orders = await getCartByUser(userID);
+
+    res.send(orders);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// changes order status to completed
+apiRouter.patch(
+  '/orders/complete/:orderId',
+  verifyToken,
+  async (req, res, next) => {
+    try {
+      const order = await completeOrder(req.params.orderId); //unsure yet what function will be called!
+      res.send(order);
+    } catch (error) {
+      throw error;
+    }
+  }
+);
 
 // changes order status to cancelled
 apiRouter.delete('/orders/:orderId', verifyToken, async (req, res, next) => {
@@ -89,7 +92,6 @@ apiRouter.delete('/orders/:orderId', verifyToken, async (req, res, next) => {
   }
 });
 
-
 // updating quantity in order/cart
 apiRouter.patch(
   '/orderedproducts/updatequantity',
@@ -97,7 +99,11 @@ apiRouter.patch(
   async (req, res, next) => {
     const { orderID, productID, quantity } = req.body;
     try {
-      const orderProduct = await updateOrderProduct(orderID, productID, quantity);
+      const orderProduct = await updateOrderProduct(
+        orderID,
+        productID,
+        quantity
+      );
       res.send(orderProduct);
     } catch (error) {
       throw error;
@@ -111,13 +117,13 @@ apiRouter.post(
   postVerifyToken,
   async (req, res, next) => {
     const { orderId, productId } = req.params;
-    
+
     try {
       const newProduct = await addProductToOrder(orderId, productId);
-      
+
       res.send(newProduct);
     } catch (error) {
-      throw(error);
+      throw error;
     }
   }
 );
@@ -136,9 +142,5 @@ apiRouter.delete(
     }
   }
 );
-
-
-
-
 
 module.exports = apiRouter;

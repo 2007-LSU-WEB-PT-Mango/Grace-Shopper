@@ -1,72 +1,62 @@
-import React, {useState} from 'react';
-import {useParams} from 'react-router-dom';
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Album from './Album';
 import AddAlerts from './Alert';
-
 // Material UI imports
-import {Grid, Button} from '@material-ui/core';
+import { Grid, Button } from '@material-ui/core';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
-
-
 const AlbumsList = ({ productList, cart }) => {
-  const {id} = useParams();
-  let filteredAlbum = productList.find(product => id && Number(id) === Number(product.id));
-  
+  const { id } = useParams();
+  let filteredAlbum = productList.find(
+    (product) => id && Number(id) === Number(product.id)
+  );
   return (
     <>
-      <div id="AlbumList" style={{"width": "80vw", "margin": "0 auto"}}>
-        
-      
+      <div id="AlbumList" style={{ width: '80vw', margin: '0 auto' }}>
         <Grid container>
-            {filteredAlbum?
-              <>
-                <Grid item xs={12} sm={6} lg={3}>
-                  <Album
-                    ID={filteredAlbum.id}
-                    name={filteredAlbum.name}
-                    description={filteredAlbum.description}
-                    price={filteredAlbum.price}
-                    imageURL={filteredAlbum.imageURL}
-                    inStock={filteredAlbum.inStock}
-                    cart={cart}
-                    
-                  />
-                </Grid>
-              </>
-            :
+          {filteredAlbum ? (
+            <>
+              <Grid item xs={12} sm={6} lg={3}>
+                <Album
+                  ID={filteredAlbum.id}
+                  name={filteredAlbum.name}
+                  description={filteredAlbum.description}
+                  price={filteredAlbum.price}
+                  imageURL={filteredAlbum.imageURL}
+                  inStock={filteredAlbum.inStock}
+                  cart={cart}
+                />
+              </Grid>
+            </>
+          ) : (
             productList.map((product, index) => {
               return (
-                
-                  <Grid item xs={12} sm={6} lg={3} key={index}>
-                    <Album
-                      ID={product.id}
-                      name={product.name}
-                      description={product.description}
-                      price={product.price}
-                      imageURL={product.imageURL}
-                      inStock={product.inStock}
-                      cart={cart}
-                    />
-                  </Grid>
-                
+                <Grid item xs={12} sm={6} lg={3} key={index}>
+                  <Album
+                    ID={product.id}
+                    name={product.name}
+                    description={product.description}
+                    price={product.price}
+                    imageURL={product.imageURL}
+                    inStock={product.inStock}
+                    cart={cart}
+                  />
+                </Grid>
               );
             })
-        }
+          )}
         </Grid>
-        {filteredAlbum?
-        <Link to="/products">
-          <Button variant="contained" color="primary">
-            <KeyboardBackspaceIcon />
-            Return to All Products
-          </Button>
-        </Link>
-        :
-          null
-      }
+        {filteredAlbum ? (
+          <Link to="/products">
+            <Button variant="contained" color="primary">
+              <KeyboardBackspaceIcon />
+              Return to All Products
+            </Button>
+          </Link>
+        ) : null}
       </div>
     </>
   );
 };
-
 export default AlbumsList;
