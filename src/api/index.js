@@ -17,7 +17,7 @@ export async function registerNewUser({
   email,
   password,
 }) {
-  // console.log('inside registerNewUser');
+  
   try {
     const { data } = await axios.post('/api/users/register', {
       firstName,
@@ -26,11 +26,11 @@ export async function registerNewUser({
       email,
       password,
     });
-    // console.log('regNewUser line 29');
-    localStorage.setItem('token', data.token);
+    console.log("this is data: ", data)
+    localStorage.setItem('token', data.token);  
     localStorage.setItem('userID', data.userID);
 
-    // console.log('console.log inside registerNewUser:', data);
+    
     return data;
   } catch (error) {
     console.error(error);
@@ -48,7 +48,7 @@ export async function loginUser({ username, password }) {
 
     localStorage.setItem('token', data.token);
     localStorage.setItem('userID', data.userID);
-    console.log(data);
+    
     return data;
   } catch (error) {
     console.error(error);
@@ -91,6 +91,7 @@ export async function checkCart() {
     const { data } = await axios.get(`/api/orders/${ID}/cart`, {
       headers: { Authorization: `Bearer ${token}` },
     });
+    
     return data;
   } catch (error) {
     console.error(error);
@@ -128,14 +129,16 @@ export async function quantityUpdate(orderID, productID, quantity) {
 }
 
 export async function addToOrder(orderID, productID) {
-  console.log('vars being passed in:', orderID, productID);
+  
   try {
     const token = localStorage.token;
-    const { data } = await axios.post(`/api/orders/${orderID}/${productID}`, {
-      headers: { Authorization: `Bearer ${token}` },
+    
+    const response = await axios.post(`/api/orders/${orderID}/${productID}`, {
+      headers: { Authorization: `Bearer ${token}`},
     });
-    return data;
-  } catch (error) {
-    throw error;
+    
+    return response.data;
+  } catch (error) { 
+    throw error
   }
 }

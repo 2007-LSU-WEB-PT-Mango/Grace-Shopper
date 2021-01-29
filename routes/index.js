@@ -16,6 +16,7 @@ const {
   getOrdersAndProducts,
 } = require('../db/index');
 const verifyToken = require('../middleware/verifyToken');
+const postVerifyToken = require('../middleware/postVerifyToken');
 
 // get all products
 apiRouter.get('/products', async (req, res, next) => {
@@ -113,10 +114,10 @@ apiRouter.patch(
 // add product to order
 apiRouter.post(
   '/orders/:orderId/:productId',
-  verifyToken,
+  postVerifyToken,
   async (req, res, next) => {
     const { orderId, productId } = req.params;
-    console.log(orderId, productId);
+
     try {
       const newProduct = await addProductToOrder(orderId, productId);
 

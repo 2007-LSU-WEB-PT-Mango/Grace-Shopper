@@ -69,6 +69,7 @@ usersRouter.post('/register', async (req, res, next) => {
         message: 'New user registered.',
         username,
         token,
+        userID: user[0].id
       });
     });
   } catch (error) {

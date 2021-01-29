@@ -15,55 +15,64 @@ import Success from './Success';
 const App = () => {
   const [productList, setProductList] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  const loadData = async () => {
-    try {
-      const response = await getProducts();
-
-      const { token } = await getUserData();
-
-      if (token === localStorage.token) {
-        setIsLoggedIn(true);
-      }
-      setProductList(response);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const [cart, setCart] = useState([]);
+  const [order, setOrder] = useState('');
 
   useEffect(() => {
-    loadData();
+    const start = async () => {
+      try {
+        const newProducts = await getProducts();
+        setProductList(newProducts);
+        const { token } = await getUserData();
+
+        if (token === localStorage.token) {
+          setIsLoggedIn(true);
+        }
+        const storageCart = await loadCart();
+        setCart(storageCart);
+      } catch (error) {
+        throw error;
+      }
+    };
+    start();
   }, []);
 
-  // useEffect(() => {
-  //   getProducts()
-  //     .then((response) => {
-  //       setProductList(response);
-  //       // if (localStorage.token) {
-  //       //   setIsLoggedIn(true);
-  //       // }
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // }, []);
+  const loadCart = async () => {
+    try {
+      const newCart = await checkCart();
+
+      return newCart;
+    } catch (error) {
+      throw error;
+    }
+  };
 
   return (
     <div className="App">
       <Router>
-        <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+        <Header
+          isLoggedIn={isLoggedIn}
+          setIsLoggedIn={setIsLoggedIn}
+          cart={cart}
+          setOrder={setOrder}
+        />
         <Switch>
           <Route exact path="/success">
             <Success />
           </Route>
           <Route exact path="/cart">
-            <Cart />
+            <Cart
+              cart={cart}
+              setCart={setCart}
+              order={order}
+              setOrder={setOrder}
+            />
           </Route>
           <Route exact path="/products/:id">
-            <AlbumsList productList={productList} />
+            <AlbumsList productList={productList} cart={cart} />
           </Route>
           <Route exact path="/products">
-            <AlbumsList productList={productList} />
+            <AlbumsList productList={productList} cart={cart} />
           </Route>
           <Route exact path="/register">
             {isLoggedIn ? (
