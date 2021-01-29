@@ -32,7 +32,6 @@ const Header = (props) => {
   };
 
   const handleMenuClick = (pageURL) => {
-    // history.push(pageURL);
 
     setAnchorEl(null);
   };

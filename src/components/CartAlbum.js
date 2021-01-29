@@ -10,11 +10,11 @@ import {Grid,
         FormControl, 
         Select, 
         Fade} from '@material-ui/core';
-import {removeItemCart, quantityUpdate} from '../api';
+import {removeItemCart, quantityUpdate, checkCart} from '../api';
 
 
 
-const CartAlbum = ({product, cart, order, classes}) => {
+const CartAlbum = ({product, cart, setCart, order, classes}) => {
     const [checked, setChecked] = useState(true);
 
     
@@ -57,10 +57,12 @@ const CartAlbum = ({product, cart, order, classes}) => {
                                         <FormHelperText>quantity</FormHelperText>
                                     </FormControl>
                                     <Button variant="contained" disableRipple={true}
-                                        onClick={() => {
+                                        onClick={async () => {
                                             try {
                                                 removeItemCart(cart.id, product.id)
                                                 setChecked(false);
+                                                const newCart = await checkCart()
+                                                setCart(newCart)
                                             } catch (error) {
                                                 throw error
                                             };

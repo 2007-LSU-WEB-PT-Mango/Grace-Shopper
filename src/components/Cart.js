@@ -21,7 +21,8 @@ const useStyles = makeStyles({
     }
   });
 
-const Cart = ({cart, order, setOrder}) => {
+
+const Cart = ({cart, setCart, order, setOrder}) => {
     
     const classes = useStyles();
     
@@ -75,7 +76,8 @@ const Cart = ({cart, order, setOrder}) => {
                             product={product}
                             cart={cart}
                             order={order}
-                            classes={classes}/>
+                            classes={classes}
+                            setCart={setCart}/>
                     )
                 }
                 )

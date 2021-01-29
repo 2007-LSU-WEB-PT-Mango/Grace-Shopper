@@ -65,7 +65,8 @@ const App = () => {
           </Route>
           <Route exact path="/cart">
             <Cart 
-              cart={cart} 
+              cart={cart}
+              setCart={setCart} 
               order={order}
               setOrder={setOrder}/>
           </Route>
