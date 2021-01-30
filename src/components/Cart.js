@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import {Grid, 
         Card, 
         CardContent, 
@@ -21,42 +21,43 @@ const useStyles = makeStyles({
     }
   });
 
-
-const Cart = ({cart, setCart, order, setOrder}) => {
-    
+  
+  const Cart = ({shoppingCart, setShoppingCart}) => {
+    const [totalPrice, setTotalPrice] = useState(0);
+    const [totalQuantity, setTotalQuantity] = useState(0);
+    const [update, setUpdate] = useState(false);
     const classes = useStyles();
-    
-
+      
     useEffect(() => {
-        setOrder(cart.products)
-    })
-    
-    
+        total();
+        quantityTotal();
+    }, [update])
+
     const total = () => {
         let rollingTotal = 0;
-        if (order && order.length >0) {
-            order.map((product) => {
+        if (shoppingCart && shoppingCart.products.length >0) {
+            shoppingCart.products.map((product) => {
                 rollingTotal = rollingTotal + (product.price * product.quantity)
                 return rollingTotal
             })
         }
-        return rollingTotal;
+        setTotalPrice(rollingTotal);
     }
 
-    const totalDue = total()+"00";
+    const totalDue = totalPrice+"00";
 
-    const quantitiyTotal = () => {
+    const quantityTotal = () => {
         let rollingTotal = 0;
-        if (order && order.length > 0) {
-            order.map((product) => {
+        if (shoppingCart && shoppingCart.products.length > 0) {
+            shoppingCart.products.map((product) => {
                 rollingTotal = rollingTotal + product.quantity
                 return rollingTotal
             })
         }
-        return rollingTotal;
+        setTotalQuantity(rollingTotal);
     }
     
-
+   
     
 
     return (
@@ -65,25 +66,26 @@ const Cart = ({cart, setCart, order, setOrder}) => {
         container
         justify="center">
             <Grid>
-                <h2>Shopping Cart</h2>
+                <h2 style={{color: "white"}}>Shopping Cart</h2>
                 <hr></hr>
-                {order && order.length > 0?
+                {shoppingCart && shoppingCart.products.length > 0?
                 
-                order.map((product, index) => {
+                shoppingCart.products.map((product, index) => {
                     return (
                         <CartAlbum 
                             key={index}
                             product={product}
-                            cart={cart}
-                            order={order}
+                            shoppingCart={shoppingCart}
                             classes={classes}
-                            setCart={setCart}/>
+                            update={update}
+                            setUpdate={setUpdate}
+                            setShoppingCart={setShoppingCart}/>
                     )
                 }
                 )
                 : <h2>Your cart is EMPTY</h2>}
             </Grid>
-            {order && order.length>0?
+            {shoppingCart && shoppingCart.products.length>0?
             <Grid>
             <Card>
                         <CardContent>
@@ -91,10 +93,10 @@ const Cart = ({cart, setCart, order, setOrder}) => {
                                 Order Details
                             </Typography>
                             <Typography gutterBottom variant="h6" component="h4">
-                                items: {quantitiyTotal()}
+                                items: {totalQuantity}
                             </Typography>
                             <Typography gutterBottom variant="h6" component="h4">
-                                Total: ${total()}
+                                Total: ${totalPrice}
                             </Typography>
 
                             {/* stripe integration */}

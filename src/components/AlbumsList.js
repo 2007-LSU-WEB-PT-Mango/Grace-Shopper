@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Album from './Album';
-import AddAlerts from './Alert';
 // Material UI imports
 import { Grid, Button } from '@material-ui/core';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
-const AlbumsList = ({ productList, cart }) => {
+
+const AlbumsList = ({ productList, shoppingCart, setShoppingCart }) => {
   const { id } = useParams();
   let filteredAlbum = productList.find(
     (product) => id && Number(id) === Number(product.id)
@@ -25,7 +25,9 @@ const AlbumsList = ({ productList, cart }) => {
                   price={filteredAlbum.price}
                   imageURL={filteredAlbum.imageURL}
                   inStock={filteredAlbum.inStock}
-                  cart={cart}
+                  category={filteredAlbum.category}
+                  shoppingCart={shoppingCart}
+                  setShoppingCart={setShoppingCart}
                 />
               </Grid>
             </>
@@ -40,7 +42,9 @@ const AlbumsList = ({ productList, cart }) => {
                     price={product.price}
                     imageURL={product.imageURL}
                     inStock={product.inStock}
-                    cart={cart}
+                    category={product.category}
+                    shoppingCart={shoppingCart}
+                    setShoppingCart={setShoppingCart}
                   />
                 </Grid>
               );

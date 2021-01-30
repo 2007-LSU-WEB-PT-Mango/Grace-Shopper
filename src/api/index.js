@@ -142,3 +142,17 @@ export async function addToOrder(orderID, productID) {
     throw error
   }
 }
+
+export async function completeOrder(orderID) {
+  try {
+    const token = localStorage.token;
+
+    const response = await axios.patch(`/api/orders/complete/${orderID}`, {
+      headers: { Authorization: `Bearer ${token}`},
+    });
+
+    return response.data;
+  } catch (error) {
+    throw error
+  }
+}

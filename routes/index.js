@@ -74,7 +74,7 @@ apiRouter.patch(
   verifyToken,
   async (req, res, next) => {
     try {
-      const order = await completeOrder(req.params.orderId); //unsure yet what function will be called!
+      const order = await completeOrder(req.params.orderId);
       res.send(order);
     } catch (error) {
       throw error;
