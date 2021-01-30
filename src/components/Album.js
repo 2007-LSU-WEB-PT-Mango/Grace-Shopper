@@ -24,6 +24,8 @@ const useStyles = makeStyles({
     padding: 10,
     margin: 10,
     flexGrow: 1,
+    alignItems: "center",
+    justifyItems: "center"
   },
   media: {
     height: 250,
@@ -56,8 +58,6 @@ const Album = (props) => {
   } = props;
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  // console.log('order in album: ', order)
-  // console.log('cart in album: ', cart)
 
   const newProduct = {
     category,
@@ -74,9 +74,16 @@ const Album = (props) => {
   function productPage() {
     return "/products/" + ID;
   }
+
+  function tracks() {
+    for (let i =0; i<trackList.length; i++) {
+      console.log(trackList[i])
+      return <p>{trackList.i}</p>}}
+
+      
   return (
     <>
-      <Grid direction="row" className={classes.root} container spacing={3}>
+      <div style={{display: "flex", flexDirection: "row", ju: "center"}}>
         <Fade in={true}>
           <Card className={classes.root}>
             <Link to={productPage()}>
@@ -131,15 +138,16 @@ const Album = (props) => {
         </Fade>
 
         {singleAlbum == true ? (
-          <Card>
+          <Card className={classes.root}>
             <CardContent>
               <Typography gutterBottom variant="h6" component="h4">
-                {trackList}
+                <h4>Album Tracklist</h4>
+                {tracks()}
               </Typography>
             </CardContent>
           </Card>
         ) : null}
-      </Grid>
+      </div>
     </>
   );
 };
