@@ -8,7 +8,7 @@ import {
   Redirect,
 } from 'react-router-dom';
 import { AlbumsList, Login, Register, Dashboard } from '../components';
-import { getProducts, getUserData } from '../api';
+import { getProducts, getUserData, checkCart } from '../api';
 import Cart from '../components/Cart';
 import Success from './Success';
 
