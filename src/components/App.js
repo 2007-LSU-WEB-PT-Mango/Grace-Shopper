@@ -16,7 +16,6 @@ const App = () => {
   const [productList, setProductList] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [shoppingCart, setShoppingCart] = useState([]);
-  // const [order, setOrder] = useState([]);
 
   console.log("cart on top level: ", shoppingCart);
 
