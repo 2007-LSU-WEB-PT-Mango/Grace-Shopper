@@ -403,23 +403,54 @@ async function cancelOrder(id) {
 
 async function getOrdersAndProducts(userID) {
   try {
-    const {
-      rows: [user],
-    } = await client.query(
-      `
-    SELECT * 
-    FROM users
-    WHERE users.id = ${userID}
-    `
-    );
-    // 2nd adapter to grab the orders
-    const {
-      rows: [orders],
-    } = await client.query(`
-    SELECT * FROM orders
-    WHERE "userID" = ${userID}`);
+    const orders = await getOrdersbyUser(userID);
 
-    return [user, orders];
+    await Promise.all(
+      orders.map(async (order) => {
+        // for each order, run getOrderProducts(order.id)
+        const products = await getCartProducts(order.id);
+        console.log('DB products:', products);
+        if (products) {
+          await Promise.all(
+            products.map(async (product) => {
+              order.description = await getProduct(product.productID);
+            })
+          );
+          // order.productInfo = await getProduct(order.products.id);
+        }
+      })
+    );
+    return orders;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getOrderHistory(userID) {
+  try {
+    // Get the user's orders.
+    const orders = await getOrdersbyUser(userID);
+
+    // Map over the orders to get their orderedproducts (getCartProducts(order.id))
+    await Promise.all(
+      orders.map(async (order) => {
+        const orderedProducts = await getCartProducts(order.id);
+        // orderedproducts && map over them to get their product description (getProduct)
+        if (orderedProducts) {
+          order.orderedProducts = orderedProducts;
+          order.products = [];
+          await Promise.all(
+            orderedProducts.map(async (orderedProduct) => {
+              const product = await getProduct(orderedProduct.productID);
+              if (product) {
+                order.products.push(product);
+              }
+            })
+          );
+        }
+      })
+    );
+    return orders;
   } catch (error) {
     throw error;
   }
@@ -455,4 +486,7 @@ module.exports = {
   updateOrderProduct,
   completeOrder,
   getOrdersAndProducts,
+  getCartProducts,
+  //
+  getOrderHistory,
 };

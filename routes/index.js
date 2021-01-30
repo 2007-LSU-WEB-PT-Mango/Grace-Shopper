@@ -13,7 +13,10 @@ const {
   updateOrderProduct,
   completeOrder,
   getCartByUser,
+  getCartProducts,
   getOrdersAndProducts,
+  //
+  getOrderHistory,
 } = require('../db/index');
 const verifyToken = require('../middleware/verifyToken');
 const postVerifyToken = require('../middleware/postVerifyToken');
@@ -48,9 +51,9 @@ apiRouter.get('/orders/:userID', verifyToken, async (req, res, next) => {
   const { userID } = req.params;
 
   try {
-    const orders = await getOrdersbyUser(userID);
-    console.log('Line 51', orders);
-    res.send(orders);
+    const userOrders = await getOrderHistory(userID);
+    console.log('UserOrders:', userOrders);
+    res.send(userOrders);
   } catch (error) {
     next(error);
   }
