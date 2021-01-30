@@ -22,7 +22,7 @@ const Stripe = require('stripe');
 
 const stripe = Stripe('sk_test_51ICFMDCJh48L0M91i51uTAjgxFsbPE1XQrV0Q5n7TQD4dzEDqIps6iCAGljkvUsfBApmKPwTOnELE7TeCEX7vywt003rsJR1fS');
 
-const YOUR_DOMAIN = 'http://http://mangorecordshop.herokuapp.com';
+const YOUR_DOMAIN = 'http://mangorecordshop.herokuapp.com';
 
 server.post('/create-checkout-session', async (req, res) => {
   
