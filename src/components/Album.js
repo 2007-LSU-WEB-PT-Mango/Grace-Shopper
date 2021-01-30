@@ -26,10 +26,22 @@ const useStyles = makeStyles({
 });
 
 const Album = (props) => {
-  const { ID, name, description, price, imageURL, inStock, cart } = props;
+  const { ID, name, description, price, imageURL, inStock, category, shoppingCart, setShoppingCart } = props;
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  
+  // console.log('order in album: ', order)
+  // console.log('cart in album: ', cart)
+
+  const newProduct = {
+    category,
+    description,
+    id: ID,
+    imageURL,
+    inStock,
+    name,
+    price,
+    quantity: 1
+  };
 
   function productPage() {
     return ("/products/"+ID)
@@ -60,8 +72,12 @@ const Album = (props) => {
             <Button fullWidth
               className={classes.action}
               onClick={() => {
-                  addToOrder(cart.id, ID)
+                  
+                  shoppingCart.products.push(newProduct)
+                  setShoppingCart(shoppingCart)
+                  addToOrder(shoppingCart.id, ID)
                   setOpen(true)
+                  
               }}
               >
               <AddShoppingCartIcon />

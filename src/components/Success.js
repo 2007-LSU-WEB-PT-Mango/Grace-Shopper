@@ -1,8 +1,17 @@
 import React from 'react';
 import Confetti from 'react-confetti'
+import { completeOrder } from '../api';
  
-const Success = () => {
-  
+
+
+const Success = ({shoppingCart}) => {
+    
+    function updateOrder(orderID) {
+        completeOrder(orderID);
+    }
+
+    updateOrder(shoppingCart.id)
+
   return (
     <>  
     <Confetti/>

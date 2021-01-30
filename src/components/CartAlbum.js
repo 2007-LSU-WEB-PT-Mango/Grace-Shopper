@@ -10,16 +10,18 @@ import {Grid,
         FormControl, 
         Select, 
         Fade} from '@material-ui/core';
-import {removeItemCart, quantityUpdate, checkCart} from '../api';
+import {removeItemCart, quantityUpdate} from '../api';
 
 
 
-const CartAlbum = ({product, cart, setCart, order, classes}) => {
+const CartAlbum = ({product, shoppingCart, setShoppingCart, update, setUpdate, classes}) => {
     const [checked, setChecked] = useState(true);
+    const [remove, setRemove] = useState(false);
 
     
 
     return (
+        <div id={product.id} style={remove? {display: "none"} : {display: "block"}}>
         <Fade in={checked}>
                             <Card
                             className={classes.root}
@@ -44,7 +46,7 @@ const CartAlbum = ({product, cart, setCart, order, classes}) => {
                                         value={product.quantity}
                                         onChange={()=> {
                                             try {
-                                                quantityUpdate(order.id, product.id, product.quantity)
+                                                quantityUpdate(shoppingCart.id, product.id, product.quantity)
                                                 
                                             } catch (error) {
                                                 throw error};
@@ -59,10 +61,15 @@ const CartAlbum = ({product, cart, setCart, order, classes}) => {
                                     <Button variant="contained" disableRipple={true}
                                         onClick={async () => {
                                             try {
-                                                removeItemCart(cart.id, product.id)
+                                                removeItemCart(shoppingCart.id, product.id)
                                                 setChecked(false);
-                                                const newCart = await checkCart()
-                                                setCart(newCart)
+                                                const updatedOrder = shoppingCart.products.filter((updatedProduct) => {
+                                                    return updatedProduct.id !== product.id
+                                                })
+                                                shoppingCart.products = updatedOrder;
+                                                setShoppingCart(shoppingCart);
+                                                setUpdate(!update);
+                                                setRemove(!remove);
                                             } catch (error) {
                                                 throw error
                                             };
@@ -72,6 +79,7 @@ const CartAlbum = ({product, cart, setCart, order, classes}) => {
                                 </Grid>
                         </Card>
                     </Fade>
+                </div>
     )
 }
 

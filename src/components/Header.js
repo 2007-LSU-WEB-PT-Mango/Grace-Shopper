@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Header = (props) => {
   // const { history } = props;
-  const { isLoggedIn, setIsLoggedIn, cart, setOrder } = props;
+  const { isLoggedIn, setIsLoggedIn} = props;
 
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -42,7 +42,7 @@ const Header = (props) => {
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
             <Link to="/products" style={{"textDecoration": "none", "color": "white"}}>
-            Mango's Vinyl Store
+            Mango's Record Store
             </Link>
           </Typography>
           <div>
@@ -76,17 +76,21 @@ const Header = (props) => {
               open={open}
               onClose={() => setAnchorEl(null)}
             >
-              <MenuItem
+              {!isLoggedIn?
+              <div>
+                <MenuItem
                 onClick={() => {
                   handleMenuClick('/register');
                 }}
-              >
-                <Link to="/register">Register</Link>
-              </MenuItem>
+                >
+                  <Link to="/register">Register</Link>
+                </MenuItem>
 
-              <MenuItem onClick={() => handleMenuClick('/login')}>
-                <Link to="/login">Log In</Link>
-              </MenuItem>
+                <MenuItem onClick={() => handleMenuClick('/login')}>
+                  <Link to="/login">Log In</Link>
+                </MenuItem>
+              </div>
+              : null}
 
               <MenuItem onClick={() => handleMenuClick('/dashboard')}>
                 <Link to="/dashboard">Dashboard</Link>
@@ -95,9 +99,8 @@ const Header = (props) => {
               <MenuItem onClick={() => handleMenuClick('/products')}>
                 <Link to="/products">Products</Link>
               </MenuItem>
-              <MenuItem onClick={() => {
-                  handleMenuClick('/cart');
-                  setOrder(cart.products);}}>
+              <MenuItem onClick={() => 
+                  handleMenuClick('/cart')}>
                 <Link to="/cart">Cart</Link>
               </MenuItem>
             </Menu>

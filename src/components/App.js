@@ -8,17 +8,20 @@ import {
   Redirect,
 } from 'react-router-dom';
 import { AlbumsList, Login, Register, Dashboard } from '../components';
-import { getProducts, getUserData } from '../api';
+import { getProducts, getUserData, checkCart } from '../api';
 import Cart from '../components/Cart';
 import Success from './Success';
 
 const App = () => {
   const [productList, setProductList] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [cart, setCart] = useState([]);
-  const [order, setOrder] = useState('');
+  const [shoppingCart, setShoppingCart] = useState([]);
+  // const [order, setOrder] = useState([]);
+
+  console.log("cart on top level: ", shoppingCart);
 
   useEffect(() => {
+    console.log('updating useEffect!!!')
     const start = async () => {
       try {
         const newProducts = await getProducts();
@@ -29,7 +32,7 @@ const App = () => {
           setIsLoggedIn(true);
         }
         const storageCart = await loadCart();
-        setCart(storageCart);
+        setShoppingCart(storageCart);
       } catch (error) {
         throw error;
       }
@@ -53,39 +56,46 @@ const App = () => {
         <Header
           isLoggedIn={isLoggedIn}
           setIsLoggedIn={setIsLoggedIn}
-          cart={cart}
-          setOrder={setOrder}
         />
         <Switch>
           <Route exact path="/success">
-            <Success />
+            <Success 
+              shoppingCart={shoppingCart}/>
           </Route>
           <Route exact path="/cart">
             <Cart
-              cart={cart}
-              setCart={setCart}
-              order={order}
-              setOrder={setOrder}
+              shoppingCart={shoppingCart}
+              setShoppingCart={setShoppingCart}
             />
           </Route>
           <Route exact path="/products/:id">
-            <AlbumsList productList={productList} cart={cart} />
+            <AlbumsList 
+              productList={productList} 
+              shoppingCart={shoppingCart} 
+              setShoppingCart={setShoppingCart}/>
           </Route>
           <Route exact path="/products">
-            <AlbumsList productList={productList} cart={cart} />
+            <AlbumsList 
+              productList={productList} 
+              shoppingCart={shoppingCart} 
+              setShoppingCart={setShoppingCart}/>
           </Route>
           <Route exact path="/register">
             {isLoggedIn ? (
               <Redirect to="/dashboard" />
             ) : (
-              <Register isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+              <Register 
+                isLoggedIn={isLoggedIn} 
+                setIsLoggedIn={setIsLoggedIn} />
             )}
           </Route>
           <Route exact path="/login">
             {isLoggedIn ? (
               <Redirect to="/dashboard" />
             ) : (
-              <Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+              <Login 
+                isLoggedIn={isLoggedIn} 
+                setIsLoggedIn={setIsLoggedIn} />
             )}
           </Route>
           <Route exact path="/dashboard">
