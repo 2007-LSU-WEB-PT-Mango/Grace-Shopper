@@ -16,7 +16,6 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import NotInterestedIcon from "@material-ui/icons/NotInterested";
-import Paper from "@material-ui/core/Paper";
 
 const useStyles = makeStyles({
   root: {
@@ -130,7 +129,7 @@ const Album = (props) => {
           </Card>
         </Fade>
 
-        {singleAlbum == true ? (
+        {singleAlbum === true ? (
           <Card>
             <CardContent>
               <Typography gutterBottom variant="h6" component="h4">

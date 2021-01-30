@@ -1,34 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Dialog from '@material-ui/core/Dialog';
+import PropTypes from "prop-types";
+import { makeStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Dialog from "@material-ui/core/Dialog";
 
-import Accordion from '@material-ui/core/Accordion';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Accordion from "@material-ui/core/Accordion";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import Typography from "@material-ui/core/Typography";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
-import Table from '@material-ui/core/Table';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import Table from "@material-ui/core/Table";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '100%',
+    width: "100%",
     minWidth: 650,
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
-    flexBasis: '75%',
+    flexBasis: "75%",
     flexShrink: 0,
   },
   secondaryHeading: {
@@ -41,9 +41,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const imageStyle = {
-  height: '50px',
-  width: '50px',
-  margin: '2px',
+  height: "50px",
+  width: "50px",
+  margin: "2px",
 };
 
 function SimpleDialog(props) {
@@ -62,14 +62,14 @@ function SimpleDialog(props) {
 
   return (
     <Dialog
-      maxWidth={'lg'}
+      maxWidth={"lg"}
       onClose={handleClose}
       aria-labelledby="simple-dialog-title"
       open={open}
     >
       <DialogTitle id="simple-dialog-title">Order History</DialogTitle>
       {orderHistory.length === 0 ? (
-        'No orders on file. Please browse our selection.'
+        "No orders on file. Please browse our selection."
       ) : (
         <List>
           {orderHistory.map((order) => {
@@ -80,8 +80,8 @@ function SimpleDialog(props) {
             return (
               <ListItem>
                 <Accordion
-                  expanded={expanded === 'panel1'}
-                  onChange={handleChange('panel1')}
+                  expanded={expanded === "panel1"}
+                  onChange={handleChange("panel1")}
                 >
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
@@ -126,6 +126,7 @@ function SimpleDialog(props) {
                                   <img
                                     src={product.imageURL}
                                     style={imageStyle}
+                                    alt={"Album Cover"}
                                   />
                                   <b>
                                     {product.name} - {product.description}
@@ -164,7 +165,7 @@ SimpleDialog.propTypes = {
 const OrderHistory = (props) => {
   const [open, setOpen] = React.useState(false);
   // const [selectedValue, setSelectedValue] = React.useState(emails[1]);
-  const { orderHistory, setOrderHistory } = props;
+  const { orderHistory } = props;
 
   const handleClickOpen = () => {
     setOpen(true);
