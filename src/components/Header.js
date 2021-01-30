@@ -1,11 +1,18 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import LogoutButton from './LogoutButton';
+import React from "react";
+import { Link } from "react-router-dom";
+import LogoutButton from "./LogoutButton";
 
 // material ui imports
-import { makeStyles } from '@material-ui/core/styles';
-import {AppBar, Toolbar, Typography, IconButton, MenuItem, Menu} from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
+import { makeStyles } from "@material-ui/core/styles";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  MenuItem,
+  Menu,
+} from "@material-ui/core";
+import MenuIcon from "@material-ui/icons/Menu";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Header = (props) => {
   // const { history } = props;
-  const { isLoggedIn, setIsLoggedIn} = props;
+  const { isLoggedIn, setIsLoggedIn } = props;
 
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -32,7 +39,6 @@ const Header = (props) => {
   };
 
   const handleMenuClick = (pageURL) => {
-
     setAnchorEl(null);
   };
 
@@ -41,8 +47,11 @@ const Header = (props) => {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            <Link to="/products" style={{"textDecoration": "none", "color": "white"}}>
-            Mango's Record Store
+            <Link
+              to="/products"
+              style={{ textDecoration: "none", color: "white" }}
+            >
+              Mango Record Store
             </Link>
           </Typography>
           <div>
@@ -65,42 +74,41 @@ const Header = (props) => {
               id="menu-appbar"
               anchorEl={anchorEl}
               anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               keepMounted
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               open={open}
               onClose={() => setAnchorEl(null)}
             >
-              {!isLoggedIn?
-              <div>
-                <MenuItem
-                onClick={() => {
-                  handleMenuClick('/register');
-                }}
-                >
-                  <Link to="/register">Register</Link>
-                </MenuItem>
+              {!isLoggedIn ? (
+                <div>
+                  <MenuItem
+                    onClick={() => {
+                      handleMenuClick("/register");
+                    }}
+                  >
+                    <Link to="/register">Register</Link>
+                  </MenuItem>
 
-                <MenuItem onClick={() => handleMenuClick('/login')}>
-                  <Link to="/login">Log In</Link>
-                </MenuItem>
-              </div>
-              : null}
+                  <MenuItem onClick={() => handleMenuClick("/login")}>
+                    <Link to="/login">Log In</Link>
+                  </MenuItem>
+                </div>
+              ) : null}
 
-              <MenuItem onClick={() => handleMenuClick('/dashboard')}>
+              <MenuItem onClick={() => handleMenuClick("/dashboard")}>
                 <Link to="/dashboard">Dashboard</Link>
               </MenuItem>
 
-              <MenuItem onClick={() => handleMenuClick('/products')}>
+              <MenuItem onClick={() => handleMenuClick("/products")}>
                 <Link to="/products">Products</Link>
               </MenuItem>
-              <MenuItem onClick={() => 
-                  handleMenuClick('/cart')}>
+              <MenuItem onClick={() => handleMenuClick("/cart")}>
                 <Link to="/cart">Cart</Link>
               </MenuItem>
             </Menu>

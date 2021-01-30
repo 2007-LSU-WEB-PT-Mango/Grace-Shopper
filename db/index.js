@@ -1,7 +1,7 @@
 // Connect to DB
-const { Compare, FormatAlignJustifyTwoTone } = require('@material-ui/icons');
-const { Client } = require('pg');
-const DB_NAME = 'mango';
+const { Compare, FormatAlignJustifyTwoTone } = require("@material-ui/icons");
+const { Client } = require("pg");
+const DB_NAME = "mango";
 const DB_URL =
   process.env.DATABASE_URL || `postgres://localhost:5432/${DB_NAME}`;
 const client = new Client({
@@ -9,7 +9,7 @@ const client = new Client({
   ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : undefined,
 });
 
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 // const { delete } = require('../routes');
 
 // database methods
@@ -34,7 +34,7 @@ async function createProduct({
   imageURL,
   inStock,
   category,
-  trackList
+  trackList,
 }) {
   try {
     const {
@@ -187,7 +187,7 @@ async function getCartByUser(userID) {
       FROM orders
       WHERE "userID"=$1 AND status=$2
     `,
-      [userID, 'cart']
+      [userID, "cart"]
     );
     if (shoppingCart) {
       const cart = shoppingCart[0];
@@ -214,8 +214,8 @@ async function getCartByUser(userID) {
       return cart;
     }
   } catch (error) {
-    console.log('making a new cart!');
-    const cart = createOrder('cart', userID);
+    console.log("making a new cart!");
+    const cart = createOrder("cart", userID);
     if (cart) {
       return cart;
     }
@@ -409,7 +409,7 @@ async function getOrdersAndProducts(userID) {
       orders.map(async (order) => {
         // for each order, run getOrderProducts(order.id)
         const products = await getCartProducts(order.id);
-        console.log('DB products:', products);
+        console.log("DB products:", products);
         if (products) {
           await Promise.all(
             products.map(async (product) => {

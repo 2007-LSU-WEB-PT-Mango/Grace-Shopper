@@ -1,10 +1,10 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import Album from './Album';
+import React from "react";
+import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
+import Album from "./Album";
 // Material UI imports
-import { Grid, Button } from '@material-ui/core';
-import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
+import { Grid, Button } from "@material-ui/core";
+import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 
 const AlbumsList = ({ productList, shoppingCart, setShoppingCart }) => {
   const { id } = useParams();
@@ -13,7 +13,7 @@ const AlbumsList = ({ productList, shoppingCart, setShoppingCart }) => {
   );
   return (
     <>
-      <div id="AlbumList" style={{ width: '80vw', margin: '0 auto' }}>
+      <div id="AlbumList" style={{ width: "80vw", margin: "0 auto" }}>
         <Grid container>
           {filteredAlbum ? (
             <>
@@ -26,8 +26,10 @@ const AlbumsList = ({ productList, shoppingCart, setShoppingCart }) => {
                   imageURL={filteredAlbum.imageURL}
                   inStock={filteredAlbum.inStock}
                   category={filteredAlbum.category}
+                  trackList={filteredAlbum.trackList}
                   shoppingCart={shoppingCart}
                   setShoppingCart={setShoppingCart}
+                  singleAlbum={true}
                 />
               </Grid>
             </>
@@ -45,6 +47,7 @@ const AlbumsList = ({ productList, shoppingCart, setShoppingCart }) => {
                     category={product.category}
                     shoppingCart={shoppingCart}
                     setShoppingCart={setShoppingCart}
+                    singleAlbum={false}
                   />
                 </Grid>
               );
