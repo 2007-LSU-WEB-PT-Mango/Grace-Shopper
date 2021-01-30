@@ -46,11 +46,11 @@ const Auth = (props) => {
   const { username, password, isGuest } = loginData;
   const classes = useStyles();
   const onChange = (event) => {
+    console.log(event.target.name, event.target.value);
     setLoginData({
       ...loginData,
       [event.target.name]: event.target.value,
     });
-    console.log(loginData);
   };
 
   const submitForm = async (e) => {
@@ -76,27 +76,14 @@ const Auth = (props) => {
 
   const isGuestClick = (event) => {
     event.preventDefault();
-    // const chicken = event.target.checked;
     if (isLoggedIn === false) {
       setLoginData({
         ...loginData,
         username: "guest",
-      });
-      setLoginData({
-        ...loginData,
         password: "guest",
+        checked: event.target.value,
       });
-      // setLoginData({
-      //   ...loginData,
-      //   isGuest: chicken,
-      // });
-      setLoginData({
-        ...loginData,
-        [event.target.name]: event.target.checked,
-      });
-      console.log(loginData);
 
-      setSuccessMessage("You are logged in as Guest.");
       setIsLoggedIn(true);
     }
   };
@@ -157,11 +144,9 @@ const Auth = (props) => {
               <Link to="/register" variant="body2">
                 Don't have an account? Sign Up
               </Link>
-              <Checkbox
-                onClick={isGuestClick}
-                name="isGuest"
-                label="Continue as Guest"
-              ></Checkbox>
+              <Button onClick={isGuestClick} value="isGuest">
+                Continue As Guest
+              </Button>
             </Grid>
           </Grid>
         </form>
