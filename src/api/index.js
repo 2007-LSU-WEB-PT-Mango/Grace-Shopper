@@ -17,7 +17,6 @@ export async function registerNewUser({
   email,
   password,
 }) {
-  // console.log('inside registerNewUser');
   try {
     const { data } = await axios.post("/api/users/register", {
       firstName,
@@ -26,11 +25,10 @@ export async function registerNewUser({
       email,
       password,
     });
-    // console.log('regNewUser line 29');
+    console.log("this is data: ", data);
     localStorage.setItem("token", data.token);
     localStorage.setItem("userID", data.userID);
 
-    // console.log('console.log inside registerNewUser:', data);
     return data;
   } catch (error) {
     console.error(error);
@@ -48,7 +46,7 @@ export async function loginUser({ username, password }) {
 
     localStorage.setItem("token", data.token);
     localStorage.setItem("userID", data.userID);
-    console.log(data);
+
     return data;
   } catch (error) {
     console.error(error);
@@ -69,6 +67,20 @@ export async function getUserData() {
   }
 }
 
+export async function getUserOrders(userID) {
+  try {
+    const token = localStorage.token;
+    const { data } = await axios.get(`/api/orders/${userID}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 // how do I get userid into this???
 export async function checkCart() {
   try {
@@ -77,6 +89,7 @@ export async function checkCart() {
     const { data } = await axios.get(`/api/orders/${ID}/cart`, {
       headers: { Authorization: `Bearer ${token}` },
     });
+
     return data;
   } catch (error) {
     console.error(error);
@@ -87,11 +100,11 @@ export async function checkCart() {
 // export async function logOutCart() {
 //   try {
 //     const guestStorage = window.localStorage;
-//     const guestCart = localStorage.setItem("cart", `${productID}`);
+//     const guestCart = localStorage.setItem("cart", `${products.id}`);
 //     const guestOrder = localStorage.getItem("cart");
-//     const { data } = await axios.get(`/api/${guestOrder}/${guestCart}/cart`);
+//     // const { data } = await axios.get(`/api/${guestOrder}/${guestCart}/cart`);
 
-//     return data;
+//     return guestOrder;
 //   } catch (error) {
 //     console.error(error);
 //     throw error;
@@ -128,13 +141,28 @@ export async function quantityUpdate(orderID, productID, quantity) {
 }
 
 export async function addToOrder(orderID, productID) {
-  console.log("vars being passed in:", orderID, productID);
   try {
     const token = localStorage.token;
-    const { data } = await axios.post(`/api/orders/${orderID}/${productID}`, {
+
+    const response = await axios.post(`/api/orders/${orderID}/${productID}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    return data;
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function completeOrder(orderID) {
+  try {
+    const token = localStorage.token;
+
+    const response = await axios.patch(`/api/orders/complete/${orderID}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    return response.data;
   } catch (error) {
     throw error;
   }

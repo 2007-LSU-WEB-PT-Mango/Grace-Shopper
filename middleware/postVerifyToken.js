@@ -1,12 +1,12 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-const verifyToken = (req, res, next) => {
-  
-  //  Get the auth header value
-  const bearerHeader = req.header("Authorization")
+const postVerifyToken = (req, res, next) => {
   
   try {
+    //  Get the auth header value
+    const bearerHeader = req.body.headers.Authorization;
+    
     //  Check if bearer is undefined
     if (typeof bearerHeader !== 'undefined') {
       // Split bearer token at the space
@@ -27,4 +27,4 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-module.exports = verifyToken;
+module.exports = postVerifyToken;

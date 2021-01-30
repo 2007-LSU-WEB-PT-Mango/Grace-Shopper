@@ -1,23 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
-import CardMedia from '@material-ui/core/CardMedia';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import Button from '@material-ui/core/Button';
+import React, {useEffect, useState} from 'react';
+import {Grid, 
+        Card, 
+        CardContent, 
+        Typography} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-// import { Link } from "react-router-dom";
-// import { loadStripe } from "@stripe/stripe-js";
 import App from './Stripe';
-import {checkCart, removeItemCart, quantityUpdate} from '../api';
+import CartAlbum from './CartAlbum';
 
-
-// const stripePromise = loadStripe("pk_test_51ICFMDCJh48L0M91LcpLLqnG895c9gQydCsdE1auAYJTqNhbskPhk4ULxKoDeuniL5BEADGKBAKbkpEPxRZyx1A600wtU2xF1J");
 
 
 const useStyles = makeStyles({
@@ -32,129 +21,82 @@ const useStyles = makeStyles({
     }
   });
 
-const Cart = () => {
+  
+  const Cart = ({shoppingCart, setShoppingCart}) => {
+    const [totalPrice, setTotalPrice] = useState(0);
+    const [totalQuantity, setTotalQuantity] = useState(0);
+    const [update, setUpdate] = useState(false);
     const classes = useStyles();
-    const [cart, setCart] =useState([]);
-    const [order, setOrder] =useState([]);
-
+      
     useEffect(() => {
-        checkCart()
-          .then((response) => {
-            setCart(response.products);
-            setOrder(response);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }, []);
-    
-    console.log(order)
-    
+        total();
+        quantityTotal();
+    }, [update])
+
     const total = () => {
         let rollingTotal = 0;
-        cart.map((product) => {
-            rollingTotal = rollingTotal + (product.price * product.quantity)
-        })
-        return rollingTotal;
+        if (shoppingCart && shoppingCart.products.length >0) {
+            shoppingCart.products.map((product) => {
+                rollingTotal = rollingTotal + (product.price * product.quantity)
+                return rollingTotal
+            })
+        }
+        setTotalPrice(rollingTotal);
     }
 
-    const totalDue = total()+"00";
+    const totalDue = totalPrice+"00";
 
-    const quantitiyTotal = () => {
+    const quantityTotal = () => {
         let rollingTotal = 0;
-        cart.map((product) => {
-            rollingTotal = rollingTotal + product.quantity
-        })
-        return rollingTotal;
+        if (shoppingCart && shoppingCart.products.length > 0) {
+            shoppingCart.products.map((product) => {
+                rollingTotal = rollingTotal + product.quantity
+                return rollingTotal
+            })
+        }
+        setTotalQuantity(rollingTotal);
     }
     
-
+   
     
 
     return (
         <div style={{padding: "20px"}}>
         <Grid
         container
-        direction="row"
         justify="center">
-            <Grid
-            direction="column"
-            justify="flex-start"
-            alignItems="center"
-            >
-                <h2>Shopping Cart</h2>
+            <Grid>
+                <h2 style={{color: "white"}}>Shopping Cart</h2>
                 <hr></hr>
-                {cart.map((product) => {
+                {shoppingCart && shoppingCart.products.length > 0?
+                
+                shoppingCart.products.map((product, index) => {
                     return (
-                        <>
-                        <Card
-                            className={classes.root}
-                            >
-                            <CardMedia
-                                className={classes.media}
-                                image={product.imageURL}
-                                title="Vinyl Record Stock Thumbnail"
-                            />
-                            <CardContent>
-                                <Typography gutterBottom variant="h5" component="h2">
-                                    {product.name} ${product.price}
-                                </Typography>
-                            </CardContent>
-                            <CardActionArea>
-                                <Grid
-                                container
-                                direction="row"
-                                justify="space-between"
-                                alignItems="center">
-
-                                    <FormControl className={classes.formControl}>
-                                        <Select
-                                        value={product.quantity}
-                                        onChange={()=> {
-                                            try {
-                                                quantityUpdate(order.id, product.id, product.quantity)
-                                                console.log("updating quant")
-                                            } catch (error) {
-                                                throw error};
-                                        }}>
-                                            <MenuItem value={1}>1</MenuItem>
-                                            <MenuItem value={2}>2</MenuItem>
-                                            <MenuItem value={3}>3</MenuItem>
-                                            <MenuItem value={4}>4</MenuItem>
-                                        </Select>
-                                        <FormHelperText>quantity</FormHelperText>
-                                    </FormControl>
-                                    <Button variant="contained" disableRipple={true}
-                                        onClick={() => {
-                                            try {
-                                                removeItemCart(order.id, product.id)
-                                                console.log("removed item!")
-                                            } catch (error) {
-                                                throw error
-                                            };
-                                        }}>
-                                        Remove
-                                    </Button>
-                                </Grid>
-                            </CardActionArea>
-                        </Card>
-                        </>
+                        <CartAlbum 
+                            key={index}
+                            product={product}
+                            shoppingCart={shoppingCart}
+                            classes={classes}
+                            update={update}
+                            setUpdate={setUpdate}
+                            setShoppingCart={setShoppingCart}/>
                     )
-                })}
+                }
+                )
+                : <h2>Your cart is EMPTY</h2>}
             </Grid>
-            <Grid
-        justify="flex-start"
-        alignItems="center">
+            {shoppingCart && shoppingCart.products.length>0?
+            <Grid>
             <Card>
                         <CardContent>
                             <Typography gutterBottom variant="h5" component="h2">
                                 Order Details
                             </Typography>
                             <Typography gutterBottom variant="h6" component="h4">
-                                items: {quantitiyTotal()}
+                                items: {totalQuantity}
                             </Typography>
                             <Typography gutterBottom variant="h6" component="h4">
-                                Total: ${total()}
+                                Total: ${totalPrice}
                             </Typography>
 
                             {/* stripe integration */}
@@ -163,6 +105,7 @@ const Cart = () => {
                         </CardContent>
                     </Card>
         </Grid>
+        : null}
         </Grid>
         </div>
     )

@@ -2,17 +2,17 @@ import React, { useState } from "react";
 import { loginUser } from "../api/index";
 import { Link } from "react-router-dom";
 // Material UI
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Grid from "@material-ui/core/Grid";
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  Grid,
+  Typography,
+  Container,
+} from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import { Checkbox } from "@material-ui/core";
-import { SentimentSatisfied } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -20,6 +20,10 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    background: "white",
+    padding: "10px",
+    border: "1px solid white",
+    borderRadius: "10px",
   },
   avatar: {
     margin: theme.spacing(1),
@@ -46,7 +50,6 @@ const Auth = (props) => {
   const { username, password, isGuest } = loginData;
   const classes = useStyles();
   const onChange = (event) => {
-    console.log(event.target.name, event.target.value);
     setLoginData({
       ...loginData,
       [event.target.name]: event.target.value,
@@ -70,23 +73,22 @@ const Auth = (props) => {
       setIsLoggedIn(true);
     } catch (error) {
       console.error(error);
-      setErrorMessage(error.response);
     }
   };
 
-  const isGuestClick = (event) => {
-    event.preventDefault();
-    if (isLoggedIn === false) {
-      setLoginData({
-        ...loginData,
-        username: "guest",
-        password: "guest",
-        checked: event.target.value,
-      });
+  // const isGuestClick = (event) => {
+  //   event.preventDefault();
+  //   if (isLoggedIn === false) {
+  //     setLoginData({
+  //       ...loginData,
+  //       username: "guest",
+  //       password: "guest",
+  //       checked: event.target.value,
+  //     });
 
-      setIsLoggedIn(true);
-    }
-  };
+  //     setIsLoggedIn(true);
+  //   }
+  // };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -144,9 +146,9 @@ const Auth = (props) => {
               <Link to="/register" variant="body2">
                 Don't have an account? Sign Up
               </Link>
-              <Button onClick={isGuestClick} value="isGuest">
+              {/* <Button onClick={isGuestClick} value="isGuest">
                 Continue As Guest
-              </Button>
+              </Button> */}
             </Grid>
           </Grid>
         </form>
