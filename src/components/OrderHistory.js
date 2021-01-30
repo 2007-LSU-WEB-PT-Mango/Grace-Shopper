@@ -74,8 +74,8 @@ function SimpleDialog(props) {
         <List>
           {orderHistory.map((order) => {
             const date = order.datePlaced.slice(0, 10);
-            const [orderedProducts] = order.orderedProducts;
-            const { quantity } = orderedProducts;
+            const orderedProducts = order.orderedProducts;
+            const {quantity} = orderedProducts;
 
             return (
               <ListItem>

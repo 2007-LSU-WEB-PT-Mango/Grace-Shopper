@@ -98,9 +98,10 @@ apiRouter.delete('/orders/:orderId', verifyToken, async (req, res, next) => {
 // updating quantity in order/cart
 apiRouter.patch(
   '/orderedproducts/updatequantity',
-  verifyToken,
+  postVerifyToken,
   async (req, res, next) => {
-    const { orderID, productID, quantity } = req.body;
+    console.log("req in route: ", req.body.body);
+    const { orderID, productID, quantity } = req.body.body;
     try {
       const orderProduct = await updateOrderProduct(
         orderID,

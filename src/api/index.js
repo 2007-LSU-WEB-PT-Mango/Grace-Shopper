@@ -122,6 +122,7 @@ export async function quantityUpdate(orderID, productID, quantity) {
       headers: { Authorization: `Bearer ${token}` },
       body: { orderID: orderID, productID: productID, quantity: quantity },
     });
+    console.log("data in api:", data)
     return data;
   } catch (error) {
     throw error;

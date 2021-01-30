@@ -28,14 +28,10 @@ const useStyles = makeStyles({
     const [update, setUpdate] = useState(false);
     const classes = useStyles();
       
-    useEffect(() => {
-        total();
-        quantityTotal();
-    }, [update])
-
+    
     const total = () => {
         let rollingTotal = 0;
-        if (shoppingCart && shoppingCart.products.length >0) {
+        if (shoppingCart && shoppingCart.products) {
             shoppingCart.products.map((product) => {
                 rollingTotal = rollingTotal + (product.price * product.quantity)
                 return rollingTotal
@@ -43,12 +39,11 @@ const useStyles = makeStyles({
         }
         setTotalPrice(rollingTotal);
     }
-
-    const totalDue = totalPrice+"00";
-
+    
+    
     const quantityTotal = () => {
         let rollingTotal = 0;
-        if (shoppingCart && shoppingCart.products.length > 0) {
+        if (shoppingCart && shoppingCart.products) {
             shoppingCart.products.map((product) => {
                 rollingTotal = rollingTotal + product.quantity
                 return rollingTotal
@@ -57,8 +52,13 @@ const useStyles = makeStyles({
         setTotalQuantity(rollingTotal);
     }
     
-   
+    const totalDue = totalPrice+"00";
     
+    useEffect(()=> {
+        total()
+        quantityTotal();
+    }, [update])
+
 
     return (
         <div style={{padding: "20px"}}>
@@ -68,7 +68,7 @@ const useStyles = makeStyles({
             <Grid>
                 <h2 style={{color: "white"}}>Shopping Cart</h2>
                 <hr></hr>
-                {shoppingCart && shoppingCart.products.length > 0?
+                {shoppingCart && shoppingCart.products?
                 
                 shoppingCart.products.map((product, index) => {
                     return (
@@ -79,13 +79,16 @@ const useStyles = makeStyles({
                             classes={classes}
                             update={update}
                             setUpdate={setUpdate}
-                            setShoppingCart={setShoppingCart}/>
+                            setShoppingCart={setShoppingCart}
+                            total={total}
+                            quantityTotal={quantityTotal}/>
+
                     )
                 }
                 )
                 : <h2>Your cart is EMPTY</h2>}
             </Grid>
-            {shoppingCart && shoppingCart.products.length>0?
+            {shoppingCart && shoppingCart.products?
             <Grid>
             <Card>
                         <CardContent>

@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import { Link } from "react-router-dom";
 import {addToOrder} from '../api';
 import AddAlerts from './Alert';
+import LoginAlerts from './LoginAlert';
 
 // Material U-I imports
 import {Card, CardMedia, CardContent, Typography, Fade, Button} from '@material-ui/core';
@@ -26,7 +27,7 @@ const useStyles = makeStyles({
 });
 
 const Album = (props) => {
-  const { ID, name, description, price, imageURL, inStock, category, shoppingCart, setShoppingCart } = props;
+  const { ID, name, description, price, imageURL, inStock, category, shoppingCart, setShoppingCart, isLoggedIn } = props;
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   // console.log('order in album: ', order)
@@ -72,12 +73,14 @@ const Album = (props) => {
             <Button fullWidth
               className={classes.action}
               onClick={() => {
-                  
+                if (isLoggedIn) {
                   shoppingCart.products.push(newProduct)
                   setShoppingCart(shoppingCart)
                   addToOrder(shoppingCart.id, ID)
                   setOpen(true)
-                  
+                } else {
+                  setOpen(true)
+                }
               }}
               >
               <AddShoppingCartIcon />
@@ -89,7 +92,12 @@ const Album = (props) => {
               SOLD OUT
             </Button>
           )}
-          <AddAlerts open={open} setOpen={setOpen} />
+          {
+            isLoggedIn ?
+            <AddAlerts open={open} setOpen={setOpen} />
+            :
+            <LoginAlerts open={open} setOpen={setOpen} />
+          }
       </Card>
       </Fade>
     </>
