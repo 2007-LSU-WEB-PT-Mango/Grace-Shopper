@@ -17,7 +17,9 @@ const AlbumsList = ({ productList, shoppingCart, setShoppingCart, isLoggedIn }) 
         <Grid container>
           {filteredAlbum ? (
             <>
-              <Grid item xs={12} sm={6} lg={3}>
+              <Grid container
+                direction="row"
+                alignItems="center">
                 <Album
                   ID={filteredAlbum.id}
                   name={filteredAlbum.name}

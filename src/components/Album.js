@@ -54,6 +54,7 @@ const Album = (props) => {
     singleAlbum,
     shoppingCart,
     setShoppingCart,
+    isLoggedIn
   } = props;
   const classes = useStyles();
   const [open, setOpen] = useState(false);
@@ -77,7 +78,7 @@ const Album = (props) => {
   }
   return (
     <>
-      <Grid direction="row" className={classes.root} container spacing={3}>
+      <div style={{display: "flex", flexDirection: "row"}}>
         <Fade in={true}>
           <Card className={classes.root}>
             <Link to={productPage()}>
@@ -130,20 +131,25 @@ const Album = (props) => {
                 SOLD OUT
               </Button>
             )}
+            {isLoggedIn? 
             <AddAlerts open={open} setOpen={setOpen} />
+            :
+            <LoginAlerts open={open} setOpen={setOpen} />
+          }
           </Card>
         </Fade>
 
         {singleAlbum == true ? (
-          <Card>
+          <Card className={classes.root}>
             <CardContent>
               <Typography gutterBottom variant="h6" component="h4">
+                <h3>Album Tracklist</h3>
                 {trackList}
               </Typography>
             </CardContent>
           </Card>
         ) : null}
-      </Grid>
+      </div>
     </>
   );
 };

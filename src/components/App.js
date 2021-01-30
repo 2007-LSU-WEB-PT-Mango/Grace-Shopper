@@ -34,7 +34,7 @@ const App = () => {
       }
     };
     start();
-  }, []);
+  }, [isLoggedIn]);
 
   const loadCart = async () => {
     try {
