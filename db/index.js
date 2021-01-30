@@ -34,17 +34,18 @@ async function createProduct({
   imageURL,
   inStock,
   category,
+  trackList,
 }) {
   try {
     const {
       rows: [product],
     } = await client.query(
       `
-      INSERT INTO products(name, description, price, "imageURL", "inStock", category)
-      VALUES($1, $2, $3, $4, $5, $6)
+      INSERT INTO products(name, description, price, "imageURL", "inStock", category, "trackList")
+      VALUES($1, $2, $3, $4, $5, $6, $7)
       RETURNING *;
     `,
-      [name, description, price, imageURL, inStock, category]
+      [name, description, price, imageURL, inStock, category, trackList]
     );
 
     return product;
@@ -188,40 +189,46 @@ async function getCartByUser(userID) {
     `,
       [userID, "cart"]
     );
-    const cart = shoppingCart[0];
+    if (shoppingCart) {
+      const cart = shoppingCart[0];
 
-    const orderProductsNumbers = await getCartProducts(cart.id);
+      const orderProductsNumbers = await getCartProducts(cart.id);
 
-    const orderProducts = await Promise.all(
-      orderProductsNumbers.map((product) => {
-        const cartProduct = getProduct(product.productID);
-        return cartProduct;
-      })
-    );
+      const orderProducts = await Promise.all(
+        orderProductsNumbers.map((product) => {
+          const cartProduct = getProduct(product.productID);
+          return cartProduct;
+        })
+      );
 
-    orderProducts.map((orderedProduct) => {
-      const orderedProductsID = orderedProduct.id;
-      orderProductsNumbers.map((product) => {
-        if (orderedProductsID === product.productID) {
-          orderedProduct.quantity = product.quantity;
-        }
+      orderProducts.map((orderedProduct) => {
+        const orderedProductsID = orderedProduct.id;
+        orderProductsNumbers.map((product) => {
+          if (orderedProductsID === product.productID) {
+            orderedProduct.quantity = product.quantity;
+          }
+        });
       });
-    });
-    cart.products = orderProducts;
+      cart.products = orderProducts;
 
-    return cart;
+      return cart;
+    }
   } catch (error) {
-    throw error;
+    console.log("making a new cart!");
+    const cart = createOrder("cart", userID);
+    if (cart) {
+      return cart;
+    }
   }
 }
 
-async function createOrder({ status, userID }) {
+async function createOrder(status, userID) {
   try {
     const {
       rows: [order],
     } = await client.query(
       `
-      INSERT INTO order(status, userID)
+      INSERT INTO orders(status, "userID")
       VALUES($1, $2)
       RETURNING *;
     `,
@@ -361,8 +368,9 @@ async function updateOrder({ id, status, userid }) {
 
     `);
     return [order];
-  } catch (error) {}
-  throw error;
+  } catch (error) {
+    throw error;
+  }
 }
 
 async function completeOrder(id) {
@@ -393,6 +401,67 @@ async function cancelOrder(id) {
   }
 }
 
+async function getOrdersAndProducts(userID) {
+  try {
+    const orders = await getOrdersbyUser(userID);
+
+    await Promise.all(
+      orders.map(async (order) => {
+        // for each order, run getOrderProducts(order.id)
+        const products = await getCartProducts(order.id);
+        console.log("DB products:", products);
+        if (products) {
+          await Promise.all(
+            products.map(async (product) => {
+              order.description = await getProduct(product.productID);
+            })
+          );
+          // order.productInfo = await getProduct(order.products.id);
+        }
+      })
+    );
+    return orders;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getOrderHistory(userID) {
+  try {
+    // Get the user's orders.
+    const orders = await getOrdersbyUser(userID);
+
+    // Map over the orders to get their orderedproducts (getCartProducts(order.id))
+    await Promise.all(
+      orders.map(async (order) => {
+        const orderedProducts = await getCartProducts(order.id);
+        // orderedproducts && map over them to get their product description (getProduct)
+        if (orderedProducts) {
+          order.orderedProducts = orderedProducts;
+          order.products = [];
+          await Promise.all(
+            orderedProducts.map(async (orderedProduct) => {
+              const product = await getProduct(orderedProduct.productID);
+              if (product) {
+                order.products.push(product);
+              }
+            })
+          );
+        }
+      })
+    );
+    return orders;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// AND
+// INNER JOIN orders
+// ON users.id = orders."userID"
+// INNER JOIN orderedproducts
+// ON orders.id = orderedproducts."orderID";
+
 // export
 module.exports = {
   client,
@@ -416,4 +485,8 @@ module.exports = {
   destroyOrderProduct,
   updateOrderProduct,
   completeOrder,
+  getOrdersAndProducts,
+  getCartProducts,
+  //
+  getOrderHistory,
 };

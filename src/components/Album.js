@@ -1,19 +1,13 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
+import { Link } from "react-router-dom";
+import {addToOrder} from '../api';
+import AddAlerts from './Alert';
 
 // Material U-I imports
+import {Card, CardMedia, CardContent, Typography, Fade, Button} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardMedia from '@material-ui/core/CardMedia';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-// import CardActionArea from '@material-ui/core/CardActionArea';
-import Button from '@material-ui/core/Button';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
-import { Link } from "react-router-dom";
-
-
-import {addToOrder} from '../api';
 
 const useStyles = makeStyles({
   root: {
@@ -32,15 +26,30 @@ const useStyles = makeStyles({
 });
 
 const Album = (props) => {
-  const { ID, name, description, price, imageURL, inStock } = props;
+  const { ID, name, description, price, imageURL, inStock, category, shoppingCart, setShoppingCart } = props;
   const classes = useStyles();
+  const [open, setOpen] = useState(false);
+  // console.log('order in album: ', order)
+  // console.log('cart in album: ', cart)
+
+  const newProduct = {
+    category,
+    description,
+    id: ID,
+    imageURL,
+    inStock,
+    name,
+    price,
+    quantity: 1
+  };
 
   function productPage() {
     return ("/products/"+ID)
   }
   return (
     <>
-      <Card className={classes.root}>
+      <Fade in={true}>
+        <Card className={classes.root}>
         <Link to={productPage()}>
           <CardMedia
             className={classes.media}
@@ -63,11 +72,12 @@ const Album = (props) => {
             <Button fullWidth
               className={classes.action}
               onClick={() => {
-                  console.log(ID)
-                  addToOrder(2, ID)
-                  console.log("adding to cart")
-                  console.log("ID:",ID)
-                
+                  
+                  shoppingCart.products.push(newProduct)
+                  setShoppingCart(shoppingCart)
+                  addToOrder(shoppingCart.id, ID)
+                  setOpen(true)
+                  
               }}
               >
               <AddShoppingCartIcon />
@@ -79,7 +89,9 @@ const Album = (props) => {
               SOLD OUT
             </Button>
           )}
+          <AddAlerts open={open} setOpen={setOpen} />
       </Card>
+      </Fade>
     </>
   );
 };
