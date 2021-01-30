@@ -17,10 +17,7 @@ const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [shoppingCart, setShoppingCart] = useState([]);
 
-  console.log("cart on top level: ", shoppingCart);
-
   useEffect(() => {
-    console.log('updating useEffect!!!')
     const start = async () => {
       try {
         const newProducts = await getProducts();
@@ -71,13 +68,15 @@ const App = () => {
             <AlbumsList 
               productList={productList} 
               shoppingCart={shoppingCart} 
-              setShoppingCart={setShoppingCart}/>
+              setShoppingCart={setShoppingCart}
+              isLoggedIn={isLoggedIn}/>
           </Route>
           <Route exact path="/products">
             <AlbumsList 
               productList={productList} 
               shoppingCart={shoppingCart} 
-              setShoppingCart={setShoppingCart}/>
+              setShoppingCart={setShoppingCart}
+              isLoggedIn={isLoggedIn}/>
           </Route>
           <Route exact path="/register">
             {isLoggedIn ? (

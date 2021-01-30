@@ -14,11 +14,11 @@ import {removeItemCart, quantityUpdate} from '../api';
 
 
 
-const CartAlbum = ({product, shoppingCart, setShoppingCart, update, setUpdate, classes}) => {
+const CartAlbum = ({product, shoppingCart, setShoppingCart, update, setUpdate, classes, total, quantityTotal}) => {
     const [checked, setChecked] = useState(true);
     const [remove, setRemove] = useState(false);
+    const [quantity, setQuantity] = useState(product.quantity);
 
-    
 
     return (
         <div id={product.id} style={remove? {display: "none"} : {display: "block"}}>
@@ -42,21 +42,29 @@ const CartAlbum = ({product, shoppingCart, setShoppingCart, update, setUpdate, c
                                 alignItems="center">
 
                                     <FormControl className={classes.formControl}>
-                                        <Select
-                                        value={product.quantity}
-                                        onChange={()=> {
-                                            try {
-                                                quantityUpdate(shoppingCart.id, product.id, product.quantity)
-                                                
-                                            } catch (error) {
-                                                throw error};
-                                        }}>
+                                        <Select 
+                                            value={quantity}
+                                            onChange={(event)=> {
+                                                setQuantity(event.target.value)
+                                            }}>
                                             <MenuItem value={1}>1</MenuItem>
                                             <MenuItem value={2}>2</MenuItem>
                                             <MenuItem value={3}>3</MenuItem>
                                             <MenuItem value={4}>4</MenuItem>
                                         </Select>
                                         <FormHelperText>quantity</FormHelperText>
+                                        <Button
+                                            onClick={() => {
+                                                quantityUpdate(shoppingCart.id, product.id, quantity)
+                                                const updateIndex = shoppingCart.products.findIndex((updateProduct) => updateProduct.id === product.id );
+                                                shoppingCart.products[updateIndex].quantity = quantity;
+                                                setShoppingCart(shoppingCart);
+                                                setUpdate(!update);
+                                                total();
+                                                quantityTotal();
+                                            }}>
+                                            update
+                                        </Button>
                                     </FormControl>
                                     <Button variant="contained" disableRipple={true}
                                         onClick={async () => {

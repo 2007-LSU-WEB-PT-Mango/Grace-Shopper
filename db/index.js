@@ -320,6 +320,7 @@ async function addProductToOrder(orderID, productID, quantity = 1) {
 }
 
 async function updateOrderProduct(orderID, productID, quantity) {
+  console.log("quantity going into db: ", quantity)
   try {
     const { rows: updatedProduct } = await client.query(
       `

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { addToOrder } from "../api";
-import AddAlerts from "./Alert";
+import {addToOrder} from '../api';
+import AddAlerts from './Alert';
+import LoginAlerts from './LoginAlert';
 
 // Material U-I imports
 import {
@@ -102,15 +103,18 @@ const Album = (props) => {
             </CardContent>
 
             {inStock ? (
-              <Button
-                fullWidth
-                className={classes.action}
-                onClick={() => {
-                  shoppingCart.products.push(newProduct);
-                  setShoppingCart(shoppingCart);
-                  addToOrder(shoppingCart.id, ID);
-                  setOpen(true);
-                }}
+              <Button fullWidth
+              className={classes.action}
+              onClick={() => {
+                if (isLoggedIn) {
+                  shoppingCart.products.push(newProduct)
+                  setShoppingCart(shoppingCart)
+                  addToOrder(shoppingCart.id, ID)
+                  setOpen(true)
+                } else {
+                  setOpen(true)
+                }
+              }}
               >
                 <AddShoppingCartIcon />
                 ADD TO CART

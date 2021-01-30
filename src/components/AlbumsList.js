@@ -6,7 +6,7 @@ import Album from "./Album";
 import { Grid, Button } from "@material-ui/core";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 
-const AlbumsList = ({ productList, shoppingCart, setShoppingCart }) => {
+const AlbumsList = ({ productList, shoppingCart, setShoppingCart, isLoggedIn }) => {
   const { id } = useParams();
   let filteredAlbum = productList.find(
     (product) => id && Number(id) === Number(product.id)
@@ -29,6 +29,7 @@ const AlbumsList = ({ productList, shoppingCart, setShoppingCart }) => {
                   trackList={filteredAlbum.trackList}
                   shoppingCart={shoppingCart}
                   setShoppingCart={setShoppingCart}
+                  isLoggedIn={isLoggedIn}
                   singleAlbum={true}
                 />
               </Grid>
@@ -47,6 +48,7 @@ const AlbumsList = ({ productList, shoppingCart, setShoppingCart }) => {
                     category={product.category}
                     shoppingCart={shoppingCart}
                     setShoppingCart={setShoppingCart}
+                    isLoggedIn={isLoggedIn}
                     singleAlbum={false}
                   />
                 </Grid>
