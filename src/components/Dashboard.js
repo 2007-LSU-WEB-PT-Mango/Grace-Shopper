@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getUserData, getUserOrders } from '../api/index';
+import OrderHistory from './OrderHistory';
 // Material UI
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
@@ -7,9 +8,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Avatar from '@material-ui/core/Avatar';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Typography from '@material-ui/core/Typography';
-
-import Grid from '@material-ui/core/Grid';
-
 import TableContainer from '@material-ui/core/TableContainer';
 import Table from '@material-ui/core/Table';
 import Paper from '@material-ui/core/Paper';
@@ -46,23 +44,22 @@ const useStyles = makeStyles((theme) => ({
 
 const Dashboard = () => {
   const classes = useStyles();
-  const [greeting, setGreeting] = useState('');
   const [username, setUsername] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
+  const [orderHistory, setOrderHistory] = useState([]);
 
   const loadData = async () => {
     try {
       const response = await getUserData();
-      console.log(`getUserData:`, response);
       const { id, firstName, lastName, username, email } = response;
       setUsername(username);
       setFirstName(firstName);
       setLastName(lastName);
       setEmail(email);
       const orders = await getUserOrders(id);
-      console.log(`getUserOrders:`, orders);
+      setOrderHistory(orders);
     } catch (error) {
       console.error(error);
     }
@@ -110,17 +107,10 @@ const Dashboard = () => {
             </TableBody>
           </Table>
         </TableContainer>
+        <OrderHistory orderHistory={orderHistory} />
       </div>
     </Container>
   );
 };
 
 export default Dashboard;
-
-{
-  /* This will be a table with a list of order histories.
-          - There should be a title similar to the Welcome greeting above.
-          - If there are no orders ? 'Our records indicate ... : map over the user's orders.
-          - Render the orders in an accordian? (Have to generate some data in Postman first).
-       */
-}

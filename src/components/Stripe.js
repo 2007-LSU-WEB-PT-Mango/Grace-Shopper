@@ -22,7 +22,6 @@ const Message = ({ message }) => (
 export default function App({cart}) {
   const [message, setMessage] = useState("");
 
-  console.log("cart passed into stripe:", cart);
   useEffect(() => {
     // Check to see if this is a redirect back from Checkout
     const query = new URLSearchParams(window.location.search);
@@ -48,9 +47,9 @@ export default function App({cart}) {
     
     });
 
-    console.log(response)
+    
     const session = await response.json();
-    console.log(session)
+    
 
     // When the customer clicks on the button, redirect them to Checkout.
     const result = await stripe.redirectToCheckout({

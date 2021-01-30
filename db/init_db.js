@@ -31,6 +31,7 @@ async function dropTables() {
 
 async function buildTables() {
   try {
+    // "trackList" TEXT NOT NULL
     await client.query(`
       CREATE TABLE users(
         id SERIAL PRIMARY KEY,
@@ -50,7 +51,8 @@ async function buildTables() {
         price INTEGER NOT NULL,
         "imageURL" TEXT DEFAULT 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/12in-Vinyl-LP-Record-Angle.jpg/1920px-12in-Vinyl-LP-Record-Angle.jpg',
         "inStock" BOOLEAN DEFAULT false NOT NULL,
-        category VARCHAR(255) NOT NULL
+        category VARCHAR(255) NOT NULL,
+        
       );
 
       CREATE TABLE orders(
